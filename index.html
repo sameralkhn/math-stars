@@ -154,19 +154,20 @@ svg[class^=mv]{transform-origin:50% 85%}
 .fg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.fg .fc{height:118px;margin:0}.fg .fq{font-size:26px}.fg .fh{font-size:14px}.fg .fr{font-size:36px}
 .gtools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 12px}.gc{text-align:center;font-weight:800}
 @media (min-width:560px){.fg{grid-template-columns:repeat(3,1fr)}}
+.mg{background:linear-gradient(135deg,#ff6b5b,#f08a00)}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='1.1.1';
+const VER='1.2.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
 const localSave=()=>{try{localStorage.setItem('mt',JSON.stringify(S))}catch(e){}};
 const save=()=>{S.ts=Date.now();localSave();push()};
 const R=n=>Math.floor(Math.random()*n),sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
-let T=[],cur=1,AC,Q,B,M,U='';
+let T=[],cur=S.cur==null?1:S.cur,AC,Q,B,M,U='';
 const later=(f,ms)=>{T.push(setTimeout(f,ms))};
 const clr=()=>{T.forEach(clearTimeout);T=[];stopA();try{speechSynthesis.cancel()}catch(e){}};
 function tone(f,d,t,v,at){if(!S.sound)return;try{AC=AC||new(window.AudioContext||webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=v||.15;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+(at||0);o.start(s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.stop(s+d)}catch(e){}}
@@ -230,11 +231,11 @@ function opts(a,b){const n=a*b,s=new Set([n]);for(const c of sh([n+a,n-a,n+b,n-b
 const tk=()=>cur||'m';
 const award=n=>{const w=S.stars[tk()]||0;S.stars[tk()]=Math.max(w,n);save();U=(false)?`<p class=tip>🔓 فتحت الجدول ${cur+1}!</p>`:''};
 const total=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
-function shell(title,body,back){app.innerHTML=`<header>${back===false?'':'<button class=ic aria-label="الرئيسية" onclick="home()">🏠</button>'}<h1>${title}</h1>${back===false?'<button class=ic aria-label="حسابي" onclick="acc()">'+(UID?'☁️':'👤')+'</button><button class=ic aria-label="الإعدادات" onclick="settings()">⚙️</button>':''}<button class=ic aria-label="الصوت" onclick="S.sound=!S.sound;save();this.textContent=S.sound?'🔊':'🔇'">${S.sound?'🔊':'🔇'}</button><span class=st>⭐ ${total()}</span></header>${body}`}
+function shell(title,body,back){app.innerHTML=`<header>${back===false?'':(typeof curD=='function'&&curD()==2?'<button class=ic aria-label="الألعاب" onclick="history.back()">🎮</button>':'<button class=ic aria-label="الرئيسية" onclick="home()">🏠</button>')}<h1>${title}</h1>${back===false?'<button class=ic aria-label="حسابي" onclick="acc()">'+(UID?'☁️':'👤')+'</button><button class=ic aria-label="الإعدادات" onclick="settings()">⚙️</button>':''}<button class=ic aria-label="الصوت" onclick="S.sound=!S.sound;save();this.textContent=S.sound?'🔊':'🔇'">${S.sound?'🔊':'🔇'}</button><span class=st>⭐ ${total()}</span></header>${body}`}
 const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
-function home(){clr();let c='';for(let t=1;t<=10;t++){const n=S.stars[t]||0;c+=`<button class="chip ${cur==t?'on':''}" onclick="cur=${t};home()">${false?'🔒':t}<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`}
-const n=S.stars.m||0;c+=`<button class="chip ${cur==0?'on':''}" style="font-size:20px" onclick="cur=0;home()">الكل<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`;
-shell('نجوم الضرب 🌟',`<div class=owl><span class=av>${AV()}</span><p>مرحبًا ${NM()}! اختر جدولًا ثم العب! اللعبة تتذكر الأرقام الصعبة وتعيدها أكثر حتى تحفظها.</p></div><div class=chips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()}</small></button><button class="mode m5 m9" onclick="cards()"><i>🎴</i>البطاقات <small>اقلب واحفظ</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m6" onclick="collect()"><i>🦘</i>اجمع قفزات <small>🦘 ${BK()}</small></button><button class="mode m7" onclick="shop()"><i>🛍️</i>المتجر <small>🪙 ${GD()}</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m4" onclick="learn()"><i>📖</i>تعلّم وردّد</button></div>`,false)}
+function home(){clr();let c='';for(let t=1;t<=10;t++){const n=S.stars[t]||0;c+=`<button class="chip ${cur==t?'on':''}" onclick="cur=S.cur=${t};save();home()">${false?'🔒':t}<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`}
+const n=S.stars.m||0;c+=`<button class="chip ${cur==0?'on':''}" style="font-size:20px" onclick="cur=S.cur=0;save();home()">الكل<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`;
+shell('نجوم الضرب 🌟',`<div class=owl><span class=av>${AV()}</span><p>مرحبًا ${NM()}! اختر جدولًا ثم العب! اللعبة تتذكر الأرقام الصعبة وتعيدها أكثر حتى تحفظها.</p></div><div class=chips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<div class=modes><button class="mode m5 m4" onclick="learn()"><i>📖</i>تعلّم وردّد <small>جدول ${cur||"الكل"}</small></button><button class="mode m9" onclick="cards()"><i>🎴</i>البطاقات</button><button class="mode mg" onclick="games()"><i>🎮</i>الألعاب</button><button class="mode m5 m7" onclick="shop()"><i>🛍️</i>المتجر <small>🪙 ${GD()}</small></button></div>`,false)}
 const TIP={1:'أي رقم × 1 يبقى كما هو.',2:'الناتج دائمًا ضعف الرقم، وعدد زوجي.',3:'اجمع رقمَي الناتج: ستجد 3 أو 6 أو 9 دائمًا.',4:'ضاعف مرتين: 4 × 6 يعني ضعف ضعف 6.',5:'الناتج ينتهي دائمًا بـ 0 أو 5.',9:'مجموع رقمَي الناتج دائمًا 9. وفي 9 × 4 اطوِ الإصبع الرابع: 3 أصابع قبله و6 بعده = 36.',10:'ضع صفرًا بعد الرقم.',11:'كرّر الرقم مرتين: 11 × 4 = 44.'};
 let LT=0,CHN=0;
 function learn(){clr();LT++;CHN=0;if(!cur)cur=1;let r='';for(let n=1;n<=10;n++)r+=`<button class=row id=r${n} onclick="rowSay(${n})">${cur} × ${n} = <b>${cur*n}</b></button>`;
@@ -602,6 +603,16 @@ shell('البطاقات 🎴',`<div class=card><div class=res>${'⭐'.repeat(n)|
 function fcGrid(){shell('البطاقات 🎴',fcOpts()+`<div class=gtools><button class=buy onclick="fcAll(1)">👀 اقلب الكل</button><button class=buy onclick="fcAll(0)">🙈 أخفِ الكل</button><button class=buy onclick="cards()">🔀 مجموعة جديدة</button></div><div class=fg>${FC.q.map((f,i)=>`<div class=fc id=g${i} onclick="fcG(${i})"><div class=in><div class=fa>${face(f,0)}</div><div class=fb>${face(f,1)}</div></div></div>`).join('')}</div><p class="sm gc" id=gc>قل الجواب بصوت عالٍ، ثم اقلب البطاقة لتتأكد!</p>`)}
 function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){const[a,b]=FC.q[i];tone(660,.1,'triangle',.12);say(`${a} ضرب ${b} يساوي ${a*b}`);FC.seen.add(i);if(FC.seen.size==FC.q.length&&!FC.gd){FC.gd=1;good();clap(10);$('#gc').textContent='🎉 قلبت كل البطاقات! أحسنت'}}}
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
+// ===== صفحة الألعاب =====
+function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m6" onclick="collect()"><i>🦘</i>اجمع قفزات <small>🦘 ${BK()}</small></button></div>`)}
+// ===== التنقّل وزر الرجوع (السحب للخلف) =====
+// المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
+const LV={learn:1,cards:1,shop:1,settings:1,acc:1,games:1,journey:2,race:2,balloons:2,quiz:2,match:2,collect:2},ORIG={};
+const curD=()=>(history.state&&history.state.d)||0;
+function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
+ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
+Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){const l=LV[n],d=curD(),st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
+addEventListener('popstate',e=>{clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
 // ===== الحسابات والمزامنة (Firebase) =====
 const LOCALK=['sound','vn'];let FB=null,UID=null,UEM='',SYN='',PT=0,UNS=null;
 const keepL=()=>{const o={};LOCALK.forEach(k=>{if(S[k]!==undefined)o[k]=S[k]});return o};
@@ -639,7 +650,7 @@ function erst(){const e=($('#em').value||'').trim();if(!e)return toast('اكتب
 function aout(){if(!confirm('تسجيل الخروج؟ سيبقى تقدّمك محفوظًا في حسابك.'))return;Promise.resolve(push(1)).finally(()=>FB.a.signOut().then(()=>{S=Object.assign(fresh(),keepL());localSave();home()}))}
 addEventListener('load',fbInit);
 if('serviceWorker'in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
-home();
+if(curD()>0)history.go(-curD());else{history.replaceState({d:0},'');home()}
 </script>
 </body>
 </html>
