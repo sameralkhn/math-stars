@@ -143,6 +143,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
+const VER='1.0.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -440,7 +441,7 @@ return `<svg ${has(eq.m)?`class="mv${eq.m}" `:''}viewBox="0 -12 100 112" xmlns="
 const NM=()=>esc((S.nm||'').trim()||CH[S.ch|0].n);
 // ===== الإعدادات =====
 const SW=['#ffffff','#ff6b5b','#ff9f1c','#ffd23f','#7ee06a','#3ed6a0','#4aa3ff','#8a63ff','#ff7aa8','#a0764f','#9aa3b5','#2b2b35'];
-function settings(){clr();shell('الإعدادات ⚙️',`<div class=card><div id=pv class=pv></div><input id=nm class=nm maxlength=12 placeholder="اكتب اسمك لتسمّي شخصيتك" value="${esc(S.nm||'')}" oninput="S.nm=this.value.trim();save()"><p class=sm>اكتب اسمك أو أي اسم تحبه 💛</p></div><h3>🎨 اختر اللون</h3><div class=sw id=sw></div><button class=big onclick="shop()">🛍️ تغيير الشخصية والملابس من المتجر</button><button class=big style="background:#18a999" onclick="vtest()">🗣️ جرّب صوت النطق</button><button class=big style="background:#5b6b8c;font-size:16px;padding:10px" onclick="vtest(1)">🔤 جرّب النطق بالإنجليزية</button><p class=sm id=vt style="text-align:center;line-height:1.6"></p><div id=vl style="text-align:center"></div>`);drawS(1)}
+function settings(){clr();shell('الإعدادات ⚙️',`<div class=card><div id=pv class=pv></div><input id=nm class=nm maxlength=12 placeholder="اكتب اسمك لتسمّي شخصيتك" value="${esc(S.nm||'')}" oninput="S.nm=this.value.trim();save()"><p class=sm>اكتب اسمك أو أي اسم تحبه 💛</p></div><h3>🎨 اختر اللون</h3><div class=sw id=sw></div><button class=big onclick="shop()">🛍️ تغيير الشخصية والملابس من المتجر</button><button class=big style="background:#18a999" onclick="vtest()">🗣️ جرّب صوت النطق</button><button class=big style="background:#5b6b8c;font-size:16px;padding:10px" onclick="vtest(1)">🔤 جرّب النطق بالإنجليزية</button><p class=sm id=vt style="text-align:center;line-height:1.6"></p><div id=vl style="text-align:center"></div><p class=sm style="text-align:center;opacity:.6;margin-top:18px">نجوم الضرب • الإصدار ${VER}</p>`);drawS(1)}
 function drawS(sw){$('#pv').innerHTML=AV();
 if(sw)$('#sw').innerHTML=SW.map(c=>`<button class="${S.col==c?'on':''}" style="background:${c}" aria-label="لون" onclick="pcol('${c}')"></button>`).join('')+`<input type=color value="${S.col||CH[S.ch|0].c}" oninput="pcol(this.value,1)" aria-label="لون مخصص"><button onclick="pcol(null)" aria-label="اللون الأصلي">↺</button>`;
 }
