@@ -158,22 +158,22 @@ const oops=()=>tone(180,.3,'sawtooth',.1);
 function clap(n){if(!S.sound)return;try{AC=AC||new(window.AudioContext||webkitAudioContext)();for(let i=0;i<n;i++){const len=AC.sampleRate*.05,buf=AC.createBuffer(1,len,AC.sampleRate),d=buf.getChannelData(0);for(let j=0;j<len;j++)d[j]=(Math.random()*2-1)*(1-j/len);const s=AC.createBufferSource(),g=AC.createGain(),f=AC.createBiquadFilter();f.type='bandpass';f.frequency.value=1800;s.buffer=buf;g.gain.value=.5;s.connect(f);f.connect(g);g.connect(AC.destination);s.start(AC.currentTime+i*.09+Math.random()*.05)}}catch(e){}}
 // ===== الصوت المسجّل (ملفات audio/NN.mp3 بترتيب القائمة PH) =====
 const NW={1:'واحد',2:'اثنان',3:'ثلاثة',4:'أربعة',5:'خمسة',6:'ستة',7:'سبعة',8:'ثمانية',9:'تسعة',10:'عشرة',11:'أحد عشر',12:'اثنا عشر',13:'ثلاثة عشر',14:'أربعة عشر',15:'خمسة عشر',16:'ستة عشر',17:'سبعة عشر',18:'ثمانية عشر',19:'تسعة عشر',20:'عشرون',30:'ثلاثون',40:'أربعون',50:'خمسون',60:'ستون',70:'سبعون',80:'ثمانون',90:'تسعون',100:'مئة'};
-const PH=[...Object.keys(NW).map(k=>[k,NW[k]]),...[20,30,40,50,60,70,80,90].map(k=>['w'+k,'و'+NW[k]]),['في','في'],['يساوي','يساوي'],
+const PH=[...Object.keys(NW).map(k=>[k,NW[k]]),...[20,30,40,50,60,70,80,90].map(k=>['w'+k,'و'+NW[k]]),['ضرب','ضرب'],['يساوي','يساوي'],
 ...['أحسنت يا بطل','أحسنت يا بطل، فزت بالسباق','المركز الثاني، كنت قريبًا جدًا','انطلق','حاول مرة أخرى','ربحت قفزة',
 'الببغاء جاء بخشبة الجسر','السلحفاة صارت جسرًا','الفيل وضع جذع الشجرة','القندس بنى الجسر','السنجاب جاء بالألواح',
 'الفيل فتح ممرًا','القندس حفر نفقًا','النمل حفر طريقًا','الدب أزاح الصخرة',
-'صخرة كبيرة في الطريق','الفيل دفع الصخرة','شجرة سقطت على الطريق','القندس قطع الشجرة','الطريق مغلق بحاجز','العامل فتح الحاجز','بقرة تقف في الطريق','المزارع أبعد البقرة','صناديق وقعت على الطريق','الشاحنة حملت الصناديق','جذع ثقيل في الطريق','الغوريلا رفع الجذع','رجل ثلج في الطريق','الشمس أذابت الثلج','قطيع خراف يعبر','الكلب جمع الخراف'].map(t=>[t,t]),['ضرب','ضرب']];
+'صخرة كبيرة في الطريق','الفيل دفع الصخرة','شجرة سقطت على الطريق','القندس قطع الشجرة','الطريق مغلق بحاجز','العامل فتح الحاجز','بقرة تقف في الطريق','المزارع أبعد البقرة','صناديق وقعت على الطريق','الشاحنة حملت الصناديق','جذع ثقيل في الطريق','الغوريلا رفع الجذع','رجل ثلج في الطريق','الشمس أذابت الثلج','قطيع خراف يعبر','الكلب جمع الخراف'].map(t=>[t,t])];
 const PI={};PH.forEach((p,i)=>PI[p[0]]=i);
-let HAS_A=false,HAS_Z=false,ACX=null,AQT=0,ASRC=[];const BUF={};
+let HAS_A=false,ACX=null,AQT=0,ASRC=[];const BUF={};
 const afile=i=>'audio/'+String(i+1).padStart(2,'0')+'.mp3';
-try{if(location.protocol.startsWith('http')){fetch(afile(0),{method:'HEAD'}).then(r=>{HAS_A=r.ok}).catch(()=>{});fetch(afile(PI['ضرب']),{method:'HEAD'}).then(r=>{HAS_Z=r.ok}).catch(()=>{})}}catch(e){}
+try{if(location.protocol.startsWith('http')){fetch(afile(0),{method:'HEAD'}).then(r=>{HAS_A=r.ok}).catch(()=>{})}}catch(e){}
 const numK=n=>n<=19||n%10==0?[String(n)]:[String(n%10),'w'+(n-n%10)];
 function actx(){if(!ACX)ACX=new(window.AudioContext||webkitAudioContext)();if(ACX.state=='suspended')ACX.resume();return ACX}
 // تحميل المقطع وقصّ الصمت من طرفيه حتى تتصل الكلمات بسلاسة
 function loadB(i){if(!BUF[i])BUF[i]=fetch(afile(i)).then(r=>r.arrayBuffer()).then(b=>new Promise((ok,no)=>actx().decodeAudioData(b,ok,no))).then(bf=>{const d=bf.getChannelData(0),th=.02;let a=0,z=d.length-1;while(a<z&&Math.abs(d[a])<th)a++;while(z>a&&Math.abs(d[z])<th)z--;const sr=bf.sampleRate,o=Math.max(0,a/sr-.015);return{bf,o,d:Math.min(bf.duration-o,(z-a)/sr+.04)}}).catch(e=>{delete BUF[i];throw e});return BUF[i]}
-let PRE=0;addEventListener('pointerdown',()=>{if(PRE||!HAS_A||S.vm=='tts')return;PRE=1;actx();PH.forEach((_,i)=>{if(i!=PI['ضرب']||HAS_Z)loadB(i).catch(()=>{})})},{passive:true});
+let PRE=0;addEventListener('pointerdown',()=>{if(PRE||!HAS_A||S.vm=='tts')return;PRE=1;actx();PH.forEach((_,i)=>loadB(i).catch(()=>{}))},{passive:true});
 function sayA(t){if(!HAS_A)return false;const m=String(t).match(/^(\d+) (?:ضرب|في) (\d+)(?: يساوي (\d+))?$/);let q;
-if(m)q=[...numK(+m[1]),HAS_Z?'ضرب':'في',...numK(+m[2]),...(m[3]?['يساوي',...numK(+m[3])]:[])];else if(PI[t]!=null)q=[t];else return false;
+if(m)q=[...numK(+m[1]),'ضرب',...numK(+m[2]),...(m[3]?['يساوي',...numK(+m[3])]:[])];else if(PI[t]!=null)q=[t];else return false;
 stopA();const tok=++AQT;Promise.all(q.map(k=>loadB(PI[k]))).then(L=>{if(tok!==AQT)return;const c=actx();let at=c.currentTime+.03;
 L.forEach((x,j)=>{const s=c.createBufferSource();s.buffer=x.bf;s.connect(c.destination);s.start(at,x.o,x.d);ASRC.push(s);at+=x.d+(j<L.length-1?.06:0)})}).catch(()=>{});return true}
 function stopA(){AQT++;ASRC.forEach(s=>{try{s.stop()}catch(e){}});ASRC=[]}
