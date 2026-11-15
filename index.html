@@ -160,14 +160,14 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='1.2.0';
+const VER='1.2.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
 const localSave=()=>{try{localStorage.setItem('mt',JSON.stringify(S))}catch(e){}};
 const save=()=>{S.ts=Date.now();localSave();push()};
 const R=n=>Math.floor(Math.random()*n),sh=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
-let T=[],cur=S.cur==null?1:S.cur,AC,Q,B,M,U='';
+let T=[],cur=S.cur==null?0:S.cur,AC,Q,B,M,U='';
 const later=(f,ms)=>{T.push(setTimeout(f,ms))};
 const clr=()=>{T.forEach(clearTimeout);T=[];stopA();try{speechSynthesis.cancel()}catch(e){}};
 function tone(f,d,t,v,at){if(!S.sound)return;try{AC=AC||new(window.AudioContext||webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type=t||'sine';o.frequency.value=f;g.gain.value=v||.15;o.connect(g);g.connect(AC.destination);const s=AC.currentTime+(at||0);o.start(s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.stop(s+d)}catch(e){}}
