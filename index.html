@@ -138,12 +138,28 @@ svg[class^=mv]{transform-origin:50% 85%}
 .trk{position:relative;width:150px;height:16px;background:#fff;border-radius:9px;box-shadow:0 3px 0 #0002;align-self:center;margin-left:16px}
 .trk b{position:absolute;left:-16px;top:-6px;font-size:18px}.trk i{position:absolute;top:-6px;font-size:18px;font-style:normal;transform:translateX(50%)}
 .race .cd{font-size:80px!important}
+.m9{background:linear-gradient(90deg,#8a63ff,#4aa3ff)!important}
+.cap2{text-align:center;font-weight:800;color:var(--grape);min-height:22px;margin-top:4px}
+.lo{padding:12px 14px;margin:12px 0 0;text-align:right}.lo .lr{margin:4px 0 10px}.lo .lr span{font-weight:800;font-size:15px}.lo .seg{margin:6px 0 0}.lo .seg button{padding:6px 4px;font-size:16px}
+.fc{perspective:1000px;height:240px;margin:12px 0;cursor:pointer}
+.fc .in{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.3,1.35,.5,1);transform-style:preserve-3d}
+.fc.on .in{transform:rotateY(180deg)}
+.fc .fa,.fc .fb{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 6px 0 #0002;direction:ltr;overflow:hidden;padding:8px}
+.fc .fa{color:#fff;background:radial-gradient(#ffffff33 2px,transparent 2.5px) 0 0/22px 22px,linear-gradient(135deg,#8a63ff,#4aa3ff)}
+.fc .fb{background:#fff;transform:rotateY(180deg);border:4px solid var(--sun)}
+.fq{font-size:44px;font-weight:800;line-height:1.1}.fq b{color:var(--coral)}.fh{font-size:20px;opacity:.9;direction:rtl}.fr{font-size:64px;font-weight:800;color:var(--coral);line-height:1}
+.tap{position:absolute;bottom:12px;left:10px;right:10px;text-align:center;font-size:14px;direction:rtl;animation:mk0 1.4s ease-in-out infinite}
+.fdots{display:grid;gap:3px;justify-content:center}.fdots i{width:8px;height:8px;border-radius:50%}
+#fk{grid-template-columns:1fr 1fr}#fk .opt{font-size:20px;padding:12px 0}.fk1{background:var(--mint)!important}.fk0{background:#ffd6a5!important}
+.fg{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.fg .fc{height:118px;margin:0}.fg .fq{font-size:26px}.fg .fh{font-size:14px}.fg .fr{font-size:36px}
+.gtools{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:0 0 12px}.gc{text-align:center;font-weight:800}
+@media (min-width:560px){.fg{grid-template-columns:repeat(3,1fr)}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='1.0.1';
+const VER='1.1.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -173,17 +189,24 @@ function actx(){if(!ACX)ACX=new(window.AudioContext||webkitAudioContext)();if(AC
 // تحميل المقطع وقصّ الصمت من طرفيه حتى تتصل الكلمات بسلاسة
 function loadB(i){if(!BUF[i])BUF[i]=fetch(afile(i)).then(r=>r.arrayBuffer()).then(b=>new Promise((ok,no)=>actx().decodeAudioData(b,ok,no))).then(bf=>{const d=bf.getChannelData(0),th=.02;let a=0,z=d.length-1;while(a<z&&Math.abs(d[a])<th)a++;while(z>a&&Math.abs(d[z])<th)z--;const sr=bf.sampleRate,o=Math.max(0,a/sr-.015);return{bf,o,d:Math.min(bf.duration-o,(z-a)/sr+.04)}}).catch(e=>{delete BUF[i];throw e});return BUF[i]}
 let PRE=0;addEventListener('pointerdown',()=>{if(PRE||!HAS_A||S.vm=='tts')return;PRE=1;actx();PH.forEach((_,i)=>loadB(i).catch(()=>{}))},{passive:true});
-function sayA(t){if(!HAS_A)return false;const m=String(t).match(/^(\d+) (?:ضرب|في) (\d+)(?: يساوي (\d+))?$/);let q;
+const SLOW=()=>S.sp!='n';
+// يشغّل الجملة من المقاطع المسجّلة مع وقفات: قصيرة بين الكلمات، وأطول قبل «يساوي» وبعدها ليستوعب الطفل
+function sayA(t,cb){if(!HAS_A)return false;const m=String(t).match(/^(\d+) (?:ضرب|في) (\d+)(?: يساوي (\d+))?$/);let q;
 if(m)q=[...numK(+m[1]),'ضرب',...numK(+m[2]),...(m[3]?['يساوي',...numK(+m[3])]:[])];else if(PI[t]!=null)q=[t];else return false;
-stopA();const tok=++AQT;Promise.all(q.map(k=>loadB(PI[k]))).then(L=>{if(tok!==AQT)return;const c=actx();let at=c.currentTime+.03;
-L.forEach((x,j)=>{const s=c.createBufferSource();s.buffer=x.bf;s.connect(c.destination);s.start(at,x.o,x.d);ASRC.push(s);at+=x.d+(j<L.length-1?.06:0)})}).catch(()=>{});return true}
+stopA();const tok=++AQT,sl=SLOW();Promise.all(q.map(k=>loadB(PI[k]))).then(L=>{if(tok!==AQT)return;const c=actx();let at=c.currentTime+.05;
+L.forEach((x,j)=>{if(j){const k=q[j],pk=q[j-1];at+=k=='يساوي'?(sl?.5:.22):pk=='يساوي'?(sl?.38:.16):k[0]=='w'?.03:(sl?.2:.08)}
+const s=c.createBufferSource();s.buffer=x.bf;s.connect(c.destination);s.start(at,x.o,x.d);ASRC.push(s);at+=x.d});
+if(cb)setTimeout(()=>{if(tok===AQT)cb()},(at-c.currentTime)*1000+60)}).catch(()=>{if(cb)cb()});return true}
 function stopA(){AQT++;ASRC.forEach(s=>{try{s.stop()}catch(e){}});ASRC=[]}
 let VO=null,VW=0;
 function pickV(){try{const v=speechSynthesis.getVoices();VO=v.find(x=>S.vn&&x.name==S.vn)||v.find(x=>/^ar[-_]SA/i.test(x.lang))||v.find(x=>/^ar/i.test(x.lang))||null}catch(e){}}
 try{pickV();speechSynthesis.addEventListener('voiceschanged',pickV)}catch(e){}
-function say(t){if(!S.sound)return;if(S.vm!='tts'&&sayA(t))return;try{if(!window.speechSynthesis){if(!VW++)toast('🔇 هذا المتصفح لا يدعم النطق، جرّب متصفحًا آخر');return}
-if(!VO)pickV();const u=new SpeechSynthesisUtterance(t);u.lang=VO?VO.lang:'ar-SA';if(VO)u.voice=VO;u.rate=.85;speechSynthesis.resume();speechSynthesis.speak(u);
-if(!VO&&speechSynthesis.getVoices().length&&!VW++)toast('🔇 لا يوجد صوت عربي على هذا الجهاز، أضفه من إعدادات تحويل النص إلى كلام')}catch(e){}}
+function say(t,cb){let c=cb;const fin=()=>{const f=c;c=null;f&&f()};if(c)later(fin,9000);
+if(!S.sound){if(c)later(fin,1400);return}if(S.vm!='tts'&&sayA(t,fin))return;
+try{if(!window.speechSynthesis){if(!VW++)toast('🔇 هذا المتصفح لا يدعم النطق، جرّب متصفحًا آخر');if(c)later(fin,1400);return}
+if(!VO)pickV();const u=new SpeechSynthesisUtterance(t);u.lang=VO?VO.lang:'ar-SA';if(VO)u.voice=VO;u.rate=SLOW()?.72:.9;u.onend=u.onerror=fin;speechSynthesis.resume();speechSynthesis.speak(u);
+if(!VO&&speechSynthesis.getVoices().length&&!VW++)toast('🔇 لا يوجد صوت عربي على هذا الجهاز، أضفه من إعدادات تحويل النص إلى كلام')}catch(e){if(c)later(fin,1400)}}
+const sayP=t=>new Promise(r=>say(t,r)),wait=ms=>new Promise(r=>later(r,ms));
 const arV=()=>{try{return speechSynthesis.getVoices().filter(x=>/^ar/i.test(x.lang))}catch(e){return[]}};
 function setV(i){const a=arV();if(a[i]){S.vn=a[i].name;save();pickV();vtest()}}
 function vtest(en){S.sound=true;save();VW=1;pickV();const L=m=>$('#vt').innerHTML=m;if(!window.speechSynthesis)return L('❌ المتصفح لا يدعم النطق');
@@ -211,13 +234,25 @@ function shell(title,body,back){app.innerHTML=`<header>${back===false?'':'<butto
 const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
 function home(){clr();let c='';for(let t=1;t<=10;t++){const n=S.stars[t]||0;c+=`<button class="chip ${cur==t?'on':''}" onclick="cur=${t};home()">${false?'🔒':t}<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`}
 const n=S.stars.m||0;c+=`<button class="chip ${cur==0?'on':''}" style="font-size:20px" onclick="cur=0;home()">الكل<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`;
-shell('نجوم الضرب 🌟',`<div class=owl><span class=av>${AV()}</span><p>مرحبًا ${NM()}! اختر جدولًا ثم العب! اللعبة تتذكر الأرقام الصعبة وتعيدها أكثر حتى تحفظها.</p></div><div class=chips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m6" onclick="collect()"><i>🦘</i>اجمع قفزات <small>🦘 ${BK()}</small></button><button class="mode m7" onclick="shop()"><i>🛍️</i>المتجر <small>🪙 ${GD()}</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m4" onclick="learn()"><i>📖</i>تعلّم وردّد</button></div>`,false)}
+shell('نجوم الضرب 🌟',`<div class=owl><span class=av>${AV()}</span><p>مرحبًا ${NM()}! اختر جدولًا ثم العب! اللعبة تتذكر الأرقام الصعبة وتعيدها أكثر حتى تحفظها.</p></div><div class=chips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()}</small></button><button class="mode m5 m9" onclick="cards()"><i>🎴</i>البطاقات <small>اقلب واحفظ</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m6" onclick="collect()"><i>🦘</i>اجمع قفزات <small>🦘 ${BK()}</small></button><button class="mode m7" onclick="shop()"><i>🛍️</i>المتجر <small>🪙 ${GD()}</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m4" onclick="learn()"><i>📖</i>تعلّم وردّد</button></div>`,false)}
 const TIP={1:'أي رقم × 1 يبقى كما هو.',2:'الناتج دائمًا ضعف الرقم، وعدد زوجي.',3:'اجمع رقمَي الناتج: ستجد 3 أو 6 أو 9 دائمًا.',4:'ضاعف مرتين: 4 × 6 يعني ضعف ضعف 6.',5:'الناتج ينتهي دائمًا بـ 0 أو 5.',9:'مجموع رقمَي الناتج دائمًا 9. وفي 9 × 4 اطوِ الإصبع الرابع: 3 أصابع قبله و6 بعده = 36.',10:'ضع صفرًا بعد الرقم.',11:'كرّر الرقم مرتين: 11 × 4 = 44.'};
-function learn(){clr();if(!cur)cur=1;let r='';for(let n=1;n<=10;n++)r+=`<button class=row id=r${n} onclick="show(${n})">${cur} × ${n} = <b>${cur*n}</b></button>`;
-shell('جدول '+cur,`<p class=tip>💡 ${TIP[cur]||'كل سطر يزيد '+cur+' عن السطر الذي قبله.'}</p><div class=rows>${r}</div><div id=viz class=viz><p>اضغط على أي سطر لترى الصورة وتسمعه</p></div><div class=cap id=cap></div><button class=big onclick="chant()">🎵 ردّد معي</button>`)}
+let LT=0,CHN=0;
+function learn(){clr();LT++;CHN=0;if(!cur)cur=1;let r='';for(let n=1;n<=10;n++)r+=`<button class=row id=r${n} onclick="rowSay(${n})">${cur} × ${n} = <b>${cur*n}</b></button>`;
+shell('جدول '+cur,`<p class=tip>💡 ${TIP[cur]||'كل سطر يزيد '+cur+' عن السطر الذي قبله.'}</p><div class=rows>${r}</div><div id=viz class=viz><p>اضغط على أي سطر لترى الصورة وتسمعه</p></div><div class=cap id=cap></div><div id=cap2 class=cap2></div><div id=lo></div><button class=big id=chb onclick="chant()">🎵 ردّد معي</button>`);lopts()}
+function lopts(){const b=(k,v,l,d)=>`<button class="${(S[k]==null?d:S[k])==v?'on':''}" onclick="S.${k}=${typeof v=='string'?`'${v}'`:v};save();lopts()">${l}</button>`;
+$('#lo').innerHTML=`<div class="card lo"><div class=lr><span>🔁 كرّر كل جملة</span><div class=seg>${[1,2,3,5].map(v=>b('r1',v,v+' ×',1)).join('')}</div></div><div class=lr><span>📚 كرّر الجدول كاملًا</span><div class=seg>${[1,2,3,5].map(v=>b('rt',v,v+' ×',1)).join('')}</div></div><div class=lr><span>⏱️ الإيقاع</span><div class=seg>${b('sp','s','🐢 هادئ','s')+b('sp','n','🐇 عادي','s')}</div></div></div>`}
 function show(n){document.querySelectorAll('.row').forEach(e=>e.classList.remove('on'));const r=$('#r'+n);if(!r)return;r.classList.add('on');let d='';for(let i=0;i<n;i++)for(let j=0;j<cur;j++)d+=`<i class=dot style="background:hsl(${i*37+10},85%,58%);animation-delay:${(i*cur+j)*12}ms"></i>`;
-const v=$('#viz');v.style.gridTemplateRows=`repeat(${cur},auto)`;v.innerHTML=d;$('#cap').textContent=`${n} مجموعات، في كل مجموعة ${cur} = ${cur*n}`;say(`${cur} ضرب ${n} يساوي ${cur*n}`)}
-function chant(){clr();for(let n=1;n<=10;n++)later(()=>show(n),(n-1)*2400)}
+const v=$('#viz');v.style.gridTemplateRows=`repeat(${cur},auto)`;v.innerHTML=d;$('#cap').textContent=`${n} مجموعات، في كل مجموعة ${cur} = ${cur*n}`}
+const chBtn=t=>{const b=$('#chb');if(b)b.textContent=t};
+function stopChant(){LT++;CHN=0;clr();chBtn('🎵 ردّد معي');const c=$('#cap2');if(c)c.textContent=''}
+// سطر واحد: يكرّره بعدد «كرّر كل جملة»
+async function rowSay(n){stopChant();const tok=LT,k=S.r1||1;for(let i=1;i<=k;i++){if(tok!==LT)return;show(n);$('#cap2').textContent=k>1?`🔁 ${i} من ${k}`:'';await sayP(`${cur} ضرب ${n} يساوي ${cur*n}`);if(tok!==LT)return;if(i<k)await wait(SLOW()?1000:500)}}
+// الجدول كاملًا: كل جملة تتكرر، والجدول كله يتكرر
+async function chant(){if(CHN)return stopChant();stopChant();const tok=LT,k=S.r1||1,T=S.rt||1;CHN=1;chBtn('⏹️ إيقاف');
+for(let t=1;t<=T;t++){for(let n=1;n<=10;n++)for(let i=1;i<=k;i++){if(tok!==LT||!$('#chb'))return;show(n);$('#cap2').textContent=(T>1?`📚 الجولة ${t} من ${T}`:'')+(T>1&&k>1?' • ':'')+(k>1?`🔁 ${i} من ${k}`:'');
+await sayP(`${cur} ضرب ${n} يساوي ${cur*n}`);if(tok!==LT)return;await wait(SLOW()?1100:500)}
+if(t<T){$('#cap2').textContent='👏 انتهت الجولة '+t;await wait(1600)}}
+if(tok===LT){CHN=0;chBtn('🎵 ردّد معي');$('#cap2').textContent='🎉 أحسنت! أنهيت الجدول';good();clap(8)}}
 let QN=30;const G=['أحسنت! 👏','رائع جدًا! 🌟','بطل! 💪','ممتاز! 🎉','عبقري! 🧠','استمر يا نجم! ✨','صح الصح! 🚀'],W=['لا بأس! الخطأ يعلّمنا 💪','قريب جدًا! حاول في السؤال التالي','أنت تتحسن، لا تستسلم! 🌈'];
 function plan(){const ts=tabs(),L=[];ts.forEach(t=>{const w=[];for(let b=1;b<=10;b++){const o=S.f[key(t,b)]||{o:0,x:0};w.push([b,Math.max(1,1+3*o.x-.5*o.o)])}for(let i=0;i<5;i++){let r=Math.random()*w.reduce((s,x)=>s+x[1],0),j=0;for(;j<w.length-1;j++){r-=w[j][1];if(r<=0)break}L.push([t,w[j][0]]);w.splice(j,1)}});const n=Math.max(30,5*ts.length);while(L.length<n){const f=pick();L.push([f[0],f[1]])}return sh(L)}
 function quiz(){clr();Q={i:0,s:0,k:0,bk:0,last:'',msg:'',l:plan()};QN=Q.l.length;qn()}
@@ -546,6 +581,27 @@ function rend(){const r=RC;r.ph='end';r.on=0;const win=r.d>=r.rd,n=win?(r.e<=2?3
 if(win){good();clap(20);say('أحسنت يا بطل، فزت بالسباق');for(let i=0;i<6;i++)later(()=>burst(R(innerWidth),R(300)+60),i*300)}else{oops();say('المركز الثاني، كنت قريبًا جدًا')}
 $('#pan').innerHTML=`<div class=card><div class=res>${win?'🏆'+'⭐'.repeat(n):'🥈⭐'}</div><h2>${win?'فاز '+NM()+' بالسباق! 🎉':'المركز الثاني! كنت قريبًا جدًا 💪'}</h2><p style=margin:0>الأخطاء: ${r.e}</p>${U}<button class=big onclick=race()>🏁 سباق جديد</button><button class=big style=background:#18a999 onclick=exitR()>🏠 الرئيسية</button></div>`}
 function exitR(){if(RC)RC.on=0;clr();try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}home()}
+// ===== البطاقات =====
+let FC={};
+function fcFacts(){const ts=tabs();let L=[];ts.forEach(a=>{for(let b=1;b<=10;b++)L.push([a,b])});
+if(L.length>20){const u=new Set(),o=[];let g=0;while(o.length<20&&g++<500){const f=pick();if(!u.has(key(f[0],f[1]))){u.add(key(f[0],f[1]));o.push([f[0],f[1]])}}L=o}
+return FC.sh?sh(L):L}
+function cards(){clr();FC={m:S.fm||'deck',sh:S.fs!==0,rv:!!S.fr};const L=fcFacts();Object.assign(FC,{q:L.slice(),n:L.length,ok:0,first:new Set(),miss:new Set(),seen:new Set(),gd:0});FC.m=='deck'?fcDeck():fcGrid()}
+function fcOpts(){const b=(js,l,on)=>`<button class="${on?'on':''}" onclick="${js};save();cards()">${l}</button>`;
+return `<div class=seg>${b("S.fm='deck'",'🎴 بطاقة بطاقة',FC.m=='deck')+b("S.fm='grid'",'🧩 شبكة البطاقات',FC.m=='grid')}</div><div class=seg>${b('S.fs='+(FC.sh?0:1),'🔀 خلط الترتيب',FC.sh)+b('S.fr='+(FC.rv?0:1),'🔄 الرقم المخفي',FC.rv)}</div>`}
+function face(f,back){const[a,b]=f,p=a*b;if(back)return FC.rv?`<div class=fq>${a} × <b>${b}</b> = ${p}</div><div class=fr>${b}</div>`:`<div class=fq>${a} × ${b} =</div><div class=fr>${p}</div>`;
+return FC.rv?`<div class=fq>${a} × ؟ = ${p}</div><div class=fh>ما الرقم المخفي؟</div>`:`<div class=fq>${a} × ${b}</div><div class=fh>= ؟</div>`}
+const dotsM=([a,b])=>`<div class=fdots style="grid-template-columns:repeat(${b},8px)">${Array.from({length:a*b},(_,i)=>`<i style="background:hsl(${(i/b|0)*37+10},85%,58%)"></i>`).join('')}</div>`;
+function fcDeck(){const f=FC.q[0];if(!f)return fcEnd();FC.cur=f;FC.flip=0;
+shell('البطاقات 🎴',fcOpts()+`<div class=prog><i style="width:${(FC.n-FC.q.length)*100/FC.n}%"></i></div><p class=sm style="text-align:center;margin:0">✅ عرفت ${FC.ok} من ${FC.n} • باقي ${FC.q.length}</p><div class="fc fbig" id=fc onclick="fcFlip()"><div class=in><div class=fa>${face(f,0)}<span class=tap>👆 فكّر في الجواب، ثم اضغط لتقلب البطاقة</span></div><div class=fb>${face(f,1)}${dotsM(f)}</div></div></div><div id=fk class=opts style="visibility:hidden"><button class="opt fk1" onclick="fcKnow(1)">✅ عرفتها</button><button class="opt fk0" onclick="fcKnow(0)">🔁 أعدها لي</button></div>`)}
+function fcFlip(){const e=$('#fc');if(!e||FC.flip)return;FC.flip=1;e.classList.add('on');tone(660,.12,'triangle',.15);const[a,b]=FC.cur;later(()=>say(`${a} ضرب ${b} يساوي ${a*b}`),350);later(()=>{const k=$('#fk');if(k)k.style.visibility='visible'},500)}
+function fcKnow(k){if(!FC.flip)return;FC.flip=0;const[a,b]=FC.cur,id=key(a,b);FC.q.shift();rec(a,b,!!k);
+if(k){FC.ok++;if(!FC.miss.has(id))FC.first.add(id);good();clap(3);const p=mid($('.fk1'));burst(p[0],p[1])}else{FC.miss.add(id);FC.q.splice(Math.min(FC.q.length,3),0,FC.cur);oops()}later(fcDeck,k?600:350)}
+function fcEnd(){const r=FC.first.size/FC.n,n=r>=.9?3:r>=.7?2:r>=.4?1:0;award(n);if(n){good();clap(16);say('أحسنت يا بطل');for(let i=0;i<5;i++)later(()=>burst(R(innerWidth),R(300)+100),i*250)}
+shell('البطاقات 🎴',`<div class=card><div class=res>${'⭐'.repeat(n)||'💪'}</div><h2>${n==3?'ذاكرة بطل!':n?'أحسنت!':'تمرّن أكثر وستحفظها!'}</h2><p>عرفت ${FC.first.size} من ${FC.n} من أول مرة</p>${U}<button class=big onclick="cards()">🎴 مجموعة جديدة</button></div>`)}
+function fcGrid(){shell('البطاقات 🎴',fcOpts()+`<div class=gtools><button class=buy onclick="fcAll(1)">👀 اقلب الكل</button><button class=buy onclick="fcAll(0)">🙈 أخفِ الكل</button><button class=buy onclick="cards()">🔀 مجموعة جديدة</button></div><div class=fg>${FC.q.map((f,i)=>`<div class=fc id=g${i} onclick="fcG(${i})"><div class=in><div class=fa>${face(f,0)}</div><div class=fb>${face(f,1)}</div></div></div>`).join('')}</div><p class="sm gc" id=gc>قل الجواب بصوت عالٍ، ثم اقلب البطاقة لتتأكد!</p>`)}
+function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){const[a,b]=FC.q[i];tone(660,.1,'triangle',.12);say(`${a} ضرب ${b} يساوي ${a*b}`);FC.seen.add(i);if(FC.seen.size==FC.q.length&&!FC.gd){FC.gd=1;good();clap(10);$('#gc').textContent='🎉 قلبت كل البطاقات! أحسنت'}}}
+function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== الحسابات والمزامنة (Firebase) =====
 const LOCALK=['sound','vn'];let FB=null,UID=null,UEM='',SYN='',PT=0,UNS=null;
 const keepL=()=>{const o={};LOCALK.forEach(k=>{if(S[k]!==undefined)o[k]=S[k]});return o};
