@@ -147,7 +147,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 .fc .fa,.fc .fb{position:absolute;inset:0;-webkit-backface-visibility:hidden;backface-visibility:hidden;border-radius:24px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;box-shadow:0 6px 0 #0002;direction:ltr;overflow:hidden;padding:8px}
 .fc .fa{color:#fff;background:radial-gradient(#ffffff33 2px,transparent 2.5px) 0 0/22px 22px,linear-gradient(135deg,#8a63ff,#4aa3ff)}
 .fc .fb{background:#fff;transform:rotateY(180deg);border:4px solid var(--sun)}
-.fq{font-size:44px;font-weight:800;line-height:1.1}.fq b{color:var(--coral)}.fh{font-size:20px;opacity:.9;direction:rtl}.fr{font-size:64px;font-weight:800;color:var(--coral);line-height:1}
+.fq{font-size:44px;font-weight:800;line-height:1.1;direction:ltr;unicode-bidi:isolate}.qm{display:inline-block;min-width:1.1em;padding:0 .15em;border:3px dashed #fff9;border-radius:12px;text-align:center}.fq b{color:var(--coral)}.fh{font-size:20px;opacity:.9;direction:rtl}.fr{font-size:64px;font-weight:800;color:var(--coral);line-height:1}
 .tap{position:absolute;bottom:12px;left:10px;right:10px;text-align:center;font-size:14px;direction:rtl;animation:mk0 1.4s ease-in-out infinite}
 .fdots{display:grid;gap:3px;justify-content:center}.fdots i{width:8px;height:8px;border-radius:50%}
 #fk{grid-template-columns:1fr 1fr}#fk .opt{font-size:20px;padding:12px 0}.fk1{background:var(--mint)!important}.fk0{background:#ffd6a5!important}
@@ -159,7 +159,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='1.1.0';
+const VER='1.1.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -257,7 +257,7 @@ let QN=30;const G=['أحسنت! 👏','رائع جدًا! 🌟','بطل! 💪','
 function plan(){const ts=tabs(),L=[];ts.forEach(t=>{const w=[];for(let b=1;b<=10;b++){const o=S.f[key(t,b)]||{o:0,x:0};w.push([b,Math.max(1,1+3*o.x-.5*o.o)])}for(let i=0;i<5;i++){let r=Math.random()*w.reduce((s,x)=>s+x[1],0),j=0;for(;j<w.length-1;j++){r-=w[j][1];if(r<=0)break}L.push([t,w[j][0]]);w.splice(j,1)}});const n=Math.max(30,5*ts.length);while(L.length<n){const f=pick();L.push([f[0],f[1]])}return sh(L)}
 function quiz(){clr();Q={i:0,s:0,k:0,bk:0,last:'',msg:'',l:plan()};QN=Q.l.length;qn()}
 function qn(){if(Q.i==QN)return qend();const f=Q.l[Q.i],a=f[0],b=f[1];Q.a=a;Q.b=b;Q.last=key(a,b);
-shell('اختبار النجوم',`<div class=prog><i style="width:${Q.i*100/QN}%"></i></div><div class=cheer><span id=ow>🦉</span><p id=bub>${Q.msg||'هيا نبدأ! '+QN+' سؤالًا وأنت قادر عليها!'}</p><b>${Q.i+1}/${QN}</b></div><div class=card><div class=q>${a} × ${b} = ؟</div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick="qa(this,${v})">${v}</button>`).join('')}</div></div>`);say(`${a} ضرب ${b}`)}
+shell('اختبار النجوم',`<div class=prog><i style="width:${Q.i*100/QN}%"></i></div><div class=cheer><span id=ow>🦉</span><p id=bub>${Q.msg||'هيا نبدأ! '+QN+' سؤالًا وأنت قادر عليها!'}</p><b>${Q.i+1}/${QN}</b></div><div class=card><div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick="qa(this,${v})">${v}</button>`).join('')}</div></div>`);say(`${a} ضرب ${b}`)}
 function qa(el,v){const ok=v==Q.a*Q.b;document.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(+o.textContent==Q.a*Q.b)o.classList.add('ok')});rec(Q.a,Q.b,ok);Q.i++;
 let m,d=ok?1000:1900;if(ok){Q.s++;Q.k++;Q.bk=Math.max(Q.bk,Q.k);good();const p=mid(el);burst(p[0],p[1]);m=G[R(G.length)];if(Q.k%5==0){m='🔥 '+Q.k+' صح متتالية! أنت مذهل!';clap(16);say('أحسنت يا بطل');for(let i=0;i<3;i++)later(()=>burst(R(innerWidth),R(300)+120),i*250);d=1700}else clap(4)}else{Q.k=0;el.classList.add('no');oops();m=W[R(W.length)]}
 if(Q.i==QN/2)m+=' نصف الطريق! 💪';Q.msg=m;$('#bub').textContent=m;$('#ow').classList.add(ok?'hop':'sad');later(qn,d)}
@@ -291,7 +291,7 @@ w+=`<div class=flag style="left:${JG*(PW+GP)+PW-80}px">🏁</div><div id=hp clas
 shell('رحلة الكوالا',`<p class=tip>أجب عن ${JK} عمليات صحيحة ليأتي صديق ويبني الجسر!</p><div id=stg><div id=wd>${w}</div><div class=sea></div></div><div id=pan></div>`);
 $('#kl').style.transition='none';mv(20);later(()=>{$('#kl').style.transition='';walk(PW-70,ask)},300)}
 function ask(){const f=pick(J.last),a=f[0],b=f[1];J.last=key(a,b);J.a=a;J.b=b;$('#th').style.opacity=1;
-$('#pan').innerHTML=`<div class=card><div class=dots>${'⭐'.repeat(J.c)+'☆'.repeat(JK-J.c)}</div><div class=q style="font-size:40px">${a} × ${b} = ؟</div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick="ja(this,${v})">${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
+$('#pan').innerHTML=`<div class=card><div class=dots>${'⭐'.repeat(J.c)+'☆'.repeat(JK-J.c)}</div><div class=q style="font-size:40px">${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick="ja(this,${v})">${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
 function ja(el,v){const ok=v==J.a*J.b;document.querySelectorAll('.opt').forEach(o=>o.disabled=true);rec(J.a,J.b,ok);
 if(ok){J.c++;good();clap(3);const p=mid(el);burst(p[0],p[1]);el.classList.add('ok');later(J.c>=JK?help:ask,800)}else{J.e++;oops();el.classList.add('no');document.querySelectorAll('.opt').forEach(o=>{if(+o.textContent==J.a*J.b)o.classList.add('ok')});later(ask,1500)}}
 function help(){const h=HP[R(HP.length)],g=J.g,e=$('#hp');$('#th').style.opacity=0;$('#pan').innerHTML=`<div class=card><div class=res>${h[0]}</div><h2>${h[1]}!</h2></div>`;say(h[1]);clap(10);
@@ -322,7 +322,7 @@ requestAnimationFrame(loop)}
 function dropK(){J.fall=1;oops();$('#ks').classList.remove('wk');$('#kl').classList.add('fall');$('#th').style.opacity=0;const p=mid($('#ks'));burst(p[0],p[1]+60);
 later(()=>{J.l--;jh();if(J.l<=0)return lose();J.f++;J.x=J.g*(PW+GP)+30;J.ph=J.built[J.g]?'bridge':'walk';J.fall=0;$('#kl').classList.remove('fall');$('#pan').innerHTML='';$('#kl').style.left=J.x+'px';cam(J.x)},1400)}
 function ask(){if(J.ph!='ask')return;const f=pick(J.last),a=f[0],b=f[1];J.last=key(a,b);J.a=a;J.b=b;$('#th').style.opacity=1;
-$('#pan').innerHTML=`<div class=card><div class=dots>${'⭐'.repeat(J.c)+'☆'.repeat(JK-J.c)}</div><div class=q>${a} × ${b} = ؟</div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ja(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
+$('#pan').innerHTML=`<div class=card><div class=dots>${'⭐'.repeat(J.c)+'☆'.repeat(JK-J.c)}</div><div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ja(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
 function help(){if(J.ph!='ask')return;J.ph='help';const h=HP[R(HP.length)],g=J.g,e=$('#hp');$('#th').style.opacity=0;$('#pan').innerHTML=`<div class=card><div class=res>${h[0]}</div><h2>${h[1]}!</h2></div>`;say(h[1]);clap(10);
 e.textContent=h[0];e.style.left=(g*(PW+GP)+PW+GP/2-24)+'px';e.classList.add('show');
 later(()=>{$('#br'+g).classList.add('on');J.built[g]=1;good();J.ph='bridge';$('#pan').innerHTML=`<div class=card><b>اعبر الجسر ▶</b></div>`;later(()=>{if(J.ph=='bridge')$('#pan').innerHTML=''},2500)},1400)}
@@ -345,7 +345,7 @@ requestAnimationFrame(loop)}
 function dropK(){J.fall=1;oops();$('#ks').classList.remove('wk');const k=$('#kl');k.classList.add('fall');k.style.bottom='-80px';$('#th').style.opacity=0;const p=mid($('#ks'));burst(p[0],p[1]+60);
 later(()=>{J.l--;jh();if(J.l<=0)return lose();J.f++;J.x=J.g*(PW+GP)+30;J.jy=0;J.vy=0;J.ph=J.built[J.g]?'bridge':'walk';J.fall=0;k.classList.remove('fall');k.style.bottom='145px';$('#pan').innerHTML='';k.style.left=J.x+'px';cam(J.x)},1400)}
 function ask(){if(J.ph!='ask')return;const f=pick(J.last),a=f[0],b=f[1];J.last=key(a,b);J.a=a;J.b=b;$('#th').style.opacity=1;
-$('#pan').innerHTML=`<div class=card><div class=dots>${'⭐'.repeat(J.c)+'☆'.repeat(JK-J.c)} <small>🦘 ${J.ca%3}/3</small></div><div class=q>${a} × ${b} = ؟</div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ja(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
+$('#pan').innerHTML=`<div class=card><div class=dots>${'⭐'.repeat(J.c)+'☆'.repeat(JK-J.c)} <small>🦘 ${J.ca%3}/3</small></div><div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ja(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
 function ja(el,v){if(!J||J.ph!='ask')return;const ok=v==J.a*J.b;document.querySelectorAll('.opt').forEach(o=>o.disabled=true);rec(J.a,J.b,ok);
 if(ok){J.c++;J.ca++;good();clap(3);const p=mid(el);burst(p[0],p[1]);el.classList.add('ok');
 if(J.ca%3==0){J.j++;jh();say('ربحت قفزة');later(()=>{if(J.ph=='ask')$('#pan').innerHTML=`<div class=card><div class=res>🦘</div><h2>ربحت قفزة! اقترب من الحافة واضغط 🦘</h2></div>`},500);later(J.c>=JK?help:ask,2200)}else later(J.c>=JK?help:ask,800)}
@@ -485,7 +485,7 @@ function pcol(c,k){S.col=c;save();drawS(!k)}
 const BK=()=>S.jp==null?5:S.jp;let C={};
 function collect(){clr();cq()}
 function cq(msg){const f=pick(C.last),a=f[0],b=f[1];C.last=key(a,b);C.a=a;C.b=b;
-shell('اجمع قفزات 🦘',`<div class=cheer><span>🦘</span><p>${msg||'كل 3 إجابات صحيحة = قفزة 🦘 + '+10*(cur||10)+' ليرة 🪙'}</p><b>🦘 ${BK()} 🪙 ${GD()}</b></div><div class=card><div class=q>${a} × ${b} = ؟</div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick="cka(this,${v})">${v}</button>`).join('')}</div></div><button class=big style="background:#18a999" onclick="journey()">🎮 يكفي، سألعب الآن</button>`);say(`${a} ضرب ${b}`)}
+shell('اجمع قفزات 🦘',`<div class=cheer><span>🦘</span><p>${msg||'كل 3 إجابات صحيحة = قفزة 🦘 + '+10*(cur||10)+' ليرة 🪙'}</p><b>🦘 ${BK()} 🪙 ${GD()}</b></div><div class=card><div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick="cka(this,${v})">${v}</button>`).join('')}</div></div><button class=big style="background:#18a999" onclick="journey()">🎮 يكفي، سألعب الآن</button>`);say(`${a} ضرب ${b}`)}
 function cka(el,v){const ok=v==C.a*C.b;document.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(+o.textContent==C.a*C.b)o.classList.add('ok')});rec(C.a,C.b,ok);
 if(ok){S.cj=(S.cj||0)+1;let m=G[R(G.length)];if(S.cj%3==0){S.jp=BK()+1;m+=' +1 🦘'}else m+=' ('+S.cj%3+'/3)';save();good();clap(3);const p=mid(el);burst(p[0],p[1]);later(()=>cq(m),900)}else{oops();el.classList.add('no');later(()=>cq('الجواب '+C.a*C.b+'، حاول في التالي'),1600)}}
 // ===== المتجر =====
@@ -568,7 +568,7 @@ if(mv&&(r.d>=r.FIN||r.rd>=r.FIN))return rend();
 requestAnimationFrame(t=>rloop(t,r))}
 function rask(){const r=RC;if(r.ph!='ask')return;const f=pick(r.last),a=f[0],b=f[1],o=r.ob[r.oi];r.last=key(a,b);r.a=a;r.b=b;
 if(!r.c&&!r.msg)say(o[1]);
-$('#pan').innerHTML=`<div class=card><div class=dots>${o[0]} ${'⭐'.repeat(r.c)+'☆'.repeat(RK-r.c)} <small>${r.msg||o[1]+'! أجب '+RK+' إجابات صحيحة لنطلب المساعدة'}</small></div><div class=q>${a} × ${b} = ؟</div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ra(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
+$('#pan').innerHTML=`<div class=card><div class=dots>${o[0]} ${'⭐'.repeat(r.c)+'☆'.repeat(RK-r.c)} <small>${r.msg||o[1]+'! أجب '+RK+' إجابات صحيحة لنطلب المساعدة'}</small></div><div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ra(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
 function ra(el,v){const r=RC;if(!r||r.ph!='ask')return;const ok=v==r.a*r.b;document.querySelectorAll('.opt').forEach(o=>o.disabled=true);rec(r.a,r.b,ok);
 if(ok){r.c++;r.n+=NI;good();clap(3);const p=mid(el);burst(p[0],p[1]);el.classList.add('ok');r.msg=G[R(G.length)]+' +🔥';rjh();later(r.c>=RK?rhelp:rask,800)}
 else{r.e++;r.rb+=90;oops();el.classList.add('no');document.querySelectorAll('.opt').forEach(o=>{if(+o.textContent==r.a*r.b)o.classList.add('ok')});r.msg=`${CH[r.ri].n} تقدّم قليلًا، ركّز وستسبقه! 💪`;later(rask,1500)}}
@@ -590,7 +590,7 @@ function cards(){clr();FC={m:S.fm||'deck',sh:S.fs!==0,rv:!!S.fr};const L=fcFacts
 function fcOpts(){const b=(js,l,on)=>`<button class="${on?'on':''}" onclick="${js};save();cards()">${l}</button>`;
 return `<div class=seg>${b("S.fm='deck'",'🎴 بطاقة بطاقة',FC.m=='deck')+b("S.fm='grid'",'🧩 شبكة البطاقات',FC.m=='grid')}</div><div class=seg>${b('S.fs='+(FC.sh?0:1),'🔀 خلط الترتيب',FC.sh)+b('S.fr='+(FC.rv?0:1),'🔄 الرقم المخفي',FC.rv)}</div>`}
 function face(f,back){const[a,b]=f,p=a*b;if(back)return FC.rv?`<div class=fq>${a} × <b>${b}</b> = ${p}</div><div class=fr>${b}</div>`:`<div class=fq>${a} × ${b} =</div><div class=fr>${p}</div>`;
-return FC.rv?`<div class=fq>${a} × ؟ = ${p}</div><div class=fh>ما الرقم المخفي؟</div>`:`<div class=fq>${a} × ${b}</div><div class=fh>= ؟</div>`}
+return FC.rv?`<div class=fq>${a} × <bdi class=qm>؟</bdi> = ${p}</div><div class=fh>ما الرقم المخفي؟</div>`:`<div class=fq>${a} × ${b} = <bdi class=qm>؟</bdi></div><div class=fh>فكّر في الجواب</div>`}
 const dotsM=([a,b])=>`<div class=fdots style="grid-template-columns:repeat(${b},8px)">${Array.from({length:a*b},(_,i)=>`<i style="background:hsl(${(i/b|0)*37+10},85%,58%)"></i>`).join('')}</div>`;
 function fcDeck(){const f=FC.q[0];if(!f)return fcEnd();FC.cur=f;FC.flip=0;
 shell('البطاقات 🎴',fcOpts()+`<div class=prog><i style="width:${(FC.n-FC.q.length)*100/FC.n}%"></i></div><p class=sm style="text-align:center;margin:0">✅ عرفت ${FC.ok} من ${FC.n} • باقي ${FC.q.length}</p><div class="fc fbig" id=fc onclick="fcFlip()"><div class=in><div class=fa>${face(f,0)}<span class=tap>👆 فكّر في الجواب، ثم اضغط لتقلب البطاقة</span></div><div class=fb>${face(f,1)}${dotsM(f)}</div></div></div><div id=fk class=opts style="visibility:hidden"><button class="opt fk1" onclick="fcKnow(1)">✅ عرفتها</button><button class="opt fk0" onclick="fcKnow(0)">🔁 أعدها لي</button></div>`)}
