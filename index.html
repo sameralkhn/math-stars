@@ -382,12 +382,16 @@ svg[class^=mv]{transform-origin:50% 85%}
 .khand .kc .kcs{font-size:clamp(26px,8.5vw,40px)!important}.khand .kc i{font-size:15px}.khand .kc.kgrp{margin-right:0!important}
 .khand{gap:6px!important}
 .ktop{transform:scale(1.45)!important}.ktable{padding:30px 18px!important}.ktop.kland{animation:kland2 .45s cubic-bezier(.3,1.6,.5,1)}@keyframes kland2{0%{transform:scale(1.9) rotate(-14deg)}100%{transform:scale(1.45) rotate(0)}}
+
+.dnkid{width:64px!important;height:70px!important}.dnrunner{display:block;font-size:62px;line-height:1;filter:drop-shadow(0 4px 3px #0006)}
+.dnkid.dnrun .dnrunner{animation:dnbob .32s infinite}@keyframes dnbob{50%{transform:translateY(-5px) rotate(-6deg)}}
+.dnkid.dnjmp{bottom:120px!important}.dnkid.dnjmp .dnrunner{transform:rotate(-20deg)}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.8.3';
+const VER='2.8.4';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1172,11 +1176,11 @@ function dino(){clr();const lv=S.dnl||1;DN={lv,d:0,dd:-320,v:0,en:60,jump:0,e:0,
 for(let w=500;w<DN.FIN-300;w+=520+R(380))DN.ob.push({w,k:R(DNOB.length)});
 shell('الهروب من الديناصور 🦖',`<div class=dnw><div class=dnsc id=dnsc><div class=dnmoon>🌕</div><div class="dnl dnl1"></div><div class="dnl dnl2"></div><div class=dnground></div>
 <div id=dnw2>${DN.ob.map((o,i)=>`<span class=dnob id=dno${i} data-w=${o.w}>${DNOB[o.k][0]}</span>`).join('')}<span class=dnhome data-w=${DN.FIN}>🏡</span>${[...Array(14)].map((_,i)=>`<span class=dnbat data-w=${300+i*420} style="top:${10+R(30)}%">${['🦇','👀','🦉','🕷️'][i%4]}</span>`).join('')}</div>
-<div class=dnkid id=dnkid><span class=dnav>${AV()}</span></div><div class=dnrex id=dnrex>🦖</div><div class=dnred id=dnred></div></div>
+<div class=dnkid id=dnkid><span class=dnrunner>🏃</span></div><div class=dnrex id=dnrex>🦖</div><div class=dnred id=dnred></div></div>
 <div class=dnhud><span class=dnmeter><i id=dnmk style="right:0">🧒</i><i id=dnmr style="right:0">🦖</i><b>🏡</b></span><span class=dnen>⚡<span class=fgw><i id=dneg></i></span></span></div></div>
-<div id=dnp class=card></div><div class=dnbtns><button class="pd dnj" id=dnj aria-label="اقفز">🦘<small>اقفز</small></button></div>`);
-$('#dnj').addEventListener('pointerdown',e=>{e.preventDefault();dnJump()});
-$('#dnp').innerHTML=`<h2>🦖 الديناصور جائع!</h2><p>اركض في الغابة حتى تصل إلى البيت 🏡. كل إجابة صحيحة تعطيك ⚡ طاقة لتركض أسرع — والأسرع في الإجابة يأخذ طاقة أكثر! واضغط <b>🦘 اقفز</b> فوق المخاطر.</p><div class=seg>${[1,2,3].map(n=>`<button class="${lv==n?'on':''}" onclick="S.dnl=${n};save();dino()">${['🙂 سهل','😬 متوسط','😱 صعب'][n-1]}</button>`).join('')}</div><button class=big onclick=dnGo()>🏃 اهرب!</button>`;
+<div id=dnp class=card></div>`);
+
+$('#dnp').innerHTML=`<h2>🦖 الديناصور جائع!</h2><p>اركض في الغابة حتى تصل إلى البيت 🏡. كل إجابة صحيحة تعطيك ⚡ طاقة لتركض أسرع — والأسرع في الإجابة يأخذ طاقة أكثر! والطاقة تجعلك <b>تقفز تلقائيًا</b> فوق مخاطر الغابة — فإن نفدت تتعثّر!</p><div class=seg>${[1,2,3].map(n=>`<button class="${lv==n?'on':''}" onclick="S.dnl=${n};save();dino()">${['🙂 سهل','😬 متوسط','😱 صعب'][n-1]}</button>`).join('')}</div><button class=big onclick=dnGo()>🏃 اهرب!</button>`;
 DN.els=[...document.querySelectorAll('#dnw2 [data-w]')];dnDraw()}
 function dnGo(){const g=DN;g.ph='run';g.t=0;dnQ();tone(120,.4,'sawtooth',.12);tone(90,.5,'sawtooth',.12,.2);requestAnimationFrame(t=>dnLoop(t,g))}
 function dnQ(){const g=DN;if(g.ph!='run')return;const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;g.lock=0;
@@ -1188,7 +1192,7 @@ later(dnQ,ok?260:900)}
 function dnJump(){const g=DN;if(!g||g.ph!='run'||g.jump>0)return;g.jump=.75;tone(600,.12,'triangle',.12);tone(900,.1,'triangle',.1,.08)}
 function dnLoop(t,g){if(g!==DN||!g.on||!$('#dnsc'))return;const dt=Math.min(.05,(t-(g.tt||t))/1000);g.tt=t;if(g.ph=='run'){g.t+=dt;
  g.en=Math.max(0,g.en-5.5*dt);g.v=70+g.en*2.4;g.d+=g.v*dt;g.dv+=(1.3+g.lv*.5)*dt;g.dd+=g.dv*dt;if(g.jump>0)g.jump-=dt;
- g.ob.forEach((o,i)=>{if(o.hit||Math.abs(o.w-g.d)>22)return;o.hit=1;if(g.jump>0){const e=$('#dno'+i);e&&e.classList.add('dnok')}else{g.en=Math.max(0,g.en-18);g.d-=40;toast(DNOB[o.k][0]+' '+DNOB[o.k][1]+' اقفز في المرة القادمة 🦘');tone(150,.2,'square',.1);const k=$('#dnkid');k&&k.classList.add('dnstum');later(()=>k&&k.classList.remove('dnstum'),600)}});
+ g.ob.forEach((o,i)=>{if(!o.j&&o.w-g.d<70&&o.w-g.d>0){o.j=1;if(g.en>=15){g.en-=12;g.jump=.75;tone(600,.12,'triangle',.12);tone(900,.1,'triangle',.1,.08)}}if(o.hit||Math.abs(o.w-g.d)>22)return;o.hit=1;if(g.jump>0){const e=$('#dno'+i);e&&e.classList.add('dnok')}else{g.en=Math.max(0,g.en-10);g.d-=40;toast(DNOB[o.k][0]+' '+DNOB[o.k][1]+' طاقتك قليلة — أجب لتقفز ⚡');tone(150,.2,'square',.1);const k=$('#dnkid');k&&k.classList.add('dnstum');later(()=>k&&k.classList.remove('dnstum'),600)}});
  const gap=g.d-g.dd;if(gap<170&&!g.warn){g.warn=1;tone(90,.6,'sawtooth',.15);toast('🦖 الديناصور يقترب! أجب بسرعة!');try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}}if(gap>260)g.warn=0;
  if(g.d>=g.FIN)return dnEnd(1);if(gap<=0)return dnEnd(0)}
 dnDraw();requestAnimationFrame(t=>dnLoop(t,g))}
@@ -1199,7 +1203,7 @@ sc.style.setProperty('--p1',(g.d*.25)%600+'px');sc.style.setProperty('--p2',(g.d
 $('#dneg').style.width=g.en+'%';$('#dnmk').style.right=Math.min(100,g.d/g.FIN*100)+'%';$('#dnmr').style.right=Math.max(0,Math.min(100,g.dd/g.FIN*100))+'%'}
 function dnEnd(win){const g=DN;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;
 if(win){award(n);good();clap(20);say('أحسنت يا بطل');for(let i=0;i<6;i++)later(()=>burst(R(innerWidth),R(300)+60),i*250)}else{tone(80,.8,'sawtooth',.18);oops()}
-$('#dnp').innerHTML=`<div class=res>${win?'🏡🎉':'🦖😱'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'نجوت من الديناصور!':'أمسكك الديناصور!'}</h2><p>${win?`وصلت البيت في ${Math.round(g.t)} ثانية • ✅ ${g.ok} إجابة`:'أجب أسرع لتأخذ طاقة أكثر، واقفز فوق المخاطر 🦘'}</p>${U}<button class=big onclick=dino()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
+$('#dnp').innerHTML=`<div class=res>${win?'🏡🎉':'🦖😱'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'نجوت من الديناصور!':'أمسكك الديناصور!'}</h2><p>${win?`وصلت البيت في ${Math.round(g.t)} ثانية • ✅ ${g.ok} إجابة`:'أجب أسرع لتأخذ طاقة أكثر ⚡ — الطاقة تجعلك تركض وتقفز'}</p>${U}<button class=big onclick=dino()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
