@@ -251,7 +251,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.0.4';
+const VER='2.0.5';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -870,7 +870,7 @@ function cpDone(){const p=cpMe();p.done=true;
 if(CP.mode=='net'){cpPush();return cpWait()}
 if(CP.mode=='local'&&CP.i<CP.P.length-1){CP.i++;good();return cpTurn()}cpEnd(CP.P)}
 const cpRank=P=>P.slice().sort((x,y)=>y.g-x.g||y.ok-x.ok||x.t-y.t);
-function cpBoard(P,live){const md=['🥇','🥈','🥉'];return `<table class=cptb><tr><th>#</th><th>المتسابق</th><th>🪙 الذهب</th><th>✅</th><th>⏱️</th></tr>${cpRank(P).map((p,i)=>`<tr${i==0&&!live?' class=win':''}><td>${md[i]||i+1}</td><td>${esc(p.n)}${live&&!p.done?' <small>('+p.q+')</small>':''}</td><td><b>${p.g}</b></td><td>${p.ok}/${p.q||CP.N}</td><td>${p.q?(p.t/p.q).toFixed(1):'-'}</td></tr>`).join('')}</table>`}
+function cpBoard(P,live){const md=['🥇','🥈','🥉'];return `<table class=cptb><tr><th>#</th><th>المتسابق</th><th>🪙 الذهب</th><th>✅</th><th>⏱️ متوسط<br>الإجابة</th></tr>${cpRank(P).map((p,i)=>`<tr${i==0&&!live?' class=win':''}><td>${md[i]||i+1}</td><td>${esc(p.n)}${live&&!p.done?' <small>('+p.q+')</small>':''}</td><td><b>${p.g}</b></td><td>${p.ok}/${p.q||CP.N}</td><td>${p.q?(p.t/p.q).toFixed(1)+' ث':'-'}</td></tr>`).join('')}</table>${live?'':'<p class=sm style="margin:0">⏱️ متوسط الإجابة = متوسط الثواني للسؤال الواحد</p>'}`}
 // ----- النتيجة: الورود والبالونات وشهادة PDF -----
 function cpRain(){let d=$('#cprain');if(d)d.remove();d=document.createElement('div');d.id='cprain';document.body.appendChild(d);
 for(let i=0;i<46;i++){const e=document.createElement('span'),bl=i%2==0;e.textContent=bl?['🎈','🎈','🎉'][i%3]:['🌹','🌷','💐','🌸'][i%4];e.className=bl?'up':'dn';e.style.left=R(96)+'%';e.style.fontSize=(26+R(26))+'px';e.style.animationDuration=(4+Math.random()*4)+'s';e.style.animationDelay=(Math.random()*3)+'s';d.appendChild(e)}
@@ -886,15 +886,15 @@ const em=(t,X,Y,s)=>{x.font=`${s}px "Apple Color Emoji","Segoe UI Emoji","Noto C
 x.direction='rtl';x.textAlign='center';x.fillStyle='#1b2a5c';x.font=`800 64px ${F}`;x.fillText('🏆 مسابقة تجميع الذهب',w/2,180);
 x.font=`600 30px ${F}`;x.fillStyle='#5b6b8c';x.fillText('نجوم الضرب • '+new Date().toLocaleDateString('ar-SA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'})+' • '+CP.N+' سؤال',w/2,240);
 x.fillStyle='#1b2a5c';x.font=`800 52px ${F}`;x.fillText(solo?'أحسنت يا':'الفائز هو',w/2,400);
-x.font=`800 110px ${F}`;x.fillStyle='#e8a000';x.fillText(W.n,w/2,530);x.font=`800 48px ${F}`;x.fillStyle='#1b2a5c';x.fillText('🪙 '+W.g+' ذهبة',w/2,610);
-em('🌹',w/2-330,520,80);em('🌹',w/2+330,520,80);
-let y=720;const cols=[1080,860,560,370,190],hd=['#','المتسابق','الذهب','الصحيحة','الوقت'];
-x.fillStyle='#1b2a5c';x.fillRect(110,y-56,w-220,76);x.fillStyle='#fff';x.font=`800 32px ${F}`;hd.forEach((t,i)=>x.fillText(t,cols[i],y-6));
+let ns=110;x.font=`800 ${ns}px ${F}`;while(x.measureText(W.n).width>w-380&&ns>40){ns-=4;x.font=`800 ${ns}px ${F}`}const nw=x.measureText(W.n).width;x.fillStyle='#e8a000';x.fillText(W.n,w/2,530);x.font=`800 48px ${F}`;x.fillStyle='#1b2a5c';x.fillText('🪙 '+W.g+' ذهبة',w/2,610);
+em('🌹',w/2-nw/2-60,520,72);em('🌹',w/2+nw/2+60,520,72);
+let y=720;const cols=[1080,850,580,410,235],hd=['#','المتسابق','الذهب','الصحيحة','متوسط الإجابة'];
+x.fillStyle='#1b2a5c';x.fillRect(110,y-56,w-220,76);x.fillStyle='#fff';hd.forEach((t,i)=>{x.font=`800 ${i==4?24:32}px ${F}`;x.fillText(t,cols[i],y-6)});
 const md=['🥇','🥈','🥉'],rh=Math.min(92,Math.floor(880/P.length));
 P.forEach((p,i)=>{y+=rh;x.fillStyle=i==0?'#fff1b8':i%2?'#ffffff':'#f2f6ff';x.fillRect(110,y-rh+20,w-220,rh);x.fillStyle='#1b2a5c';x.font=`700 ${Math.min(38,rh*.45)}px ${F}`;
 if(md[i])em(md[i],cols[0],y-rh*.25,Math.min(44,rh*.5));else{x.font=`700 34px ${F}`;x.fillText(String(i+1),cols[0],y-rh*.25)}x.font=`700 ${Math.min(38,rh*.45)}px ${F}`;
-x.fillText(p.n,cols[1],y-rh*.25);x.fillText(String(p.g),cols[2],y-rh*.25);x.fillText(p.ok+'/'+CP.N,cols[3],y-rh*.25);x.fillText(p.q?(p.t/p.q).toFixed(1)+' ث':'-',cols[4],y-rh*.25)});
-['🎈','🌹','🎈','🌷','🎈','🌹','🎈'].forEach((t,i)=>em(t,190+i*143,h-120,64));x.font=`600 26px ${F}`;x.fillStyle='#5b6b8c';x.fillText('مبروك للجميع! 🌟',w/2,h-200);
+{let fs=Math.min(38,rh*.45);x.font=`700 ${fs}px ${F}`;while(x.measureText(p.n).width>360&&fs>16){fs-=2;x.font=`700 ${fs}px ${F}`}x.fillText(p.n,cols[1],y-rh*.25);x.font=`700 ${Math.min(38,rh*.45)}px ${F}`}x.fillText(String(p.g),cols[2],y-rh*.25);x.fillText(p.ok+'/'+CP.N,cols[3],y-rh*.25);x.fillText(p.q?(p.t/p.q).toFixed(1)+' ث':'-',cols[4],y-rh*.25)});
+['🎈','🌹','🎈','🌷','🎈','🌹','🎈'].forEach((t,i)=>em(t,190+i*143,h-120,64));x.font=`600 26px ${F}`;x.fillStyle='#5b6b8c';x.fillText('⏱️ متوسط الإجابة: متوسط الثواني التي استغرقها المتسابق للإجابة عن السؤال الواحد',w/2,y+70);x.fillText('مبروك للجميع! 🌟',w/2,h-200);
 const blob=jpgPDF(c),name=`تجميع-الذهب-${W.n}.pdf`.replace(/[\\/:*?"<>|]/g,''),file=new File([blob],name,{type:'application/pdf'});
 try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:'مسابقة تجميع الذهب',text:(solo?'أحسنت يا ':'الفائز هو ')+W.n+' 🏆'});return}}catch(e){if(e&&e.name=='AbortError')return}
 const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);toast('📄 تم تنزيل ملف PDF')}
