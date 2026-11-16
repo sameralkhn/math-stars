@@ -308,12 +308,21 @@ svg[class^=mv]{transform-origin:50% 85%}
 .kpc{display:grid;grid-template-columns:1fr 1fr;gap:10px}.kpc button{border:0;border-radius:16px;height:70px;color:#fff;font:inherit;font-weight:800;font-size:20px;cursor:pointer}
 .kintro{text-align:center}.kfan{display:flex;justify-content:center;gap:0;margin:6px 0 14px}.kfan .kc{margin:0 -6px;cursor:default}
 .kfee{background:#fff6d0;border-radius:14px;padding:8px;font-weight:700;margin:8px 0}.kno{color:#e8453c;font-weight:800}
+
+.balc{display:block;width:100%;border:0;font:inherit;text-align:center;cursor:pointer;background:linear-gradient(135deg,#fff8dc,#ffe9a8);border-radius:22px;padding:12px;margin:0 0 12px;box-shadow:0 5px 0 #e0b000,0 8px 16px #0001}
+.balg{display:flex;align-items:center;justify-content:center;gap:10px;direction:ltr}.balg b{font-size:46px;line-height:1;color:#ffc400;-webkit-text-stroke:2px #b07800;text-shadow:0 4px 0 #b07800,0 0 18px #ffe27a}.balg small{font-weight:800;color:#b07800}
+.bals{display:flex;justify-content:center;flex-wrap:wrap;gap:6px 12px;margin:6px 0;font-weight:800;font-size:14px;color:#5b4a00}.bup{color:#18a959}
+.balbar{height:10px;border-radius:6px;background:#fff;overflow:hidden;margin:4px 10px}.balbar i{display:block;height:100%;background:linear-gradient(90deg,#ffc531,#ff8a1f)}
+.balm{margin:8px 0 2px;font-weight:800;font-size:16px;color:var(--ink)}.ball{color:#b07800;font-weight:800}
+.lds{text-align:center;background:linear-gradient(135deg,#fff8dc,#ffe9a8)}.ldd{margin:12px 0 4px;font-size:15px;color:#5b6b8c}
+.ldr{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;border-bottom:1px solid #eef1f6}.ldr span{display:flex;flex-direction:column;font-weight:700}.ldr small{font-size:11px;color:#8a94a6;font-weight:600}
+.lup{color:#18a959;font-size:18px;direction:ltr}.ldn{color:#e8453c;font-size:18px;direction:ltr}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.5.0';
+const VER='2.6.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -376,13 +385,19 @@ function burst(x,y){const E=['⭐','🎈','✨','🎉','💛'];for(let i=0;i<14;
 const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+r.height/2]};
 const key=(a,b)=>a+'x'+b;
 // الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
+// سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
+let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة'};
+function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
+if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150}
+const gSince=ms=>(S.gl||[]).filter(x=>x.ts>=ms&&x.d>0).reduce((a,x)=>a+x.d,0);
+const dayStart=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
 let QT=Date.now(),LASTG={g:0,t:0};
 const GTIER=[[.5,50],[1,40],[1.5,25],[2,20],[3,10],[4,5]],goldFor=t=>(GTIER.find(x=>t<=x[0])||[0,1])[1];
 // يبدأ العدّ لحظة ظهور سؤال جديد على الشاشة
 let QTX='';new MutationObserver(()=>{const q=document.querySelector('.q,#fc:not(.on) .fq,.bl');const k=q?q.textContent+(q.closest('[id]')||{}).id:'';if(k&&k!==QTX){QTX=k;QT=Date.now()}}).observe(document.body,{childList:true,subtree:true});
 const fuelFor=g=>({50:25,40:20,25:15,20:12,10:8,5:5}[g]||3);
 const rec=(a,b,ok)=>{const o=S.f[key(a,b)]=S.f[key(a,b)]||{o:0,x:0};ok?o.o++:o.x++;const t=(Date.now()-QT)/1000;QT=Date.now();
-if(ok){const g=goldFor(t);LASTG={g,t};S.gd=GD()+g;tone(1046,.1,'triangle',.15);if(g>=20)tone(1318,.2,'triangle',.15,.08);toast(`🪙 +${g} • ⏱️ ${t<10?t.toFixed(1):Math.round(t)} ث${g==50?' ⚡ برق!':''}`)}else LASTG={g:0,t};save()};
+if(ok){const g=goldFor(t);LASTG={g,t};S.gd=GD()+g;gLog(g);tone(1046,.1,'triangle',.15);if(g>=20)tone(1318,.2,'triangle',.15,.08);toast(`🪙 +${g} • ⏱️ ${t<10?t.toFixed(1):Math.round(t)} ث${g==50?' ⚡ برق!':''}`)}else LASTG={g:0,t};save()};
 const tabs=()=>{if(!cur)return[1,2,3,4,5,6,7,8,9,10];if(S.scope=='one')return[cur];return Array.from({length:cur},(_,i)=>i+1)};
 // ذكاء التكرار: الحقائق التي يخطئ فيها الطفل تظهر أكثر
 function pick(avoid){const L=[];tabs().forEach(a=>{for(let b=1;b<=10;b++){const o=S.f[key(a,b)]||{o:0,x:0};L.push([a,b,Math.max(1,1+3*o.x-.5*o.o)])}});let r=Math.random()*L.reduce((s,x)=>s+x[2],0);for(const x of L){r-=x[2];if(r<=0&&key(x[0],x[1])!==avoid)return x}return L[R(L.length)]}
@@ -394,7 +409,16 @@ function shell(title,body,back){app.innerHTML=`<header>${back===false?'':(typeof
 const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
 function home(){clr();let c='';for(let t=1;t<=10;t++){const n=S.stars[t]||0;c+=`<button class="chip ${cur==t?'on':''}" onclick="cur=S.cur=${t};save();home()">${false?'🔒':t}<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`}
 const n=S.stars.m||0;c+=`<button class="chip ${cur==0?'on':''}" style="font-size:20px" onclick="cur=S.cur=0;save();home()">الكل<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`;
-shell('نجوم الضرب 🌟',`<div class=owl><span class=av>${AV()}</span><p>مرحبًا ${NM()}! اختر جدولًا ثم العب! اللعبة تتذكر الأرقام الصعبة وتعيدها أكثر حتى تحفظها.</p></div><div class=chips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<div class=modes><button class="mode m5 m4" onclick="learn()"><i>📖</i>تعلّم وردّد <small>جدول ${cur||"الكل"}</small></button><button class="mode m9" onclick="cards()"><i>🎴</i>البطاقات</button><button class="mode mg" onclick="games()"><i>🎮</i>الألعاب</button></div>`,false)}
+shell('نجوم الضرب 🌟',`<div class=owl><span class=av>${AV()}</span><p>مرحبًا ${NM()}! اختر جدولًا ثم العب! اللعبة تتذكر الأرقام الصعبة وتعيدها أكثر حتى تحفظها.</p></div>${balCard()}<div class=chips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<div class=modes><button class="mode m5 m4" onclick="learn()"><i>📖</i>تعلّم وردّد <small>جدول ${cur||"الكل"}</small></button><button class="mode m9" onclick="cards()"><i>🎴</i>البطاقات</button><button class="mode mg" onclick="games()"><i>🎮</i>الألعاب</button></div>`,false)}
+// بطاقة الرصيد في الرئيسية مع عبارة تشجيعية
+const CHEER=['كل إجابة في نصف ثانية = 50 ذهبة ⚡','الأبطال يتدرّبون كل يوم 💪','أسرع قليلًا… والذهب يتضاعف! 🚀','جرّب «حارس الأرض» واجمع ذهبًا أكثر ☄️','سلسلة إجابات صحيحة = كنز من الذهب 🔥','كل يوم تتعلّم فيه تصبح أقوى 🌟','تحدَّ نفسك: اجمع أكثر من الأمس! 🏆'];
+function balCard(){const g=GD(),td=gSince(dayStart()),yd=gSince(dayStart()-864e5)-td,nx=Math.ceil((g+1)/1000)*1000;let m;
+if(!td)m='ابدأ يومك بسؤال سريع واجمع أول ذهبة! 🌅';else if(yd&&td>yd)m=`رائع! جمعت اليوم أكثر من أمس بـ 🪙 ${(td-yd).toLocaleString('en')} 🎉`;else if(td>=500)m='يوم ذهبي! أنت نجم اليوم ⭐';else if(g<FEE)m=`باقي 🪙 ${(FEE-g).toLocaleString('en')} لتلعب «آخر ورقة» 🃏`;else m=CHEER[Math.floor(Date.now()/36e5)%CHEER.length];
+return `<button class=balc onclick=ledger()><div class=balg><span class=cpcoin>🪙</span><b>${g.toLocaleString('en')}</b><small>ليرة ذهبية</small></div><div class=bals><span>⭐ ${total()} نجمة</span><span class=bup>📈 اليوم +${td.toLocaleString('en')}</span><span>🎯 الهدف 🪙 ${nx.toLocaleString('en')}</span></div><div class=balbar><i style="width:${Math.round((g%1000)/10)}%"></i></div><p class=balm>${m}</p><small class=ball>📜 سجل الرصيد ←</small></button>`}
+function ledger(){clr();const L=S.gl||[],g=GD(),td=gSince(dayStart()),wk=gSince(Date.now()-7*864e5),fmt=n=>Math.abs(n).toLocaleString('en');let last='',rows='';
+L.forEach(x=>{const d=new Date(x.ts),dk=d.toDateString();if(dk!=last){last=dk;const t=new Date(dayStart());rows+=`<h3 class=ldd>${x.ts>=dayStart()?'اليوم':x.ts>=dayStart()-864e5?'أمس':d.toLocaleDateString('ar-SA-u-nu-latn',{weekday:'long',day:'numeric',month:'long'})}</h3>`}
+rows+=`<div class=ldr><span>${esc(x.s)}<small>${d.toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})}${x.n>1?` • ${x.n} مرة`:''}</small></span><b class="${x.d>0?'lup':'ldn'}">${x.d>0?'+':'−'}${fmt(x.d)} 🪙</b></div>`});
+shell('سجل الرصيد 📜',`<div class="card lds"><div class=balg><span class=cpcoin>🪙</span><b>${g.toLocaleString('en')}</b></div><div class=bals><span class=bup>📈 اليوم +${td.toLocaleString('en')}</span><span>📅 هذا الأسبوع +${wk.toLocaleString('en')}</span><span>⭐ ${total()} نجمة</span></div></div>${rows?`<div class=card>${rows}</div>`:'<div class=card><p>لا توجد حركات بعد. العب واجمع أول ذهبة! 💪</p></div>'}<button class=big onclick="games()">🎮 اجمع المزيد من الذهب</button>`)}
 const TIP={1:'أي رقم × 1 يبقى كما هو.',2:'الناتج دائمًا ضعف الرقم، وعدد زوجي.',3:'اجمع رقمَي الناتج: ستجد 3 أو 6 أو 9 دائمًا.',4:'ضاعف مرتين: 4 × 6 يعني ضعف ضعف 6.',5:'الناتج ينتهي دائمًا بـ 0 أو 5.',9:'مجموع رقمَي الناتج دائمًا 9. وفي 9 × 4 اطوِ الإصبع الرابع: 3 أصابع قبله و6 بعده = 36.',10:'ضع صفرًا بعد الرقم.',11:'كرّر الرقم مرتين: 11 × 4 = 44.'};
 let LT=0,CHN=0;
 function learn(){clr();LT++;CHN=0;if(!cur)cur=1;let r='';for(let n=1;n<=10;n++)r+=`<button class=row id=r${n} onclick="rowSay(${n})">${cur} × ${n} = <b>${cur*n}</b></button>`;
@@ -697,7 +721,7 @@ if((S.own[k]||[]).includes(i)){delete TY[k];if(k=='c')S.ch=i;else S.eq[k]=S.eq[k
 dS(0)}
 function bu(k,i){S.own=S.own||{};S.eq=S.eq||{};const ow=S.own[k]=S.own[k]||[];
 if(GD()<PR[k]){oops();toast('تحتاج 🪙'+PR[k]+' وعندك 🪙'+GD()+' — حلّ المزيد من الأسئلة!');return}
-S.gd=GD()-PR[k];ow.push(i);if(k=='c')S.ch=i;else S.eq[k]=i;delete TY[k];good();clap(8);burst(innerWidth/2,220);toast('🎉 '+NAMES[k](i)+' صارت لك!');save();dS(0)}
+S.gd=GD()-PR[k];gLog(-PR[k],'🛍️ المتجر');ow.push(i);if(k=='c')S.ch=i;else S.eq[k]=i;delete TY[k];good();clap(8);burst(innerWidth/2,220);toast('🎉 '+NAMES[k](i)+' صارت لك!');save();dS(0)}
 // ===== سباق السيارات =====
 // قيادة يدوية: 🦶 البنزين يبقى مضغوطًا حتى 🛑 الفرامل، ◀ ▶ للتحرك بين المسارات، 🚀 توربو.
 // وضعان: 🚧 طريق بعوائق (3 إجابات تزيل العائق) أو ⛽ طريق مفتوح (البنزين من الإجابات فقط).
@@ -827,7 +851,7 @@ if(dr){const tb=r.tt>0&&r.fuel>0;if(r.tt>0)r.tt-=dt;const gas=(r.G||tb)&&r.fuel>
  if(r.v>vm)r.v=Math.max(vm,r.v-350*dt);const ds=r.v*dt;if(gas)r.fuel=Math.max(0,r.fuel-ds*r.fpx*GFUEL[r.g-1]*(tb?1.5:1));if(r.fuel<=0&&r.G){r.G=0;rgas()}
  r.d+=ds;r.rd+=r.vr*dt;r.x=Math.max(.75,Math.min(3.25,r.x+r.S*1.9*dt));
  r.items.forEach((it,i)=>{if(it.t||Math.abs(it.w-r.d)>34||Math.abs(it.l-r.x)>.55)return;it.t=1;const e=$('#it'+i);if(e)e.classList.add('got');
-  if(it.k=='c'){r.coins++;S.gd=GD()+5;save();tone(1046,.08,'triangle',.18);tone(1318,.12,'triangle',.15,.06);const c=$('#rcn');if(c)c.textContent='🪙 '+r.coins}
+  if(it.k=='c'){r.coins++;S.gd=GD()+5;gLog(5,'🏎️ سباق السيارات');save();tone(1046,.08,'triangle',.18);tone(1318,.12,'triangle',.15,.06);const c=$('#rcn');if(c)c.textContent='🪙 '+r.coins}
   else if(r.v>60){r.v*=it.k=='h'?.4:.35;rbump();rtoast(it.k=='h'?'🕳️ حفرة! تجنّبها بـ ◀ ▶':'🛢️ بقعة زيت! تجنّبها بـ ◀ ▶');if(it.k=='p')r.x=Math.max(.75,Math.min(3.25,r.x+(Math.random()<.5?-.4:.4)))}});
  r.tr.forEach(c=>{c.w+=c.v*dt;if(r.obs){const o=r.OW[r.oi];if(o&&c.w>o-170&&c.w<o+60)c.w=o+60}
   if(Math.abs(c.l-r.x)<.62&&c.w-r.d<64&&c.w-r.d>-30){if(r.v>c.v+20)rbump();r.v=Math.min(r.v,c.v*.6);r.d=Math.min(r.d,c.w-64);rtoast('🚗 زحمة! تجاوز السيارة بـ ◀ ▶')}});
@@ -885,11 +909,11 @@ function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.clas
 function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
-Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){const d=curD(),l=LV[n]=='r'?Math.min(d+1,3):LV[n],st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
+Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){if(LV[n]===2||n=='learn'||n=='cards')CURG=n;const d=curD(),l=LV[n]=='r'?Math.min(d+1,3):LV[n],st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
 addEventListener('popstate',e=>{clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
 // ===== خمس ألعاب إضافية =====
 let GX={};
@@ -969,8 +993,8 @@ shell('آخر ورقة 🃏',`<div id=kx></div><div class="card kintro"><div cla
 <div class=seg>${b('bot','🤖 ضد الكمبيوتر')+b('net','📱 مع العائلة')}</div>${body}</div>`)}
 const KSYM={S:'⊘',R:'⇄',D:'+2','4':'+4'};
 function kCard(c,cls='',attr=''){const w=kWild(c),v=kVal(c),sym=w?(c=='W4'?'+4':'🌈'):(KSYM[v]||v);return `<div class="kc ${w?'kw':''} ${cls}" style="--k:${w?'#222':KC[c[0]]}" ${attr}><span class=kcs>${sym}</span><i>${sym}</i></div>`}
-function kPay(key){S.kpaid=S.kpaid||{};if(S.kpaid[key])return true;if(GD()<FEE)return false;S.gd=GD()-FEE;S.kpaid[key]=1;const k=Object.keys(S.kpaid);if(k.length>30)delete S.kpaid[k[0]];save();toast(`🎟️ دفعت 🪙 ${FEE} للمشاركة`);return true}
-function kPrize(key,amt){S.kwon=S.kwon||{};if(S.kwon[key])return;S.kwon[key]=1;S.gd=GD()+amt;save()}
+function kPay(key){S.kpaid=S.kpaid||{};if(S.kpaid[key])return true;if(GD()<FEE)return false;S.gd=GD()-FEE;gLog(-FEE,'🃏 آخر ورقة — رسوم');S.kpaid[key]=1;const k=Object.keys(S.kpaid);if(k.length>30)delete S.kpaid[k[0]];save();toast(`🎟️ دفعت 🪙 ${FEE} للمشاركة`);return true}
+function kPrize(key,amt){S.kwon=S.kwon||{};if(S.kwon[key])return;S.kwon[key]=1;S.gd=GD()+amt;gLog(amt,'🏆 آخر ورقة — فوز');save()}
 // ضد الكمبيوتر
 const BOTN=['🤖 روبي','🦊 ثعلوب','🐼 باندو'];
 function kBotStart(){const nb=S.kb||2;const key='bot'+Date.now();if(!kPay(key))return toast('رصيدك لا يكفي');const ids=['me',...Array.from({length:nb},(_,i)=>'b'+i)],names={me:NM()};ids.slice(1).forEach((u,i)=>names[u]=BOTN[i]);
