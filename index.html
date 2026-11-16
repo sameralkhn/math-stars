@@ -221,7 +221,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='1.8.0';
+const VER='1.8.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -265,9 +265,8 @@ function pickV(){try{const v=speechSynthesis.getVoices();VO=v.find(x=>S.vn&&x.na
 try{pickV();speechSynthesis.addEventListener('voiceschanged',pickV)}catch(e){}
 function say(t,cb){let c=cb;const fin=()=>{const f=c;c=null;f&&f()};if(c)later(fin,9000);
 if(!S.sound){if(c)later(fin,1400);return}if(S.vm!='tts'&&sayA(t,fin))return;
-try{if(!window.speechSynthesis){if(!VW++)toast('🔇 هذا المتصفح لا يدعم النطق، جرّب متصفحًا آخر');if(c)later(fin,1400);return}
-if(!VO)pickV();const u=new SpeechSynthesisUtterance(t);u.lang=VO?VO.lang:'ar-SA';if(VO)u.voice=VO;u.rate=SLOW()?.72:.9;u.onend=u.onerror=fin;speechSynthesis.resume();speechSynthesis.speak(u);
-if(!VO&&speechSynthesis.getVoices().length&&!VW++)toast('🔇 لا يوجد صوت عربي على هذا الجهاز، أضفه من إعدادات تحويل النص إلى كلام')}catch(e){if(c)later(fin,1400)}}
+try{if(!window.speechSynthesis){if(c)later(fin,1400);return}
+if(!VO)pickV();if(!VO&&speechSynthesis.getVoices().length){if(c)later(fin,1400);return}const u=new SpeechSynthesisUtterance(t);u.lang=VO?VO.lang:'ar-SA';if(VO)u.voice=VO;u.rate=SLOW()?.72:.9;u.onend=u.onerror=fin;speechSynthesis.resume();speechSynthesis.speak(u);}catch(e){if(c)later(fin,1400)}}
 const sayP=t=>new Promise(r=>say(t,r)),wait=ms=>new Promise(r=>later(r,ms));
 const arV=()=>{try{return speechSynthesis.getVoices().filter(x=>/^ar/i.test(x.lang))}catch(e){return[]}};
 function setV(i){const a=arV();if(a[i]){S.vn=a[i].name;save();pickV();vtest()}}
