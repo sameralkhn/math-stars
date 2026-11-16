@@ -200,7 +200,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='1.5.0';
+const VER='1.5.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -585,41 +585,62 @@ S.gd=GD()-PR[k];ow.push(i);if(k=='c')S.ch=i;else S.eq[k]=i;delete TY[k];good();c
 // وضعان: 🚧 طريق بعوائق (3 إجابات تزيل العائق) أو ⛽ طريق مفتوح (البنزين من الإجابات فقط).
 const RO=[['🪨','صخرة كبيرة في الطريق','🐘','الفيل دفع الصخرة'],['🌳','شجرة سقطت على الطريق','🦫','القندس قطع الشجرة'],['🚧','الطريق مغلق بحاجز','👷','العامل فتح الحاجز'],['🐄','بقرة تقف في الطريق','🧑‍🌾','المزارع أبعد البقرة'],['📦','صناديق وقعت على الطريق','🚚','الشاحنة حملت الصناديق'],['🪵','جذع ثقيل في الطريق','🦍','الغوريلا رفع الجذع'],['⛄','رجل ثلج في الطريق','☀️','الشمس أذابت الثلج'],['🐑','قطيع خراف يعبر','🐕','الكلب جمع الخراف']];
 const RK=3,RG=800,FUEL1=15,VMAX=260,VTB=470,VRIV=170,LXP=[20,40,60,80],LYL=[52.5,37.5,22.5,7.5];let RC;
-// ----- 100 سيارة: 10 أشكال × 10 زخارف، بأي لون -----
-const CARN=['سيدان','رياضية','فورمولا','جيب','فان','بيك أب','باص','باجي','خنفساء','مستقبلية'],DECN=['سادة','خطّا سباق','خط عريض','رقم','لهب','شطرنج','نجوم','برق','شرطة','جناح'];
-const CARC=['#e8453c','#ff8a1f','#ffc531','#8bd450','#18a959','#18b6c9','#2e8bff','#3949ab','#8a63ff','#e8579a','#8d5a3b','#9aa3b5','#ffffff','#2b2f3a'];
-function carSVG(i,c,h){const s=i/10|0,dc=i%10,T='#2b2f3a',W='#bfe6ff',n=parseInt(c.slice(1),16),lum=(.3*(n>>16)+.59*(n>>8&255)+.11*(n&255))/255,A=lum>.62?'#1b2a5c':'#ffffff';
-const wh=(x,y,w=8,ht=16)=>`<rect x="${x}" y="${y}" width="${w}" height="${ht}" rx="3" fill="${T}"/>`,rc=(x,y,w,ht,r,f)=>`<rect x="${x}" y="${y}" width="${w}" height="${ht}" rx="${r}" fill="${f}"/>`;
-let b='',w='',fy=10,cy=55;
-if(s==0){b=wh(6,16)+wh(46,16)+wh(6,66)+wh(46,66)+rc(10,8,40,84,14,c);w=rc(15,28,30,14,5,W)+rc(16,68,28,9,4,W)}
-else if(s==1){b=wh(8,14)+wh(44,14)+wh(8,70)+wh(44,70)+`<path d="M30 3C44 3 48 14 48 30L49 80C49 92 42 96 30 96C18 96 11 92 11 80L12 30C12 14 16 3 30 3Z" fill="${c}"/>`;w=`<path d="M17 40Q30 33 43 40L41 52Q30 48 19 52Z" fill="${W}"/>`+rc(20,76,20,6,3,W);fy=8;cy=64}
-else if(s==2){b=wh(4,14,10,18)+wh(46,14,10,18)+wh(4,70,10,20)+wh(46,70,10,20)+rc(8,4,44,6,2,c)+rc(25,6,10,30,5,c)+rc(20,30,20,56,8,c)+rc(6,88,48,8,2,c);w=`<circle cx="30" cy="52" r="6" fill="${T}"/><circle cx="30" cy="52" r="4" fill="#ffc531"/>`;fy=6;cy=70}
-else if(s==3){b=wh(6,14,8,18)+wh(46,14,8,18)+wh(6,66,8,18)+wh(46,66,8,18)+rc(9,8,42,82,6,c)+`<circle cx="30" cy="92" r="7" fill="${T}"/><circle cx="30" cy="92" r="3" fill="#888"/>`;w=rc(13,24,34,10,2,W)+rc(14,44,32,3,1,'#0004')+rc(14,58,32,3,1,'#0004');cy=70}
-else if(s==4){b=wh(6,12)+wh(46,12)+wh(6,70)+wh(46,70)+rc(9,5,42,90,8,c);w=rc(13,10,34,10,4,W)+rc(11,26,4,40,2,W)+rc(45,26,4,40,2,W);fy=7}
-else if(s==5){b=wh(6,14)+wh(46,14)+wh(6,68)+wh(46,68)+rc(10,6,40,46,12,c)+rc(10,54,40,40,4,c)+rc(14,58,32,32,3,'#0003');w=rc(14,24,32,11,4,W)+rc(15,42,30,6,3,W);fy=8;cy=74}
-else if(s==6){b=wh(5,14,7,16)+wh(48,14,7,16)+wh(5,74,7,16)+wh(48,74,7,16)+rc(8,2,44,96,7,c);w=rc(11,4,38,8,3,W);for(let y=18;y<90;y+=12)w+=rc(10,y,6,8,2,W)+rc(44,y,6,8,2,W);w+=rc(22,30,16,10,2,'#0002');fy=3;cy=62}
-else if(s==7){b=wh(3,12,12,20)+wh(45,12,12,20)+wh(3,68,12,22)+wh(45,68,12,22)+rc(13,14,34,72,16,c);w=`<rect x="17" y="30" width="26" height="40" rx="6" fill="none" stroke="${T}" stroke-width="3"/><circle cx="30" cy="50" r="7" fill="${T}"/>`;fy=16;cy=78}
-else if(s==8){b=wh(7,18,8,14)+wh(45,18,8,14)+wh(7,68,8,14)+wh(45,68,8,14)+`<ellipse cx="30" cy="50" rx="22" ry="45" fill="${c}"/>`;w=`<ellipse cx="30" cy="34" rx="14" ry="7" fill="${W}"/><ellipse cx="30" cy="72" rx="11" ry="5" fill="${W}"/>`;fy=9}
-else{b=wh(8,22,6,12)+wh(46,22,6,12)+wh(8,70,6,12)+wh(46,70,6,12)+`<path d="M30 2L52 40L48 92Q30 98 12 92L8 40Z" fill="${c}"/>`;w=`<ellipse cx="30" cy="44" rx="9" ry="16" fill="#7ff3ff" opacity=".85"/>`+rc(10,62,4,24,2,'#7ff3ff')+rc(46,62,4,24,2,'#7ff3ff');fy=6;cy=76}
-let d='';
-if(dc==1)d=rc(23,fy,4,92-fy,1,A)+rc(33,fy,4,92-fy,1,A);
-else if(dc==2)d=rc(26,fy,8,92-fy,2,A);
-else if(dc==3)d=`<circle cx="30" cy="${cy}" r="8" fill="${A}"/><text x="30" y="${cy+4}" font-size="11" font-weight="800" text-anchor="middle" fill="${c}">${s+1}</text>`;
-else if(dc==4)d=`<path d="M16 ${fy+20}q3-12 7-2q2-12 7-3q3-12 7 1q3-11 7 4z" fill="#ff8a1f"/><path d="M20 ${fy+20}q3-8 5 0q3-9 6-1q3-8 6 1z" fill="#ffd34d"/>`;
-else if(dc==5){for(let k=0;k<8;k++)d+=rc(14+k*4,cy-6+(k%2?4:0),4,4,0,A)+rc(14+k*4,cy-2-(k%2?4:0),4,4,0,T)}
-else if(dc==6)d=[20,30,40].map(x=>`<text x="${x}" y="${cy+4}" font-size="11" text-anchor="middle" fill="${A}">★</text>`).join('');
-else if(dc==7)d=`<path d="M34 ${cy-16}L24 ${cy+2}L31 ${cy+2}L26 ${cy+18}L38 ${cy-4}L31 ${cy-4}Z" fill="#ffd34d" stroke="${T}" stroke-width="1"/>`;
-else if(dc==8)d=rc(16,cy-4,14,7,2,'#ff3b3b')+rc(30,cy-4,14,7,2,'#2e8bff');
-else if(dc==9)d=rc(6,89,48,7,2,T)+rc(8,90,44,3,1,A);
-const L=s==2?'':`<ellipse cx="19" cy="${fy+1}" rx="4" ry="2.5" fill="#ffe680"/><ellipse cx="41" cy="${fy+1}" rx="4" ry="2.5" fill="#ffe680"/>`;
-return `<svg viewBox="0 0 60 100" width="${h*.6}" height="${h}" aria-hidden="true">${b}${d}${w}${L}</svg>`}
+// ----- 100 سيارة حديثة بمظهر ثلاثي الأبعاد: 10 أشكال × 10 زخارف، بأي لون -----
+const CARN=['سيدان كهربائية','كوبيه رياضية','سوبر كار','دفع رباعي','هاتشباك','بيك أب','عائلية','فورمولا 1','عضلية','مستقبلية'],DECN=['سادة','خطّا سباق','خط عريض','رقم','لهب','شطرنج','نجوم','برق','شرطة','جناح'];
+const CARC=['#e8453c','#ff8a1f','#ffc531','#8bd450','#18a959','#18b6c9','#2e8bff','#3949ab','#8a63ff','#e8579a','#8d5a3b','#9aa3b5','#f4f6fa','#2b2f3a'];
+// wf/wm/wr عرض المقدمة والوسط والمؤخرة، yf/yr طرفا الجسم، c=[بداية الزجاج الأمامي، السقف، نهاية السقف، نهاية الزجاج الخلفي]، g=[عرض الزجاج أمام/وسط/خلف]
+const CSH=[{wf:40,wm:44,wr:42,yf:6,yr:104,c:[34,46,74,84],g:[14,18,14]},{wf:38,wm:46,wr:44,yf:4,yr:104,c:[40,52,70,80],g:[12,16,12]},{wf:32,wm:50,wr:48,yf:2,yr:104,c:[42,54,66,74],g:[10,14,10],intake:1},
+{wf:44,wm:46,wr:46,yf:8,yr:104,c:[28,38,86,94],g:[17,19,17],rails:1},{wf:40,wm:44,wr:44,yf:12,yr:96,c:[32,44,78,88],g:[14,18,16]},{wf:44,wm:46,wr:46,yf:6,yr:106,c:[26,36,50,56],g:[17,19,17],bed:1},
+{wf:42,wm:46,wr:46,yf:6,yr:106,c:[18,28,90,98],g:[16,19,18]},null,{wf:42,wm:46,wr:46,yf:4,yr:106,c:[46,56,74,82],g:[13,16,13],scoop:1},{wf:30,wm:50,wr:44,yf:2,yr:104,c:[30,40,72,80],g:[12,17,12],bubble:1}];
+let CID=0;
+function bodyP(o){const{wf,wm,wr,yf,yr}=o,F=wf/2,M=wm/2,Rr=wr/2;return `M30 ${yf}C${30+F+2} ${yf} ${30+F} ${yf+4} ${30+F} ${yf+12}C${30+M} ${yf+30} ${30+M} ${yr-30} ${30+Rr} ${yr-9}C${30+Rr} ${yr-2} ${30+Rr-4} ${yr} 30 ${yr}C${30-Rr+4} ${yr} ${30-Rr} ${yr-2} ${30-Rr} ${yr-9}C${30-M} ${yr-30} ${30-M} ${yf+30} ${30-F} ${yf+12}C${30-F} ${yf+4} ${30-F-2} ${yf} 30 ${yf}Z`}
+function carSVG(i,c,h){const s=i/10|0,dc=i%10,u='k'+(++CID),n=parseInt(c.slice(1),16),lum=(.3*(n>>16)+.59*(n>>8&255)+.11*(n&255))/255,A=lum>.62?'#1b2a5c':'#ffffff';
+const defs=`<defs><linearGradient id="${u}s" x1="0" x2="1"><stop offset="0" stop-color="#000" stop-opacity=".5"/><stop offset=".2" stop-color="#000" stop-opacity=".05"/><stop offset=".42" stop-color="#fff" stop-opacity=".38"/><stop offset=".58" stop-color="#fff" stop-opacity=".15"/><stop offset=".82" stop-color="#000" stop-opacity=".08"/><stop offset="1" stop-color="#000" stop-opacity=".5"/></linearGradient>
+<linearGradient id="${u}v" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset=".35" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".25"/></linearGradient>
+<linearGradient id="${u}g" x1="0" y1="0" x2=".3" y2="1"><stop offset="0" stop-color="#0b1a33"/><stop offset=".55" stop-color="#2d5c8f"/><stop offset="1" stop-color="#8ec9ff"/></linearGradient>
+<radialGradient id="${u}t" cx=".5" cy=".5" r=".6"><stop offset=".55" stop-color="#3a3d46"/><stop offset="1" stop-color="#121318"/></radialGradient>
+<filter id="${u}b"><feGaussianBlur stdDeviation="1.6"/></filter></defs>`;
+const tyre=(x,y,w=7,ht=17)=>`<rect x="${x}" y="${y}" width="${w}" height="${ht}" rx="3" fill="url(#${u}t)"/><rect x="${x+1.5}" y="${y+2}" width="${w-3}" height="1.2" fill="#555"/><rect x="${x+1.5}" y="${y+ht-3.2}" width="${w-3}" height="1.2" fill="#555"/>`;
+let out='',cy=60,fy=10,yr=100;
+if(s==7){// فورمولا 1 حديثة مع الهالة
+ fy=6;yr=100;cy=62;const bp=`M30 4C33 4 34 8 34 14L35 36C42 40 43 46 43 56L42 84C42 92 38 96 30 96C22 96 18 92 18 84L17 56C17 46 18 40 25 36L26 14C26 8 27 4 30 4Z`;
+ out=`<ellipse cx="30" cy="54" rx="22" ry="46" fill="#000" opacity=".25" filter="url(#${u}b)"/>`+tyre(3,16,11,20)+tyre(46,16,11,20)+tyre(2,72,13,24)+tyre(45,72,13,24)+
+ `<rect x="6" y="6" width="48" height="7" rx="2" fill="${c}"/><rect x="6" y="6" width="48" height="7" rx="2" fill="url(#${u}v)"/><rect x="5" y="94" width="50" height="9" rx="2" fill="#23262e"/><rect x="7" y="95" width="46" height="3" rx="1" fill="${c}"/>`+
+ `<clipPath id="${u}c"><path d="${bp}"/></clipPath><path d="${bp}" fill="${c}"/><g clip-path="url(#${u}c)">@D@</g><path d="${bp}" fill="url(#${u}s)"/><path d="${bp}" fill="url(#${u}v)"/>`+
+ `<path d="M23 44Q30 36 37 44" fill="none" stroke="#1b1d24" stroke-width="2.6" stroke-linecap="round"/><ellipse cx="30" cy="54" rx="6" ry="9" fill="#14161c"/><circle cx="30" cy="52" r="4.2" fill="#ffc531"/><circle cx="31.2" cy="50.8" r="1.4" fill="#fff" opacity=".7"/>`}
+else{const o=CSH[s],bp=bodyP(o),[y0,y1,y2,y3]=o.c,[a,b,e]=o.g,M=o.wm/2;fy=o.yf;yr=o.yr;cy=(y1+y2)/2;
+ const glass=`M${30-a} ${y0}Q30 ${y0-3} ${30+a} ${y0}L${30+b} ${y1}L${30+b} ${y2}L${30+e} ${y3}Q30 ${y3+2} ${30-e} ${y3}L${30-b} ${y2}L${30-b} ${y1}Z`;
+ const wy1=o.yf+16,wy2=o.yr-30;
+ out=`<ellipse cx="30" cy="${(o.yf+o.yr)/2+2}" rx="${M+3}" ry="${(o.yr-o.yf)/2+2}" fill="#000" opacity=".28" filter="url(#${u}b)"/>`+tyre(30-M-3,wy1)+tyre(30+M-4,wy1)+tyre(30-M-3,wy2)+tyre(30+M-4,wy2)+
+ `<clipPath id="${u}c"><path d="${bp}"/></clipPath><path d="${bp}" fill="${c}"/>`+(o.bed?`<rect x="${30-M+4}" y="${y3+6}" width="${o.wm-8}" height="${o.yr-y3-14}" rx="3" fill="#000" opacity=".35"/><rect x="${30-M+6}" y="${y3+8}" width="${o.wm-12}" height="${o.yr-y3-18}" rx="2" fill="#000" opacity=".2"/>`:'')+
+ `<g clip-path="url(#${u}c)">@D@</g><path d="${bp}" fill="url(#${u}s)"/><path d="${bp}" fill="url(#${u}v)"/>`+
+ (o.bubble?`<ellipse cx="30" cy="${(y0+y3)/2}" rx="${b}" ry="${(y3-y0)/2}" fill="url(#${u}g)"/><ellipse cx="${30-b/3}" cy="${y0+10}" rx="3" ry="8" fill="#fff" opacity=".45"/>`
+ :`<path d="${glass}" fill="url(#${u}g)"/><path d="M${30-b+1} ${y1+1}L${30+b-1} ${y1+1}L${30+b-1} ${y2-1}L${30-b+1} ${y2-1}Z" fill="${c}"/><path d="M${30-b+1} ${y1+1}L${30+b-1} ${y1+1}L${30+b-1} ${y2-1}L${30-b+1} ${y2-1}Z" fill="url(#${u}s)" opacity=".7"/><path d="M${30-a+3} ${y0+1}L${30-a+8} ${y0}L${30-b+6} ${y1-1}L${30-b+2} ${y1-1}Z" fill="#fff" opacity=".4"/>`)+
+ `<ellipse cx="${30-M-1}" cy="${y0+3}" rx="2.6" ry="1.6" fill="${c}"/><ellipse cx="${30+M+1}" cy="${y0+3}" rx="2.6" ry="1.6" fill="${c}"/>`+
+ (o.rails?`<rect x="${30-b+2}" y="${y1+3}" width="2" height="${y2-y1-6}" rx="1" fill="#2b2f3a" opacity=".6"/><rect x="${30+b-4}" y="${y1+3}" width="2" height="${y2-y1-6}" rx="1" fill="#2b2f3a" opacity=".6"/>`:'')+
+ (o.scoop?`<rect x="25" y="${fy+14}" width="10" height="12" rx="2" fill="#000" opacity=".45"/>`:'')+(o.intake?`<path d="M${30-M+2} 60l5 -4v14z" fill="#000" opacity=".45"/><path d="M${30+M-2} 60l-5 -4v14z" fill="#000" opacity=".45"/>`:'')+
+ `<rect x="${30-o.wf/2+3}" y="${fy+4}" width="9" height="2.6" rx="1.3" fill="#eaf6ff"/><rect x="${30+o.wf/2-12}" y="${fy+4}" width="9" height="2.6" rx="1.3" fill="#eaf6ff"/>`+(o.bubble?`<rect x="${30-o.wf/2+3}" y="${fy+4}" width="${o.wf-6}" height="2" rx="1" fill="#7ff3ff"/>`:'')+
+ `<rect x="${30-o.wr/2+4}" y="${yr-5}" width="${o.wr-8}" height="2.6" rx="1.3" fill="#ff3046"/>`}
+let d='';const T='#23262e';
+if(dc==1)d=`<rect x="23" y="0" width="4" height="110" fill="${A}" opacity=".9"/><rect x="33" y="0" width="4" height="110" fill="${A}" opacity=".9"/>`;
+else if(dc==2)d=`<rect x="26" y="0" width="8" height="110" fill="${A}" opacity=".9"/>`;
+else if(dc==3)d=`<circle cx="30" cy="${cy}" r="7.5" fill="${A}"/><text x="30" y="${cy+4}" font-size="10.5" font-weight="800" text-anchor="middle" fill="${c}" font-family="sans-serif">${s+1}</text>`;
+else if(dc==4)d=`<path d="M14 ${fy+24}q3-12 7-2q2-12 7-3q3-12 7 1q3-11 7 4z" fill="#ff8a1f"/><path d="M19 ${fy+24}q3-8 5 0q3-9 6-1q3-8 6 1z" fill="#ffd34d"/>`;
+else if(dc==5){for(let k=0;k<12;k++)d+=`<rect x="${6+k*4}" y="${cy-4+(k%2?4:0)}" width="4" height="4" fill="${A}"/><rect x="${6+k*4}" y="${cy-(k%2?4:0)}" width="4" height="4" fill="${T}"/>`}
+else if(dc==6)d=[21,30,39].map(x=>`<text x="${x}" y="${cy+4}" font-size="10" text-anchor="middle" fill="${A}">★</text>`).join('');
+else if(dc==7)d=`<path d="M34 ${fy+8}L24 ${fy+24}L31 ${fy+24}L26 ${fy+38}L38 ${fy+18}L31 ${fy+18}Z" fill="#ffd34d" stroke="${T}" stroke-width=".8"/>`;
+else if(dc==8)d=`<rect x="0" y="${cy-14}" width="60" height="9" fill="${A}" opacity=".9"/>`;
+out=out.replace('@D@',d);
+if(dc==8)out+=`<rect x="18" y="${cy-3}" width="12" height="6" rx="2" fill="#ff2d3d"/><rect x="30" y="${cy-3}" width="12" height="6" rx="2" fill="#2e8bff"/><rect x="18" y="${cy-3}" width="24" height="2" rx="1" fill="#fff" opacity=".45"/>`;
+if(dc==9)out+=`<rect x="5" y="${yr-6}" width="50" height="6" rx="2" fill="${T}"/><rect x="7" y="${yr-5}" width="46" height="2" rx="1" fill="${A}"/><rect x="14" y="${yr-10}" width="3" height="5" fill="${T}"/><rect x="43" y="${yr-10}" width="3" height="5" fill="${T}"/>`;
+return `<svg viewBox="0 0 60 110" width="${(h*60/110).toFixed(1)}" height="${h}" aria-hidden="true">${defs}${out}</svg>`}
 const myCar=()=>S.car||{s:0,c:CARC[0]};
 function garage(){clr();const cs=myCar();shell('الكراج 🚗',`<div class="card gar"><div class=gprev>${carSVG(cs.s,cs.c,140)}</div><h2>${CARN[cs.s/10|0]} • ${DECN[cs.s%10]}</h2><p class=sm style="margin:0 0 6px">🎨 اختر اللون:</p><div class=gcol>${CARC.map(c=>`<button class="sw${c==cs.c?' on':''}" style="background:${c}" aria-label="لون" onclick="gset(null,'${c}')"></button>`).join('')}</div></div><p class=sm style="text-align:center">🚗 اختر الشكل (100 سيارة):</p><div class=ggrid>${Array.from({length:100},(_,i)=>`<button class="gc${i==cs.s?' on':''}" onclick="gset(${i})" aria-label="${CARN[i/10|0]} ${DECN[i%10]}">${carSVG(i,cs.c,58)}</button>`).join('')}</div><button class=big onclick="history.back()">🏁 إلى السباق</button>`)}
 function gset(i,c){const cs=myCar();if(i!=null)cs.s=i;if(c)cs.c=c;S.car=cs;save();tone(700,.08,'triangle',.12);const y=scrollY;garage();scrollTo(0,y)}
 // ----- السباق -----
 function race(){clr();let ri;do{ri=R(26)}while(ri==(S.ch|0));
 RC={rd:350,ri,rcar:{s:R(100),c:CARC[R(CARC.length)]},ph:'intro',on:1,t:0};rcfg();rbuild();rintro();const r=RC;requestAnimationFrame(t=>rloop(t,r))}
-function rcfg(){const r=RC,obs=(S.rm||'o')=='o',n=obs?5:0;Object.assign(r,{obs,d:0,rd:350,rb:0,v:0,fuel:30,tb:1,tt:0,c:0,fc:0,e:0,oi:0,last:'',msg:'',G:0,B:0,x:2,lx:2,coins:0});
+function rcfg(){const r=RC,obs=(S.rm||'o')=='o',n=obs?5:0;Object.assign(r,{obs,d:0,rd:350,rb:0,v:0,fuel:30,tb:1,tt:0,c:0,fc:0,e:0,oi:0,last:'',msg:'',G:0,B:0,x:2,S:0,coins:0});
 r.ob=sh(RO).slice(0,n);r.OW=r.ob.map((_,i)=>700+i*RG);r.RN=n;r.FIN=obs?r.OW[n-1]+RG:5200;r.items=[];
 for(let w=420;w<r.FIN-200;w+=170){if(r.OW.some(o=>Math.abs(o-w)<230))continue;const q=Math.random();if(q<.55)r.items.push({w,l:1+R(3),k:'c'});else if(q<.75)r.items.push({w,l:1+R(3),k:'p'})}}
 function rintro(){const r=RC,b=(js,l,on)=>`<button class="${on?'on':''}" onclick="${js}">${l}</button>`,cs=myCar(),m=S.rm||'o',o=S.ro||'p';
@@ -629,26 +650,26 @@ function rstart(){const r=RC;if(!r||r.ph!='intro')return;rfs(S.ro||'p');rbuild()
 ['3','2','1','انطلق! 🚦'].forEach((s,i)=>later(()=>{$('#pan').innerHTML=`<div class=card><div class="res cd">${s}</div></div>`;tone(i<3?440:880,.25,'square',.12)},i*800));
 later(()=>{if(RC!==r)return;r.ph='drive';$('#pan').innerHTML='';say('انطلق')},3300)}
 function rrot(){S.ro=(S.ro||'p')=='p'?'l':'p';save();rfs(S.ro);rbuild();const r=RC;if(r.ph=='ask'||r.ph=='fuel')rq();else if(r.ph=='intro')rintro()}
-function rbuild(){const r=RC,pt=(S.ro||'p')=='p';r.pt=pt;let w='',k=0;const L=l=>pt?`left:${LXP[l]}%`:`bottom:${LYL[l]}%`;
+function rbuild(){const r=RC,pt=(S.ro||'p')=='p';r.pt=pt;let w='',k=0;const L=l=>pt?`left:${LXP[l]}%`:`bottom:${LYL[l]}%`;r.S=0;
 for(let x=-300;x<r.FIN+900;x+=pt?190:260)w+=`<div class="wo tr" style="${pt?'left:'+(k%2?5:95)+'%':''}" data-w=${x}>${['🌳','🌲','🏡','🌳','🌻'][k++%5]}</div>`;
 r.items.forEach((it,i)=>{if(!it.t)w+=`<div class="wo it" id=it${i} style="${L(it.l)}" data-w=${it.w}>${it.k=='c'?'🪙':'🛢️'}</div>`});
 r.ob.forEach((o,i)=>w+=`<div class="wo ro${i<r.oi?' gone':''}" id=ro${i} data-w=${r.OW[i]}>${o[0]}${o[0]}${o[0]}</div><div class="wo rhp" id=rh${i} style="${L(0)}" data-w=${r.OW[i]}>${o[2]}</div>`);
 w+=`<div class="wo fl" data-w=${r.FIN}></div>`;const mc=myCar(),drv=a=>`<span class=dv>${a}</span>`;
 app.innerHTML=`<div id=jv class="race ${pt?'pt':'ls'}">${pt?'':'<div class=hl id=hlB></div><div class=hl id=hlA></div>'}<div class=road><div class=ln></div></div><div id=rw>${w}<div class="wo car" id=rcar style="${L(0)}"><span class=cb>${carSVG(r.rcar.s,r.rcar.c,72)}<span class=nf>🔥</span></span>${drv(AV(r.ri,CH[r.ri].c,NQ))}</div><div class="wo car" id=pcar><span class=cb>${carSVG(mc.s,mc.c,76)}<span class=nf>🔥</span></span>${drv(AV())}</div></div><div id=jh></div><div id=pan></div>
 <div class=pedals><button class="pd brk" id=pbk aria-label="فرامل">🛑<small>فرامل</small></button><button class="pd gas" id=pgs aria-label="بنزين">🦶<small>بنزين</small></button></div>
-<div class=lpad><button class="pd tbo" id=ptb onclick="rturbo()" aria-label="توربو">🚀<small>توربو</small><b id=tbn></b></button><div class=steer><button class="pd st1" onclick="rsteer(-1)" aria-label="يسار">${pt?'◀':'▲'}</button><button class="pd st1" onclick="rsteer(1)" aria-label="يمين">${pt?'▶':'▼'}</button></div></div></div>`;
+<div class=lpad><button class="pd tbo" id=ptb onclick="rturbo()" aria-label="توربو">🚀<small>توربو</small><b id=tbn></b></button><div class=steer><button class="pd st1" id=psl aria-label="يسار">${pt?'◀':'▲'}</button><button class="pd st1" id=psr aria-label="يمين">${pt?'▶':'▼'}</button></div></div></div>`;
 r.els=[...document.querySelectorAll('#rw [data-w]')];rpedals();rjh()}
 function rpedals(){const g=$('#pgs'),b=$('#pbk'),r=RC;if(!g)return;
 g.addEventListener('pointerdown',e=>{e.preventDefault();if(r.ph=='fuel'){if(r.fuel>=5)rgo();else toast('⛽ الخزان فارغ! أجب عن سؤال أولًا')}if(r.ph!='drive')return;if(r.fuel<=0)return toast('⛽ نفد البنزين!');r.G=1;r.B=0;rgas()});
 b.addEventListener('pointerdown',e=>{e.preventDefault();r.B=1;r.G=0;b.classList.add('on');rgas();try{b.setPointerCapture(e.pointerId)}catch(x){}});
 ['pointerup','pointercancel','lostpointercapture'].forEach(n=>b.addEventListener(n,()=>{r.B=0;b.classList.remove('on')}));
+[['#psl',-1],['#psr',1]].forEach(([q,k])=>{const e=$(q),on=v=>ev=>{ev.preventDefault();r.S=v;e.classList.toggle('on',!!v);if(v)try{e.setPointerCapture(ev.pointerId)}catch(x){}};e.addEventListener('pointerdown',on(k));['pointerup','pointercancel','lostpointercapture'].forEach(n=>e.addEventListener(n,on(0)));e.addEventListener('contextmenu',ev=>ev.preventDefault())});
 [g,b].forEach(x=>x.addEventListener('contextmenu',e=>e.preventDefault()));rgas()}
 function rgas(){const g=$('#pgs');if(g)g.classList.toggle('on',!!(RC&&RC.G))}
-function rsteer(k){const r=RC;if(!r||r.ph!='drive')return;r.lx=Math.max(1,Math.min(3,r.lx+k));tone(500,.05,'triangle',.08)}
 addEventListener('keydown',e=>{const r=RC;if(!r||!r.on||!$('.race'))return;const k=e.key;
 if(k=='ArrowUp'){if(r.ph=='fuel'&&r.fuel>=5)rgo();if(r.ph=='drive'&&r.fuel>0){r.G=1;r.B=0;rgas()}}else if(k=='ArrowDown'){r.B=1;r.G=0;rgas()}
-else if(k=='ArrowLeft')rsteer(-1);else if(k=='ArrowRight')rsteer(1);else if(k==' '||k=='t'){e.preventDefault();rturbo()}});
-addEventListener('keyup',e=>{if(RC&&e.key=='ArrowDown')RC.B=0});
+else if(k=='ArrowLeft')r.S=-1;else if(k=='ArrowRight')r.S=1;else if(k==' '||k=='t'){e.preventDefault();rturbo()}});
+addEventListener('keyup',e=>{if(!RC)return;if(e.key=='ArrowDown')RC.B=0;if(e.key=='ArrowLeft'||e.key=='ArrowRight')RC.S=0});
 function rjh(){const r=RC;$('#jh').innerHTML=`<button class=ic onclick=exitR()>🏠</button>${r.obs?`<span class=st>🚧 ${r.oi}/${r.RN}</span>`:''}<button class="st fuelb" onclick=rpit() aria-label="محطة البنزين">⛽ <span class=fgw id=fgw><i id=fg></i></span></button><span class=st id=rcn>🪙 ${r.coins}</span><button class=ic onclick=rrot() aria-label="تغيير الاتجاه">${r.pt?'🖥️':'📱'}</button><span class=trk><b>🏁</b><i id=tr2>🚙</i><i id=tp>🏎️</i></span>`;rtbn()}
 function rtbn(){const r=RC,b=$('#tbn'),p=$('#ptb');if(b)b.textContent=r.tb;if(p)p.disabled=!r.tb}
 function rturbo(){const r=RC;if(!r||r.ph!='drive'||!r.tb||r.fuel<=0||r.tt>0)return;r.tb--;r.tt=2.5;r.G=1;r.B=0;rgas();rtbn();tone(300,.5,'sawtooth',.1);tone(600,.5,'sawtooth',.08,.15)}
@@ -659,14 +680,14 @@ function rloop(t,r){if(r!==RC||!r.on||!$('.race'))return;const dt=Math.min(.05,(
 if(dr){const tb=r.tt>0&&r.fuel>0;if(r.tt>0)r.tt-=dt;const gas=(r.G||tb)&&r.fuel>0&&!r.B,vm=tb?VTB:VMAX;
  if(r.B)r.v=Math.max(0,r.v-850*dt);else if(gas)r.v=Math.min(vm,r.v+(tb?750:380)*dt);else r.v=Math.max(0,r.v-150*dt);
  if(r.v>vm)r.v=Math.max(vm,r.v-500*dt);if(gas)r.fuel=Math.max(0,r.fuel-(tb?11:5)*dt);if(r.fuel<=0&&r.G){r.G=0;rgas()}
- r.d+=r.v*dt;r.rd+=VRIV*dt;r.x+=Math.sign(r.lx-r.x)*Math.min(Math.abs(r.lx-r.x),7*dt);
+ r.d+=r.v*dt;r.rd+=VRIV*dt;r.x=Math.max(.75,Math.min(3.25,r.x+r.S*1.9*dt));
  r.items.forEach((it,i)=>{if(it.t||Math.abs(it.w-r.d)>34||Math.abs(it.l-r.x)>.55)return;it.t=1;const e=$('#it'+i);if(e)e.classList.add('got');
   if(it.k=='c'){r.coins++;S.gd=GD()+5;save();tone(1046,.08,'triangle',.18);tone(1318,.12,'triangle',.15,.06);const c=$('#rcn');if(c)c.textContent='🪙 '+r.coins}else if(r.v>60){r.v*=.35;rbump();toast('🛢️ بقعة زيت! تجنّبها بـ ◀ ▶')}});
  if(r.obs&&r.oi<r.RN&&r.d>=r.OW[r.oi]-150){r.d=r.OW[r.oi]-150;if(r.v>150)rbump();r.v=0;r.tt=0;r.G=r.B=0;rgas();r.ph='ask';r.c=0;r.msg='';rjh();rq()}
  else if(r.fuel<=0&&r.v<4){r.ph='fuel';r.G=0;rgas();r.msg='⛽ نفد البنزين! أجب لتملأ الخزان';say('نفد البنزين');rq()}}
 if(r.rb>0){const m=Math.min(r.rb,260*dt);r.rb-=m;r.rd+=m;if(r.ph!='drive')r.rd=Math.min(r.rd,r.FIN-200)}
 const J0=$('.race');J0.classList.toggle('drv',dr);const pc=$('#pcar'),rc=$('#rcar'),mv=r.v>5;
-if(r.pt){const CY=J0.clientHeight*.7;r.els.forEach(e=>e.style.top=(CY-(e.dataset.w-r.d))+'px');pc.style.top=CY+'px';pc.style.left=(20+20*r.x)+'%';rc.style.top=(CY-(r.rd-r.d))+'px';$('.race .ln').style.backgroundPosition='0 '+(r.d%92)+'px'}
+if(r.pt){const CY=J0.clientHeight*.56;r.els.forEach(e=>e.style.top=(CY-(e.dataset.w-r.d))+'px');pc.style.top=CY+'px';pc.style.left=(20+20*r.x)+'%';rc.style.top=(CY-(r.rd-r.d))+'px';$('.race .ln').style.backgroundPosition='0 '+(r.d%92)+'px'}
 else{const CX=J0.clientWidth*.72;r.els.forEach(e=>e.style.left=(CX-(e.dataset.w-r.d))+'px');pc.style.left=CX+'px';pc.style.bottom=(52.5-15*r.x)+'%';rc.style.left=(CX-(r.rd-r.d))+'px';$('.race .ln').style.backgroundPosition=(r.d%92)+'px 0';$('#hlA').style.backgroundPositionX=(r.d*.35)+'px';$('#hlB').style.backgroundPositionX=(r.d*.12)+'px'}
 pc.classList.toggle('go',mv);pc.classList.toggle('nitro',r.tt>0&&dr);rc.classList.toggle('go',dr||r.rb>0);rc.classList.toggle('nitro',r.rb>0);
 const fg=$('#fg');if(fg){fg.style.width=r.fuel+'%';$('#fgw').classList.toggle('low',r.fuel<20)}
