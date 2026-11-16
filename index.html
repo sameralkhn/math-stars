@@ -250,7 +250,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 .cpgms{display:grid;grid-template-columns:1fr 1fr;gap:8px}.cpgms button{border:0;border-radius:14px;background:#eef3ff;font:inherit;font-weight:800;font-size:15px;padding:8px 4px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer}.cpgms button i{font-style:normal;font-size:22px}.cpgms button.on{background:var(--sun);box-shadow:0 0 0 2px var(--ink)}
 .cparena{position:relative;height:300px;overflow:hidden;border-radius:16px;background:linear-gradient(#bfe6ff,#eaf7ff);margin-top:6px}
 .cpbal{position:absolute;bottom:4px;width:22%;height:96px;border:0;padding:0;background:none;cursor:pointer;animation:cprise 7s linear forwards}
-.cpbal span{display:flex;align-items:center;justify-content:center;width:100%;height:84px;border-radius:50% 50% 46% 46%;background:radial-gradient(circle at 32% 28%,#fff9 0 8%,transparent 9%),var(--c);color:#fff;font:800 28px/1 inherit;font-family:inherit;-webkit-text-stroke:1px #0004;box-shadow:inset -6px -8px 0 #0002}
+.cpbal span{display:flex;align-items:center;justify-content:center;width:100%;height:84px;border-radius:50% 50% 46% 46%;background:radial-gradient(circle at 32% 28%,#fff9 0 8%,transparent 9%),var(--c);color:#fff;font-family:inherit;font-weight:900;font-size:38px;line-height:1;letter-spacing:1px;-webkit-text-stroke:5px #1b2a5c;paint-order:stroke fill;text-shadow:0 3px 0 #1b2a5c;box-shadow:inset -6px -8px 0 #0002}
 .cpbal::after{content:'';position:absolute;left:50%;bottom:0;width:2px;height:14px;background:#0005}
 .cpbal.pop{animation:cppop2 .3s forwards}.cpbal.bad span{filter:grayscale(1)}.cpbal.right span{outline:4px solid #18a959}
 @keyframes cprise{from{bottom:4px}to{bottom:310px}}@keyframes cppop2{to{transform:scale(1.6);opacity:0}}
@@ -269,7 +269,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.2.0';
+const VER='2.2.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
