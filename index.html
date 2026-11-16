@@ -481,7 +481,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.12.2';
+const VER='2.12.3';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1190,7 +1190,7 @@ function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me
 const opp=kRing(st,me);
 shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class=ktable style="--kc:${KC[st.color]}"><button class=klogb onclick=kLogPop() aria-label="سجل الأحداث">📜<small>السجل</small></button><span class=kdot title="اللون المطلوب: ${KN[st.color]}" style="background:${KC[st.color]}"></span><div class=kpile>${kCard(top,'ktop')}</div>
 <button class=kdeck onclick="kDo({t:'draw'})" ${myTurn&&!st.drew?'':'disabled'}><span>🂠</span><small>سحب</small></button><span class=kdir>${st.dir>0?'↻':'↺'}</span></div>
-<p class=kmsg>${esc(st.msg||'')}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(st.names[st.order[st.turn]]||'')}</p>
+<p class=kmsg>${esc(kSm(st.msg,st))}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(kShort(st.names[st.order[st.turn]]))}</p>
 ${(()=>{const n=st.order.length,mi=st.order.indexOf(me);if(mi<0||n<2)return'';const nx=st.order[((mi+st.dir)%n+n)%n],nn=nx===me?'أنت':esc(kShort(st.names[nx]));KG.nxn=nn;return `<div class=knext>👉 بعدك: <b>${nn}</b> <span>🃏 ${st.hands[nx].length}</span> <i>${st.dir>0?'↻':'↺'}</i><small>هو من يأخذ +2/+4 ويُتخطّى ⊘</small></div>`})()}<div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)+'').join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
 <div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>30000?`<button class="buy kskip" onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB();kAlerts();const sl=$('#kshl');if(sl)sl.innerHTML=kLogRows()}
 function kEnd(){const g=KG,st=g.st,win=st.winner===g.me,wn=esc(st.names[st.winner]||'');backRelease();
@@ -1207,6 +1207,7 @@ kPop(`🏆 <b>${win?'فزت بالجولة!':'فاز '+wn+'!'}</b> <small>+🪙 
 // دائرة اللاعبين الصغيرة: الترتيب والاتجاه وصاحب الدور. الضغط عليها يفتح نافذة بالتفاصيل
 // الاسم الأول فقط بلا رموز، لشاشة الأدوار
 const kShort=n=>{const t=String(n||'').replace(/[\p{Extended_Pictographic}\u2600-\u27BF\uFE0F\u200D]/gu,' ').trim().split(/\s+/)[0];return t||String(n||'?')};
+const kSm=(m,st)=>{let t=String(m||'');Object.values((st&&st.names)||{}).sort((a,b)=>String(b).length-String(a).length).forEach(n=>{if(n)t=t.split(n).join(kShort(n))});return t};
 function kRingH(st,me,big){const O=st.order,n=O.length,mi=Math.max(0,O.indexOf(me)),cu=O[st.turn],nx=O[kNext(st)],pos=a=>[50+42*Math.cos(a),50+36*Math.sin(a)],ang=i=>Math.PI/2+(i-mi)*2*Math.PI/n;
 let h='';for(let i=0;i<n;i++){const am=(ang(i)+ang(i+1))/2,[x,y]=pos(am),rot=am*180/Math.PI+90+(st.dir>0?0:180);h+=`<span class=karw style="left:${x}%;top:${y}%;transform:translate(-50%,-50%) rotate(${rot}deg)">➤</span>`}
 O.forEach((u,i)=>{const[x,y]=pos(ang(i)),c=st.hands[u].length;h+=`<div class="kseat${u===cu?' on':''}${u===nx&&u!==cu?' nx':''}${u===me?' me':''}" ${big?'':`id="ko_${u}"`} style="left:${x}%;top:${y}%"><b>${u===me?'أنت':esc(kShort(st.names[u]))}</b><span>🃏 ${c}</span>${big&&c==1?'<small>ورقة!</small>':''}${big?(u===cu?'<i class=ktag>🎯 الدور</i>':u===nx?'<i class="ktag kn">التالي</i>':''):''}</div>`});
@@ -1214,7 +1215,7 @@ return `<div class="kring${big?' big':''}">${h}<div class=kmid><span class="kdir
 function kRing(st,me){return `<button class=kringb onclick=kRingPop() aria-label="ترتيب اللاعبين">${kRingH(st,me,0)}<small class=kringt>👆 التفاصيل</small></button>`}
 function kLogRows(){const st=KG&&KG.st;if(!st)return'';const L=(st.log||[]).slice().reverse(),ic=c=>c=='draw'?'<span class=klic>🂠</span>':c=='skip'?'<span class=klic>⏭️</span>':c=='one'?'<span class=klic>🙋</span>':c?kCard(c,'klc'):'<span class=klic>•</span>';
 const d=document.createElement('div');d.className='ksheetw';d.onclick=e=>{if(e.target===d)kSheetClose(d)};
-return L.length?L.map((x,i)=>`<div class="klr${i==0?' new':''}">${ic(x.c)}<span>${esc(x.m||'')}</span><small>${new Date(x.t).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})}</small></div>`).join(''):'<p>لم تحدث حركات بعد</p>'}
+return L.length?L.map((x,i)=>`<div class="klr${i==0?' new':''}">${ic(x.c)}<span>${esc(kSm(x.m,st))}</span><small>${new Date(x.t).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})}</small></div>`).join(''):'<p>لم تحدث حركات بعد</p>'}
 function kLogPop(){if(!KG||!KG.st)return;$('.ksheetw')&&$('.ksheetw').remove();const d=document.createElement('div');d.className='ksheetw';d.onclick=e=>{if(e.target===d)kSheetClose(d)};
 d.innerHTML=`<div class=ksheet><div class=kgrab></div><div class=kshh><b>📜 سجل الأحداث</b><button class=kpx onclick="kSheetClose(this.closest('.ksheetw'))" aria-label="إغلاق">✖</button></div><div class=kshl id=kshl>${kLogRows()}</div></div>`;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'))}
 function kSheetClose(d){if(!d)return;d.classList.remove('show');setTimeout(()=>d.remove(),280)}
@@ -1248,7 +1249,7 @@ function kFly(fromEl,card){const pile=$('.ktop');if(!fromEl||!pile)return;const 
 f.style.left=a.left+a.width/2-31+'px';f.style.top=a.top+a.height/2-46+'px';app.appendChild(f);pile.style.visibility='hidden';
 requestAnimationFrame(()=>{f.style.transform=`translate(${b.left+b.width/2-(a.left+a.width/2)}px,${b.top+b.height/2-(a.top+a.height/2)}px) rotate(${360+R(40)-20}deg) scale(1.25)`});later(()=>{f.remove();pile.style.visibility=''},560)}
 function kAlerts(){const g=KG,st=g&&g.st;if(!st||!st.hands)return;const me=g.me,P=g.prev,cur={hand:(st.hands[me]||[]).slice(),turn:st.order[st.turn],dl:st.disc.length,top:st.disc[st.disc.length-1],color:st.color,dir:st.dir,cnt:{},my:(st.hands[me]||[]).length};
-st.order.forEach(u=>cur.cnt[u]=st.hands[u].length);g.prev=cur;if(!P||st.winner)return;if(cur.top!==P.top){const tp=$('.ktop');if(tp){tp.classList.add('kland');const r=tp.getBoundingClientRect();later(()=>kSpark(r.left+r.width/2,r.top+r.height/2,KC[st.color]),cur.turn!==me&&P.turn!==me?520:60)}}const nm=u=>esc(st.names[u]||'');if(cur.dir!==P.dir){const d=$('.kdirb');d&&d.classList.add('flip');kPop(`⇄ <b>انعكس الاتجاه!</b> <small>التالي: ${nm(st.order[kNext(st)])}</small>`,'warn',1800)}
+st.order.forEach(u=>cur.cnt[u]=st.hands[u].length);g.prev=cur;if(!P||st.winner)return;if(cur.top!==P.top){const tp=$('.ktop');if(tp){tp.classList.add('kland');const r=tp.getBoundingClientRect();later(()=>kSpark(r.left+r.width/2,r.top+r.height/2,KC[st.color]),cur.turn!==me&&P.turn!==me?520:60)}}const nm=u=>esc(kShort(st.names[u]));if(cur.dir!==P.dir){const d=$('.kdirb');d&&d.classList.add('flip');kPop(`⇄ <b>انعكس الاتجاه!</b> <small>التالي: ${nm(st.order[kNext(st)])}</small>`,'warn',1800)}
 // من لعب؟ (الورقة الجديدة في الكومة)
 if(cur.dl>P.dl&&cur.top!==P.top){const who=st.order.find(u=>cur.cnt[u]<P.cnt[u])||P.turn;if(who!==me){const c=cur.top,v=kVal(c);kFly($('#ko_'+who),c);
  let msg=`<b>${nm(who)}</b> لعب`,cls='',snd='card';
