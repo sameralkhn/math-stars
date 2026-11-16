@@ -251,7 +251,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.0.5';
+const VER='2.0.6';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -841,7 +841,7 @@ qs=`<h3>عدد الأسئلة</h3><div class=seg>${[10,20,50,100].map(n=>`<butto
 if(m=='solo')body=`<label class=cplb for=cpn1>✏️ اسم المتسابق (اكتبه كما تحب)</label><input id=cpn1 class=nm maxlength=20 value="${esc(NM())}" placeholder="اسم المتسابق">${qs}<button class=big onclick=cpStartLocal(1)>🏁 ابدأ</button>`;
 else if(m=='local'){const ns=(S.cpn&&S.cpn.length>1?S.cpn:[NM(),'']);body=`<div id=cpl>${ns.map((n,i)=>cpRow(n,i)).join('')}</div><button class=buy onclick=cpAdd()>➕ أضف متسابقًا</button>${qs}<div id=cptbw>${cpTabUI()}</div><p class=sm>يلعب المتسابقون بالدور على هذا الجهاز، وكلهم يُسألون نفس الأسئلة.</p><button class=big onclick=cpStartLocal(0)>🏁 ابدأ المسابقة</button>`}
 else body=!FB?`<p>☁️ تحتاج هذه المسابقة اتصالًا بالإنترنت وفتح اللعبة من رابطها.</p>`:!UID?`<p>👤 سجّل الدخول أولًا، وكذلك كل من سيشارك من جواله.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`:
-`<label class=cplb for=cpn1>✏️ اسمك في المسابقة — يظهر للآخرين وفي الشهادة، ويمكن أن يختلف عن اسم حسابك</label><input id=cpn1 class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك هنا">${qs}<div id=cptbw>${cpTabUI()}</div><button class=big onclick=cpCreate()>🏠 أنشئ غرفة</button><h3>أو انضم إلى غرفة</h3><input id=cpcode class=nm inputmode=numeric maxlength=4 placeholder="رمز الغرفة (4 أرقام)" dir=ltr><button class=big style="background:#18a999" onclick=cpJoin()>🔑 انضمام</button>`;
+`<label class=cplb for=cpn1>✏️ اسمك في المسابقة — يظهر للآخرين وفي الشهادة، ويمكن أن يختلف عن اسم حسابك</label><input id=cpn1 class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك هنا">${qs}<div id=cptbw>${cpTabUI()}</div><button class=big onclick=cpCreate()>🏠 أنشئ غرفة</button><h3>أو انضم إلى غرفة</h3><input id=cpcode class=nm inputmode=numeric maxlength=3 placeholder="رقم الغرفة (مثل 50)" dir=ltr><button class=big style="background:#18a999" onclick=cpJoin()>🔑 انضمام</button>`;
 shell('تجميع الذهب 🏆',`<div id=cpx></div><p class=tip>🪙 كل إجابة صحيحة تعطي ذهبًا حسب سرعتك: نصف ثانية 50، ثانية 40، … والأكثر ذهبًا يفوز! الأسئلة ${m=='solo'?'من '+(cur?'جدول '+cur:'كل الجداول'):'من كل جداول الضرب، إلا إذا اختار المنظّم جداول معيّنة'}.</p><div class=card><div class=seg>${b('solo','👤 فردية')+b('local','👥 جهاز واحد')+b('net','📱 عدة أجهزة')}</div>${body}</div>`)}
 const cpTabs=()=>{const t=(S.cptb||[]).filter(x=>x>=1&&x<=10);return t.length?t.sort((a,b)=>a-b):[1,2,3,4,5,6,7,8,9,10]};
 function cpTabUI(){const t=cpTabs(),all=t.length==10;return `<h3>جداول الضرب</h3><div class=cptbs><button class="${all?'on':''}" onclick="S.cptb=[];save();cpTabRe()">الكل</button>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="${!all&&t.includes(n)?'on':''}" onclick="cpTabT(${n})">${n}</button>`).join('')}</div>`}
@@ -910,9 +910,11 @@ return new Blob(parts,{type:'application/pdf'})}
 // ----- عدة أجهزة: غرفة برمز من 4 أرقام -----
 const roomRef=c=>FB.d.collection('rooms').doc(c);
 const netErr=e=>{console.warn(e);toast(e&&e.code=='permission-denied'?'⚠️ يجب تحديث قواعد Firestore للمسابقة الجماعية':'⚠️ تعذّر الاتصال، تحقق من الإنترنت')};
-async function cpCreate(){const n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}S.cpme=n;save();try{let code,g=0;do{code=String(1000+R(9000));}while((await roomRef(code).get()).exists&&g++<8);
+async function cpCreate(){const n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}S.cpme=n;save();try{let code=null;const easy=[...sh([10,20,30,40,50,60,70,80,90]),...sh([11,22,33,44,55,66,77,88,99]),...sh([100,200,300,400,500,600,700,800,900])];
+for(const c of easy){const d=await roomRef(String(c)).get(),r=d.exists?d.data():null;if(!r||Date.now()-(r.ts||0)>3*3600e3||(r.state=='end'&&Date.now()-(r.ts||0)>600e3)){code=String(c);break}}
+if(!code)code=String(10+R(90));
 const N=S.cpq||100;await roomRef(code).set({host:UID,N,tabs:cpTabs(),seed:Date.now()%1e9,state:'wait',ts:Date.now(),players:{[UID]:newP(n)}});cpRoom(code)}catch(e){netErr(e)}}
-async function cpJoin(){const code=($('#cpcode').value||'').replace(/\D/g,''),n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}if(code.length!=4)return toast('اكتب رمز الغرفة من 4 أرقام');S.cpme=n;save();
+async function cpJoin(){const code=($('#cpcode').value||'').replace(/\D/g,''),n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}if(code.length<2)return toast('اكتب رقم الغرفة، مثل 50');S.cpme=n;save();
 try{const d=await roomRef(code).get();if(!d.exists)return toast('لا توجد غرفة بهذا الرمز');const r=d.data();if(r.state!='wait'&&!(r.players||{})[UID])return toast('المسابقة بدأت بالفعل');
 const mine=(r.players||{})[UID];if(!mine)await roomRef(code).update({['players.'+UID]:newP(n)});else if(mine.n!=n)await roomRef(code).update({['players.'+UID+'.n']:n});cpRoom(code)}catch(e){netErr(e)}}
 function cpRoom(code){cpOff();CP={mode:'net',code,view:'lobby',P:[],me:null};cpLobby();CP.uns=roomRef(code).onSnapshot(cpSnap,netErr)}
@@ -924,7 +926,7 @@ const all=CP.P.length&&CP.P.every(p=>p.done);
 if(r.state=='end'||all){if(CP.host&&r.state!='end')roomRef(CP.code).update({state:'end'}).catch(()=>{});if(CP.view!='end'){CP.view='end';cpEnd(CP.P)}return}
 if(CP.view=='wait')cpWait();else cpLive()}
 function cpLobby(){const P=CP.P,host=CP.room&&CP.room.host==UID;
-shell('غرفة المسابقة 📱',`<div id=cpx></div><div class="card cpt"><p class=sm>رمز الغرفة — أرسله لمن سيشارك:</p><div class=cpcode dir=ltr>${CP.code}</div><p class=sm>يفتح كل متسابق «تجميع الذهب ← 📱 عدة أجهزة» من جواله، ويكتب الرمز.</p><h3>المتسابقون (${P.length})</h3><div class=cppl>${P.map(p=>`<span>${esc(p.n)}${CP.room&&p.u==CP.room.host?' 👑':''}</span>`).join('')||'…'}</div>
+shell('غرفة المسابقة 📱',`<div id=cpx></div><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به من سيشارك:</p><div class=cpcode dir=ltr>${CP.code}</div><p class=sm>يفتح كل متسابق «تجميع الذهب ← 📱 عدة أجهزة» من جواله، ويكتب هذا الرقم.</p><h3>المتسابقون (${P.length})</h3><div class=cppl>${P.map(p=>`<span>${esc(p.n)}${CP.room&&p.u==CP.room.host?' 👑':''}</span>`).join('')||'…'}</div>
 <button class=buy onclick=cpRename()>✏️ تغيير اسمي</button>${host?`<button class=big onclick=cpNetStart()>🏁 ابدأ للجميع</button>`:'<p>⏳ بانتظار المضيف ليبدأ المسابقة…</p>'}${CP.room?`<p class=sm>${CP.room.N} سؤال لكل متسابق • ${(CP.room.tabs||[]).length==10?'كل الجداول':'الجداول: '+(CP.room.tabs||[]).join('، ')}</p>`:''}</div>`)}
 function cpRename(){const me=(CP.P.find(p=>p.u==UID)||{}).n||'';const n=(prompt('اكتب اسمك في المسابقة:',me)||'').trim().slice(0,20);if(!n||n==me)return;S.cpme=n;save();roomRef(CP.code).update({['players.'+UID+'.n']:n}).catch(netErr)}
 function cpNetStart(){roomRef(CP.code).update({state:'play',ts:Date.now()}).catch(netErr)}
