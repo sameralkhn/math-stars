@@ -481,7 +481,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.12.1';
+const VER='2.12.2';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1191,7 +1191,7 @@ const opp=kRing(st,me);
 shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class=ktable style="--kc:${KC[st.color]}"><button class=klogb onclick=kLogPop() aria-label="سجل الأحداث">📜<small>السجل</small></button><span class=kdot title="اللون المطلوب: ${KN[st.color]}" style="background:${KC[st.color]}"></span><div class=kpile>${kCard(top,'ktop')}</div>
 <button class=kdeck onclick="kDo({t:'draw'})" ${myTurn&&!st.drew?'':'disabled'}><span>🂠</span><small>سحب</small></button><span class=kdir>${st.dir>0?'↻':'↺'}</span></div>
 <p class=kmsg>${esc(st.msg||'')}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(st.names[st.order[st.turn]]||'')}</p>
-${(()=>{const n=st.order.length,mi=st.order.indexOf(me);if(mi<0||n<2)return'';const nx=st.order[((mi+st.dir)%n+n)%n],nn=nx===me?'أنت':esc(st.names[nx]||'');KG.nxn=nn;return `<div class=knext>👉 بعدك: <b>${nn}</b> <span>🃏 ${st.hands[nx].length}</span> <i>${st.dir>0?'↻':'↺'}</i><small>هو من يأخذ +2/+4 ويُتخطّى ⊘</small></div>`})()}<div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)+'').join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
+${(()=>{const n=st.order.length,mi=st.order.indexOf(me);if(mi<0||n<2)return'';const nx=st.order[((mi+st.dir)%n+n)%n],nn=nx===me?'أنت':esc(kShort(st.names[nx]));KG.nxn=nn;return `<div class=knext>👉 بعدك: <b>${nn}</b> <span>🃏 ${st.hands[nx].length}</span> <i>${st.dir>0?'↻':'↺'}</i><small>هو من يأخذ +2/+4 ويُتخطّى ⊘</small></div>`})()}<div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)+'').join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
 <div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>30000?`<button class="buy kskip" onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB();kAlerts();const sl=$('#kshl');if(sl)sl.innerHTML=kLogRows()}
 function kEnd(){const g=KG,st=g.st,win=st.winner===g.me,wn=esc(st.names[st.winner]||'');backRelease();
 if(win){kPrize(g.key,g.pot);good()}kSfx('win');clap(win?25:12);cpRain();vib(win?[100,60,100,60,300]:[200]);say(win?'أحسنت يا بطل':'مبروك للفائز');
@@ -1205,9 +1205,11 @@ shell('آخر ورقة 🃏',`<div id=kx></div><div class="card kend"><div class
 kPop(`🏆 <b>${win?'فزت بالجولة!':'فاز '+wn+'!'}</b> <small>+🪙 ${g.pot.toLocaleString('en')}${win?'':' للفائز'}</small>`,'turn',2600)}
 // دائرة اللاعبين: الترتيب، والاتجاه بأسهم، وصاحب الدور، والتالي — يراها الجميع
 // دائرة اللاعبين الصغيرة: الترتيب والاتجاه وصاحب الدور. الضغط عليها يفتح نافذة بالتفاصيل
+// الاسم الأول فقط بلا رموز، لشاشة الأدوار
+const kShort=n=>{const t=String(n||'').replace(/[\p{Extended_Pictographic}\u2600-\u27BF\uFE0F\u200D]/gu,' ').trim().split(/\s+/)[0];return t||String(n||'?')};
 function kRingH(st,me,big){const O=st.order,n=O.length,mi=Math.max(0,O.indexOf(me)),cu=O[st.turn],nx=O[kNext(st)],pos=a=>[50+42*Math.cos(a),50+36*Math.sin(a)],ang=i=>Math.PI/2+(i-mi)*2*Math.PI/n;
 let h='';for(let i=0;i<n;i++){const am=(ang(i)+ang(i+1))/2,[x,y]=pos(am),rot=am*180/Math.PI+90+(st.dir>0?0:180);h+=`<span class=karw style="left:${x}%;top:${y}%;transform:translate(-50%,-50%) rotate(${rot}deg)">➤</span>`}
-O.forEach((u,i)=>{const[x,y]=pos(ang(i)),c=st.hands[u].length;h+=`<div class="kseat${u===cu?' on':''}${u===nx&&u!==cu?' nx':''}${u===me?' me':''}" ${big?'':`id="ko_${u}"`} style="left:${x}%;top:${y}%"><b>${u===me?'أنت':esc(st.names[u]||'?')}</b><span>🃏 ${c}</span>${big&&c==1?'<small>ورقة!</small>':''}${big?(u===cu?'<i class=ktag>🎯 الدور</i>':u===nx?'<i class="ktag kn">التالي</i>':''):''}</div>`});
+O.forEach((u,i)=>{const[x,y]=pos(ang(i)),c=st.hands[u].length;h+=`<div class="kseat${u===cu?' on':''}${u===nx&&u!==cu?' nx':''}${u===me?' me':''}" ${big?'':`id="ko_${u}"`} style="left:${x}%;top:${y}%"><b>${u===me?'أنت':esc(kShort(st.names[u]))}</b><span>🃏 ${c}</span>${big&&c==1?'<small>ورقة!</small>':''}${big?(u===cu?'<i class=ktag>🎯 الدور</i>':u===nx?'<i class="ktag kn">التالي</i>':''):''}</div>`});
 return `<div class="kring${big?' big':''}">${h}<div class=kmid><span class="kdirb${st.dir>0?'':' rev'}">${st.dir>0?'↻':'↺'}</span>${big?`<small>${st.dir>0?'باتجاه عقارب الساعة':'عكس عقارب الساعة'}</small>`:''}</div></div>`}
 function kRing(st,me){return `<button class=kringb onclick=kRingPop() aria-label="ترتيب اللاعبين">${kRingH(st,me,0)}<small class=kringt>👆 التفاصيل</small></button>`}
 function kLogRows(){const st=KG&&KG.st;if(!st)return'';const L=(st.log||[]).slice().reverse(),ic=c=>c=='draw'?'<span class=klic>🂠</span>':c=='skip'?'<span class=klic>⏭️</span>':c=='one'?'<span class=klic>🙋</span>':c?kCard(c,'klc'):'<span class=klic>•</span>';
