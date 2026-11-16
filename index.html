@@ -378,12 +378,16 @@ svg[class^=mv]{transform-origin:50% 85%}
 .kdeck{background:repeating-linear-gradient(45deg,#8a63ff 0 8px,#e8579a 8px 16px)!important}
 .khand.khit{animation:shk .35s 2;background:#ffe0e8}
 .kend{text-align:center}.kendt{font-weight:800;color:#ff6b5b;margin:0}.kwn{color:#e8a000;font-size:1.25em}.kprize{font-size:24px;font-weight:900;color:#e8a000;margin:4px 0;-webkit-text-stroke:.5px #b07800}
+.khand .kc{width:calc((100% - 24px)/5)!important;max-width:86px!important;border-width:5px;border-radius:14px}
+.khand .kc .kcs{font-size:clamp(26px,8.5vw,40px)!important}.khand .kc i{font-size:15px}.khand .kc.kgrp{margin-right:0!important}
+.khand{gap:6px!important}
+.ktop{transform:scale(1.45)!important}.ktable{padding:30px 18px!important}.ktop.kland{animation:kland2 .45s cubic-bezier(.3,1.6,.5,1)}@keyframes kland2{0%{transform:scale(1.9) rotate(-14deg)}100%{transform:scale(1.45) rotate(0)}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.8.2';
+const VER='2.8.3';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
