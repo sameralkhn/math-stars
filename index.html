@@ -481,7 +481,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.12.3';
+const VER='2.12.4';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1143,9 +1143,9 @@ const v=kVal(c),n=st.order.length;let msg=nm+' لعب';
 if(h.length==1&&!st.one[u]){kDraw(st,u,2);msg=nm+' نسي أن يقول «ورقة!» فسحب 2'}
 if(!h.length){st.winner=u;st.msg=nm+' فاز!';return true}
 if(h.length>1)delete st.one[u];
-if(v=='R'){st.dir*=-1;if(n==2)st.turn=kNext(st);msg+=' ⇄ عكس الاتجاه'}
-else if(v=='S'){st.turn=kNext(st);msg+=' ⊘ تخطّي '+st.names[st.order[st.turn]]}
-else if(v=='D'||v=='4'){const nx=st.order[kNext(st)];kDraw(st,nx,v=='D'?2:4);st.turn=kNext(st);msg+=` ${st.names[nx]} يسحب ${v=='D'?2:4}`}
+if(v=='R'){st.dir*=-1;if(n==2)st.turn=kNext(st);msg+=' (⇄ عكس الاتجاه)'}
+else if(v=='S'){st.turn=kNext(st);msg+=' (⊘ تخطّي '+st.names[st.order[st.turn]]+')'}
+else if(v=='D'||v=='4'){const nx=st.order[kNext(st)];kDraw(st,nx,v=='D'?2:4);st.turn=kNext(st);msg+=v=='D'?` (${st.names[nx]} يسحب ورقتين)`:` (${st.names[nx]} يسحب 4 أوراق)`}
 if(kWild(c))msg+=' • اللون '+KN[st.color];st.turn=kNext(st);st.msg=msg;return true}
 // ----- الواجهة -----
 function cardsHome(){clr();cpOff&&cpOff();if(KG&&KG.uns){KG.uns();KG=null}const g=GD(),can=g>=FEE,m=S.km||'bot',nb=S.kb||2;
