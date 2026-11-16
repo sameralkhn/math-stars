@@ -121,20 +121,49 @@ svg[class^=mv]{transform-origin:50% 85%}
 /* ===== سباق السيارات ===== */
 .m8{background:linear-gradient(90deg,#ff6b5b,#f08a00)!important}
 .race{background:linear-gradient(#7fd0ff,#e6f6ff 56%)}
-.race #rw{position:absolute;inset:0}
-.race .hl{position:absolute;left:0;right:0;bottom:44%;height:90px;background:radial-gradient(circle at 50% 100%,#79d65a 58%,transparent 60%) 0 100%/240px 90px repeat-x}
-.race #hlB{height:140px;background:radial-gradient(circle at 50% 100%,#a9c7f0 58%,transparent 60%) 0 100%/420px 140px repeat-x;opacity:.85}
-.race .road{position:absolute;left:0;right:0;bottom:0;height:44%;background:linear-gradient(#9aa3b5 0 8px,#4e5566 8px calc(100% - 10px),#79d65a calc(100% - 10px))}
-.race .ln{position:absolute;left:0;right:0;bottom:21%;height:6px;background:repeating-linear-gradient(90deg,#fff 0 46px,transparent 46px 92px)}
-.wo{position:absolute;transform:translateX(-50%);line-height:1}
-.car{font-size:64px;z-index:2}.car .dv{position:absolute;width:36px;height:41px;left:30%;top:-12px;z-index:-1}.car .dv svg{width:100%;height:100%;display:block}
-.car.go .dv{animation:mk0 .4s infinite}
-.car .nf{position:absolute;right:-26px;bottom:6px;font-size:30px;opacity:0;transform:rotate(90deg);transition:opacity .2s}.car.nitro .nf{opacity:1}
-.lane1{bottom:2%}.lane2{bottom:23%;font-size:54px}
-.ro{font-size:58px;bottom:3%;transition:transform 1s,opacity 1s}.ro.gone{transform:translate(-50%,-180px) rotate(60deg);opacity:0}
-.rhp{font-size:56px;bottom:3%;opacity:0;transform:none;margin-left:-28px;transition:opacity .4s}.rhp.show{opacity:1;animation:hop .8s 2}
-.tr{bottom:44%;font-size:42px}
-.fl{bottom:0;height:44%;width:26px;background:repeating-conic-gradient(#222 0 25%,#fff 0 50%) 0 0/13px 13px}
+.race #rw{position:absolute;inset:0;pointer-events:none}
+.wo{position:absolute;line-height:1}
+.car{z-index:2}.car .cb{display:inline-block;position:relative}.car .dv{position:absolute;width:36px;height:41px}.car .dv svg{width:100%;height:100%;display:block}
+.car .nf{position:absolute;right:-26px;bottom:6px;font-size:28px;opacity:0;transform:rotate(90deg);transition:opacity .2s}.car.nitro .nf{opacity:1}
+.car.go .dv{animation:mk0 .4s infinite}.car.bump .cb{animation:shk .35s}
+@keyframes shk{0%,100%{translate:0}25%{translate:-7px}75%{translate:7px}}
+.ro{font-size:58px;transition:transform 1s,opacity 1s}.ro.gone{opacity:0}
+.rhp{font-size:56px;opacity:0;transition:opacity .4s}.rhp.show{opacity:1;animation:hop .8s 2}
+.ls .hl{position:absolute;left:0;right:0;bottom:44%;height:90px;background:radial-gradient(circle at 50% 100%,#79d65a 58%,transparent 60%) 0 100%/240px 90px repeat-x}
+.ls #hlB{height:140px;background:radial-gradient(circle at 50% 100%,#a9c7f0 58%,transparent 60%) 0 100%/420px 140px repeat-x;opacity:.85}
+.ls .road{position:absolute;left:0;right:0;bottom:0;height:44%;background:linear-gradient(#9aa3b5 0 8px,#4e5566 8px calc(100% - 10px),#79d65a calc(100% - 10px))}
+.ls .ln{position:absolute;left:0;right:0;bottom:21%;height:6px;background:repeating-linear-gradient(90deg,#fff 0 46px,transparent 46px 92px)}
+.ls .wo{transform:translateX(-50%)}
+.ls .car{font-size:64px}.ls .car .dv{left:30%;bottom:52%;z-index:-1}
+.ls .lane1{bottom:2%}.ls .lane2{bottom:23%;font-size:54px}
+.ls .ro,.ls .rhp{bottom:3%}.ls .rhp{transform:none;margin-left:-28px}.ls .ro.gone{transform:translate(-50%,-180px) rotate(60deg)}
+.ls .tr{bottom:44%;font-size:42px}
+.ls .fl{bottom:0;height:44%;width:26px;background:repeating-conic-gradient(#222 0 25%,#fff 0 50%) 0 0/13px 13px}
+#jv.pt{background:#7ed957}
+.pt .road{position:absolute;top:0;bottom:0;left:20%;right:20%;background:linear-gradient(90deg,#9aa3b5 0 8px,#4e5566 8px calc(100% - 8px),#9aa3b5 calc(100% - 8px))}
+.pt .ln{position:absolute;top:0;bottom:0;left:50%;width:6px;margin-left:-3px;background:repeating-linear-gradient(180deg,#fff 0 46px,transparent 46px 92px)}
+.pt .wo{transform:translate(-50%,-50%)}
+.pt .car{font-size:58px}.pt .car .cb{transform:rotate(90deg)}.pt .car .dv{left:50%;top:50%;margin:-22px 0 0 -18px}
+.pt .lane1{left:64%}.pt .lane2{left:36%;font-size:50px}
+.pt .ro{left:64%}.pt .rhp{left:88%}.pt .ro.gone{transform:translate(80%,-50%) rotate(60deg)}
+.pt .tr{font-size:36px}.pt .tl{left:9%}.pt .tR{left:91%}
+.pt .fl{left:50%;width:60%;height:26px;background:repeating-conic-gradient(#222 0 25%,#fff 0 50%) 0 0/13px 13px}
+#jv.pt #pan{left:8px;right:8px;width:auto;top:96px}
+.pt #jh{flex-wrap:wrap;right:8px}.pt .trk{width:96px}
+.pedals{position:absolute;right:12px;bottom:14px;display:flex;flex-direction:column;gap:12px;z-index:7}
+.pd{border:0;border-radius:22px;width:84px;height:80px;font-size:32px;font-family:inherit;font-weight:800;color:#fff;box-shadow:0 6px 0 #0003;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;touch-action:none;-webkit-tap-highlight-color:transparent;cursor:pointer}
+.pd small{font-size:13px;margin-top:5px}
+.pd.on{transform:translateY(4px);box-shadow:0 2px 0 #0003;filter:brightness(1.12)}
+.gas{background:linear-gradient(#3ccf7e,#18a959);height:112px}
+.brk{background:linear-gradient(#ff6b6b,#d63c3c)}
+.tbo{position:absolute;left:12px;bottom:14px;z-index:7;background:linear-gradient(#ffb340,#f07800)}
+.tbo b{position:absolute;top:-8px;right:-8px;background:#1b2a5c;color:#fff;border-radius:12px;padding:3px 8px;font-size:15px}
+.tbo:disabled{filter:grayscale(1);opacity:.55}
+.race:not(.drv) .pd{opacity:.45}
+.fuelb{display:flex;align-items:center;gap:6px;border:0;font:inherit;font-weight:800;cursor:pointer}
+.fgw{display:inline-block;width:70px;height:12px;border-radius:7px;background:#dde3ee;overflow:hidden}.fgw i,.gauge i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff5b5b,#ffc531 35%,#3ccf7e 70%)}
+.fgw.low{animation:mk0 .6s infinite}
+.gauge{height:14px;border-radius:8px;background:#e7ecf5;overflow:hidden;margin:6px 0}
 .trk{position:relative;width:150px;height:16px;background:#fff;border-radius:9px;box-shadow:0 3px 0 #0002;align-self:center;margin-left:16px}
 .trk b{position:absolute;left:-16px;top:-6px;font-size:18px}.trk i{position:absolute;top:-6px;font-size:18px;font-style:normal;transform:translateX(50%)}
 .race .cd{font-size:80px!important}
@@ -162,7 +191,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='1.3.1';
+const VER='1.4.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -543,43 +572,64 @@ function bu(k,i){S.own=S.own||{};S.eq=S.eq||{};const ow=S.own[k]=S.own[k]||[];
 if(GD()<PR[k]){oops();toast('تحتاج 🪙'+PR[k]+' وعندك 🪙'+GD()+' — حلّ المزيد من الأسئلة!');return}
 S.gd=GD()-PR[k];ow.push(i);if(k=='c')S.ch=i;else S.eq[k]=i;delete TY[k];good();clap(8);burst(innerWidth/2,220);toast('🎉 '+NAMES[k](i)+' صارت لك!');save();dS(0)}
 // ===== سباق السيارات =====
+// القيادة يدويًا: 🦶 البنزين للسير، 🛑 الفرامل، 🚀 التوربو. البنزين ينفد، وكل إجابة صحيحة تملأ الخزان.
 const RO=[['🪨','صخرة كبيرة في الطريق','🐘','الفيل دفع الصخرة'],['🌳','شجرة سقطت على الطريق','🦫','القندس قطع الشجرة'],['🚧','الطريق مغلق بحاجز','👷','العامل فتح الحاجز'],['🐄','بقرة تقف في الطريق','🧑‍🌾','المزارع أبعد البقرة'],['📦','صناديق وقعت على الطريق','🚚','الشاحنة حملت الصناديق'],['🪵','جذع ثقيل في الطريق','🦍','الغوريلا رفع الجذع'],['⛄','رجل ثلج في الطريق','☀️','الشمس أذابت الثلج'],['🐑','قطيع خراف يعبر','🐕','الكلب جمع الخراف']];
-const RK=3,RG=800,RN=5,NI=60;let RC;
-function race(){clr();try{document.documentElement.requestFullscreen().then(()=>screen.orientation.lock('landscape')).catch(()=>{})}catch(e){}
-const ob=sh(RO).slice(0,RN),OW=ob.map((_,i)=>700+i*RG),FIN=OW[RN-1]+RG;let ri;do{ri=R(26)}while(ri==(S.ch|0));
-const r=RC={d:0,rd:350,rb:0,n:0,c:0,e:0,oi:0,ob,OW,FIN,ri,ph:'count',on:1,t:0,last:'',msg:''};
-let w='',k=0;for(let x=-260;x<FIN+700;x+=260)w+=`<div class="wo tr" data-w=${x}>${['🌳','🌲','🏡','🌳','🌻'][k++%5]}</div>`;
-ob.forEach((o,i)=>w+=`<div class="wo ro" id=ro${i} data-w=${OW[i]}>${o[0]}</div><div class="wo rhp" id=rh${i} data-w=${OW[i]+90}>${o[2]}</div>`);
-w+=`<div class="wo fl" data-w=${FIN}></div>`;
-app.innerHTML=`<div id=jv class=race><div class=hl id=hlB></div><div class=hl id=hlA></div><div class=road><div class=ln></div></div><div id=rw>${w}<div class="wo car lane2" id=rcar><span class=nf>🔥</span>🚙<span class=dv>${AV(ri,CH[ri].c,NQ)}</span></div><div class="wo car lane1" id=pcar><span class=nf>🔥</span>🏎️<span class=dv>${AV()}</span></div></div><div id=jh></div><div id=pan></div><div id=rot>🔄 لفّ الهاتف أفقيًا لتجربة أفضل</div></div>`;
-r.els=[...document.querySelectorAll('#rw [data-w]')];rjh();
-$('#pan').innerHTML=`<div class=card><b>سباق ضد ${CH[ri].n}! 🏁<br>أجب عن الأسئلة لتزيل العوائق، وكل إجابة صحيحة تعطيك نيترو 🔥 لتسبقه</b></div>`;
-['3','2','1','انطلق! 🚦'].forEach((s,i)=>later(()=>{$('#pan').innerHTML=`<div class=card><div class="res cd">${s}</div></div>`;tone(i<3?440:880,.25,'square',.12)},3000+i*800));
-later(()=>{r.ph='drive';$('#pan').innerHTML='';say('انطلق')},6300);requestAnimationFrame(t=>rloop(t,r))}
-function rjh(){const r=RC;$('#jh').innerHTML=`<button class=ic onclick=exitR()>🏠</button><span class=st>🚧 ${r.oi}/${RN}</span><span class=st>🔥 ${Math.round(r.n/NI)}</span><span class=trk><b>🏁</b><i id=tr2>🚙</i><i id=tp>🏎️</i></span>`}
-function rloop(t,r){if(r!==RC||!r.on||!$('.race'))return;const dt=Math.min(.05,(t-(r.t||t))/1000);r.t=t;
-if(r.ph=='drive'){let sp=230;if(r.n>0){sp+=230;r.n=Math.max(0,r.n-230*dt)}r.d+=sp*dt;r.rd+=230*dt;
- if(r.oi<RN&&r.d>=r.OW[r.oi]-150){r.d=r.OW[r.oi]-150;r.ph='ask';rjh();rask()}}
-if(r.rb>0){const m=Math.min(r.rb,260*dt);r.rb-=m;r.rd+=m;if(r.ph!='drive')r.rd=Math.min(r.rd,r.FIN-200)}
-const CX=$('.race').clientWidth*.72,mv=r.ph=='drive';
-r.els.forEach(e=>e.style.left=(CX-(e.dataset.w-r.d))+'px');
-const pc=$('#pcar'),rc=$('#rcar');pc.style.left=CX+'px';rc.style.left=(CX-(r.rd-r.d))+'px';
-pc.classList.toggle('go',mv);pc.classList.toggle('nitro',mv&&r.n>0);rc.classList.toggle('go',mv||r.rb>0);rc.classList.toggle('nitro',r.rb>0);
-$('.race .ln').style.backgroundPosition=(r.d%92)+'px 0';$('#hlA').style.backgroundPositionX=(r.d*.35)+'px';$('#hlB').style.backgroundPositionX=(r.d*.12)+'px';
-const tp=$('#tp'),t2=$('#tr2');if(tp){tp.style.right=Math.min(100,r.d/r.FIN*100)+'%';t2.style.right=Math.min(100,r.rd/r.FIN*100)+'%'}
-if(mv&&(r.d>=r.FIN||r.rd>=r.FIN))return rend();
+const RK=3,RG=800,RN=5,FUEL1=15,VMAX=260,VTB=470,VRIV=170;let RC;
+function race(){clr();const ob=sh(RO).slice(0,RN),OW=ob.map((_,i)=>700+i*RG);let ri;do{ri=R(26)}while(ri==(S.ch|0));
+const r=RC={d:0,rd:350,rb:0,v:0,fuel:30,tb:1,tt:0,c:0,e:0,oi:0,ob,OW,FIN:OW[RN-1]+RG,ri,ph:'intro',on:1,t:0,last:'',msg:'',G:0,B:0};
+rbuild();$('#pan').innerHTML=`<div class=card><b>سباق ضد ${CH[ri].n}! 🏁</b><p class=sm style="margin:6px 0">اضغط مطوّلًا على <b>🦶 البنزين</b> لتسير، و<b>🛑 الفرامل</b> لتتوقف، و<b>🚀 التوربو</b> لتسرع.<br>البنزين ينفد! كل إجابة صحيحة تملأ ⛽ ${FUEL1} لترًا.</p><p class=sm style="margin:4px 0"><b>كيف تريد أن تمسك الجهاز؟</b></p><div class=opts style="grid-template-columns:1fr 1fr"><button class=opt onclick="rstart('p')">📱 طولي</button><button class=opt onclick="rstart('l')">🖥️ عرضي</button></div></div>`;
 requestAnimationFrame(t=>rloop(t,r))}
-function rask(){const r=RC;if(r.ph!='ask')return;const f=pick(r.last),a=f[0],b=f[1],o=r.ob[r.oi];r.last=key(a,b);r.a=a;r.b=b;
-if(!r.c&&!r.msg)say(o[1]);
-$('#pan').innerHTML=`<div class=card><div class=dots>${o[0]} ${'⭐'.repeat(r.c)+'☆'.repeat(RK-r.c)} <small>${r.msg||o[1]+'! أجب '+RK+' إجابات صحيحة لنطلب المساعدة'}</small></div><div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ra(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
-function ra(el,v){const r=RC;if(!r||r.ph!='ask')return;const ok=v==r.a*r.b;document.querySelectorAll('.opt').forEach(o=>o.disabled=true);rec(r.a,r.b,ok);
-if(ok){r.c++;r.n+=NI;good();clap(3);const p=mid(el);burst(p[0],p[1]);el.classList.add('ok');r.msg=G[R(G.length)]+' +🔥';rjh();later(r.c>=RK?rhelp:rask,800)}
-else{r.e++;r.rb+=90;oops();el.classList.add('no');document.querySelectorAll('.opt').forEach(o=>{if(+o.textContent==r.a*r.b)o.classList.add('ok')});r.msg=`${CH[r.ri].n} تقدّم قليلًا، ركّز وستسبقه! 💪`;later(rask,1500)}}
-function rhelp(){const r=RC;if(r.ph!='ask')return;r.ph='help';r.msg='';const i=r.oi,o=r.ob[i];
-$('#pan').innerHTML=`<div class=card><div class=res>${o[2]}</div><h2>${o[3]}!</h2></div>`;say(o[3]);clap(10);$('#rh'+i).classList.add('show');
-later(()=>{$('#ro'+i).classList.add('gone');good()},1300);
-later(()=>{$('#rh'+i).classList.remove('show');r.ph='ready';$('#pan').innerHTML=`<div class=card><h2>الطريق مفتوح! 🔥 ×${Math.round(r.n/NI)} نيترو</h2><button class=big onclick=rgo()>🚦 انطلق!</button></div>`},2600)}
-function rgo(){const r=RC;if(r.ph!='ready')return;r.oi++;r.c=0;r.ph='drive';$('#pan').innerHTML='';tone(220,.4,'sawtooth',.08);tone(330,.4,'sawtooth',.08,.15);rjh()}
+function rfs(o){try{document.documentElement.requestFullscreen().then(()=>screen.orientation.lock(o=='p'?'portrait':'landscape')).catch(()=>{})}catch(e){}}
+function rstart(o){const r=RC;if(!r||r.ph!='intro')return;S.ro=o;save();rfs(o);rbuild();r.ph='count';
+['3','2','1','انطلق! 🚦'].forEach((s,i)=>later(()=>{$('#pan').innerHTML=`<div class=card><div class="res cd">${s}</div></div>`;tone(i<3?440:880,.25,'square',.12)},i*800));
+later(()=>{if(RC!==r)return;r.ph='drive';$('#pan').innerHTML='';say('انطلق')},3300)}
+function rrot(){S.ro=(S.ro||'p')=='p'?'l':'p';save();rfs(S.ro);rbuild();const r=RC;if(r.ph=='ask'||r.ph=='fuel')rq();else if(r.ph=='ready')rready()}
+function rbuild(){const r=RC,pt=(S.ro||'p')=='p';r.pt=pt;let w='',k=0;
+for(let x=-300;x<r.FIN+900;x+=pt?190:260)w+=`<div class="wo tr ${k%2?'tl':'tR'}" data-w=${x}>${['🌳','🌲','🏡','🌳','🌻'][k++%5]}</div>`;
+r.ob.forEach((o,i)=>w+=`<div class="wo ro${i<r.oi?' gone':''}" id=ro${i} data-w=${r.OW[i]}>${o[0]}</div><div class="wo rhp" id=rh${i} data-w=${r.OW[i]+(pt?0:90)}>${o[2]}</div>`);
+w+=`<div class="wo fl" data-w=${r.FIN}></div>`;
+app.innerHTML=`<div id=jv class="race ${pt?'pt':'ls'}">${pt?'':'<div class=hl id=hlB></div><div class=hl id=hlA></div>'}<div class=road><div class=ln></div></div><div id=rw>${w}<div class="wo car lane2" id=rcar><span class=cb>🚙<span class=nf>🔥</span></span><span class=dv>${AV(r.ri,CH[r.ri].c,NQ)}</span></div><div class="wo car lane1" id=pcar><span class=cb>🏎️<span class=nf>🔥</span></span><span class=dv>${AV()}</span></div></div><div id=jh></div><div id=pan></div><div class=pedals><button class="pd brk" id=pbk aria-label="فرامل">🛑<small>فرامل</small></button><button class="pd gas" id=pgs aria-label="بنزين">🦶<small>بنزين</small></button></div><button class="pd tbo" id=ptb onclick="rturbo()" aria-label="توربو">🚀<small>توربو</small><b id=tbn></b></button></div>`;
+r.els=[...document.querySelectorAll('#rw [data-w]')];rhold('#pgs','G');rhold('#pbk','B');rjh()}
+function rhold(sel,k){const e=$(sel),on=v=>ev=>{ev.preventDefault();if(RC)RC[k]=v;e.classList.toggle('on',!!v);if(v)try{e.setPointerCapture(ev.pointerId)}catch(x){}};
+e.addEventListener('pointerdown',on(1));['pointerup','pointercancel','lostpointercapture'].forEach(n=>e.addEventListener(n,on(0)));e.addEventListener('contextmenu',ev=>ev.preventDefault())}
+addEventListener('keydown',e=>{const r=RC;if(!r||!r.on||!$('.race'))return;if(['ArrowUp','ArrowRight'].includes(e.key))r.G=1;else if(['ArrowDown','ArrowLeft'].includes(e.key))r.B=1;else if(e.key==' '||e.key=='t'){e.preventDefault();rturbo()}});
+addEventListener('keyup',e=>{const r=RC;if(!r)return;if(['ArrowUp','ArrowRight'].includes(e.key))r.G=0;else if(['ArrowDown','ArrowLeft'].includes(e.key))r.B=0});
+function rjh(){const r=RC;$('#jh').innerHTML=`<button class=ic onclick=exitR()>🏠</button><span class=st>🚧 ${r.oi}/${RN}</span><button class="st fuelb" onclick=rpit() aria-label="محطة البنزين">⛽ <span class=fgw id=fgw><i id=fg></i></span></button><button class=ic onclick=rrot() aria-label="تغيير الاتجاه">${r.pt?'🖥️':'📱'}</button><span class=trk><b>🏁</b><i id=tr2>🚙</i><i id=tp>🏎️</i></span>`;rtbn()}
+function rtbn(){const r=RC,b=$('#tbn'),p=$('#ptb');if(b)b.textContent=r.tb;if(p)p.disabled=!r.tb}
+function rturbo(){const r=RC;if(!r||r.ph!='drive'||!r.tb||r.fuel<=0||r.tt>0)return;r.tb--;r.tt=2.5;rtbn();tone(300,.5,'sawtooth',.1);tone(600,.5,'sawtooth',.08,.15)}
+function rpit(){const r=RC;if(!r||r.ph!='drive')return;r.v=0;r.tt=0;r.ph='fuel';r.msg='';rq()}
+const gauge=()=>`<div class=gauge><i style="width:${RC.fuel}%"></i></div>`;
+function rloop(t,r){if(r!==RC||!r.on||!$('.race'))return;const dt=Math.min(.05,(t-(r.t||t))/1000);r.t=t;const dr=r.ph=='drive';
+if(dr){const tb=r.tt>0&&r.fuel>0;if(r.tt>0)r.tt-=dt;const gas=(r.G||tb)&&r.fuel>0&&!r.B,vm=tb?VTB:VMAX;
+ if(r.B)r.v=Math.max(0,r.v-850*dt);else if(gas)r.v=Math.min(vm,r.v+(tb?750:380)*dt);else r.v=Math.max(0,r.v-150*dt);
+ if(r.v>vm)r.v=Math.max(vm,r.v-500*dt);if(gas)r.fuel=Math.max(0,r.fuel-(tb?11:5)*dt);
+ r.d+=r.v*dt;r.rd+=VRIV*dt;
+ if(r.oi<RN&&r.d>=r.OW[r.oi]-150){r.d=r.OW[r.oi]-150;if(r.v>150){tone(140,.25,'sawtooth',.12);const p=$('#pcar');p.classList.add('bump');later(()=>p.classList.remove('bump'),400)}
+  r.v=0;r.tt=0;r.G=r.B=0;r.ph='ask';r.c=0;r.msg='';rjh();rq()}
+ else if(r.fuel<=0&&r.v<4){r.ph='fuel';r.msg='⛽ نفد البنزين! أجب لتملأ الخزان';say('نفد البنزين');rq()}}
+if(r.rb>0){const m=Math.min(r.rb,260*dt);r.rb-=m;r.rd+=m;if(r.ph!='drive')r.rd=Math.min(r.rd,r.FIN-200)}
+const J0=$('.race');J0.classList.toggle('drv',r.ph=='drive');
+const pc=$('#pcar'),rc=$('#rcar'),mv=r.v>5;
+if(r.pt){const CY=J0.clientHeight*.7;r.els.forEach(e=>e.style.top=(CY-(e.dataset.w-r.d))+'px');pc.style.top=CY+'px';rc.style.top=(CY-(r.rd-r.d))+'px';$('.race .ln').style.backgroundPosition='0 '+(r.d%92)+'px'}
+else{const CX=J0.clientWidth*.72;r.els.forEach(e=>e.style.left=(CX-(e.dataset.w-r.d))+'px');pc.style.left=CX+'px';rc.style.left=(CX-(r.rd-r.d))+'px';$('.race .ln').style.backgroundPosition=(r.d%92)+'px 0';$('#hlA').style.backgroundPositionX=(r.d*.35)+'px';$('#hlB').style.backgroundPositionX=(r.d*.12)+'px'}
+pc.classList.toggle('go',mv);pc.classList.toggle('nitro',r.tt>0&&dr);rc.classList.toggle('go',dr||r.rb>0);rc.classList.toggle('nitro',r.rb>0);
+const fg=$('#fg');if(fg){fg.style.width=r.fuel+'%';$('#fgw').classList.toggle('low',r.fuel<20)}
+const tp=$('#tp'),t2=$('#tr2');if(tp){tp.style.right=Math.min(100,r.d/r.FIN*100)+'%';t2.style.right=Math.min(100,r.rd/r.FIN*100)+'%'}
+if(dr&&(r.d>=r.FIN||r.rd>=r.FIN))return rend();
+requestAnimationFrame(t=>rloop(t,r))}
+// سؤال عند العائق (3 إجابات تستدعي المساعد) أو في محطة البنزين (كل إجابة تملأ الخزان)
+function rq(){const r=RC;if(r.ph!='ask'&&r.ph!='fuel')return;const f=pick(r.last),a=f[0],b=f[1];r.last=key(a,b);r.a=a;r.b=b;let head;
+if(r.ph=='ask'){const o=r.ob[r.oi];head=`<div class=dots>${o[0]} ${'⭐'.repeat(r.c)+'☆'.repeat(RK-r.c)} <small>${r.msg||o[1]+'! أجب '+RK+' إجابات صحيحة لنطلب المساعدة'}</small></div>`;if(!r.c&&!r.msg)say(o[1])}
+else head=`<div class=dots>⛽ <small>${r.msg||'محطة البنزين: كل إجابة صحيحة = '+FUEL1+' لترًا'}</small></div>${gauge()}`;
+$('#pan').innerHTML=`<div class=card>${head}<div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ra(this,${v})>${v}</button>`).join('')}</div>${r.ph=='fuel'?`<button class=big style="margin-top:8px" ${r.fuel<5?'disabled':''} onclick=rgo()>🚦 انطلق (⛽ ${Math.round(r.fuel)}%)</button>`:''}</div>`;say(`${a} ضرب ${b}`)}
+function ra(el,v){const r=RC;if(!r||(r.ph!='ask'&&r.ph!='fuel'))return;const ok=v==r.a*r.b;document.querySelectorAll('.opt').forEach(o=>o.disabled=true);rec(r.a,r.b,ok);
+if(ok){r.fuel=Math.min(100,r.fuel+FUEL1);if(r.ph=='ask')r.c++;good();clap(3);const p=mid(el);burst(p[0],p[1]);el.classList.add('ok');r.msg=G[R(G.length)]+` +⛽${FUEL1}`;later(r.ph=='ask'&&r.c>=RK?rhelp:rq,800)}
+else{r.e++;r.rb+=90;oops();el.classList.add('no');document.querySelectorAll('.opt').forEach(o=>{if(+o.textContent==r.a*r.b)o.classList.add('ok')});r.msg=`${CH[r.ri].n} تقدّم قليلًا، ركّز وستسبقه! 💪`;later(rq,1500)}}
+function rhelp(){const r=RC;if(r.ph!='ask')return;r.ph='help';r.msg='';r.tb++;rtbn();const i=r.oi,o=r.ob[i];
+$('#pan').innerHTML=`<div class=card><div class=res>${o[2]}</div><h2>${o[3]}!</h2><p class=sm style="margin:0">🚀 ربحت توربو!</p></div>`;say(o[3]);clap(10);$('#rh'+i).classList.add('show');
+later(()=>{$('#ro'+i).classList.add('gone');good()},1300);later(()=>{$('#rh'+i).classList.remove('show');r.ph='ready';rready()},2600)}
+function rready(){$('#pan').innerHTML=`<div class=card><h2>الطريق مفتوح! ⛽ ${Math.round(RC.fuel)}% • 🚀 ${RC.tb}</h2>${gauge()}<button class=big onclick=rgo()>🚦 انطلق!</button></div>`}
+function rgo(){const r=RC;if(r.ph=='ready'){r.oi++;r.c=0}else if(r.ph!='fuel'||r.fuel<5)return;r.ph='drive';r.msg='';$('#pan').innerHTML='';tone(220,.4,'sawtooth',.08);tone(330,.4,'sawtooth',.08,.15);rjh()}
 function rend(){const r=RC;r.ph='end';r.on=0;const win=r.d>=r.rd,n=win?(r.e<=2?3:r.e<=5?2:1):1;award(n);
 if(win){good();clap(20);say('أحسنت يا بطل، فزت بالسباق');for(let i=0;i<6;i++)later(()=>burst(R(innerWidth),R(300)+60),i*300)}else{oops();say('المركز الثاني، كنت قريبًا جدًا')}
 $('#pan').innerHTML=`<div class=card><div class=res>${win?'🏆'+'⭐'.repeat(n):'🥈⭐'}</div><h2>${win?'فاز '+NM()+' بالسباق! 🎉':'المركز الثاني! كنت قريبًا جدًا 💪'}</h2><p style=margin:0>الأخطاء: ${r.e}</p>${U}<button class=big onclick=race()>🏁 سباق جديد</button><button class=big style=background:#18a999 onclick=exitR()>🏠 الرئيسية</button></div>`}
