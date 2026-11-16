@@ -420,12 +420,14 @@ svg[class^=mv]{transform-origin:50% 85%}
 .kdir{top:auto!important;bottom:10px;left:14px!important}
 .kdot{position:absolute;top:12px;right:12px;width:54px;height:54px;border-radius:50%;border:5px solid #fff;box-shadow:0 0 0 3px #0002,0 4px 10px #0004;animation:none}
 .kcol{display:none!important}
+.kop.kgot{animation:kgot .5s 3}@keyframes kgot{50%{transform:scale(1.12);box-shadow:0 0 0 4px #e8453c,0 0 18px #e8453c}}
+.kpop.give{box-shadow:0 0 0 4px #ff8a1f,0 10px 30px #0004!important;background:linear-gradient(135deg,#fff6e5,#ffe0ef)!important;font-size:19px!important}.kbig{font-size:28px;font-weight:900;color:#e8453c}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.10.3';
+const VER='2.10.4';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1180,6 +1182,11 @@ if(cur.dl>P.dl&&cur.top!==P.top){const who=st.order.find(u=>cur.cnt[u]<P.cnt[u])
  if(kWild(c)){msg+=`<br>🌈 اللون الآن: <b style="color:${KC[st.color]}">${KN[st.color]}</b>`;snd=snd=='bad'?'bad':'wild';const t=$('.ktable');if(t){t.style.setProperty('--fl',KC[st.color]);t.classList.add('kflash');later(()=>t.classList.remove('kflash'),900)}}
  kPop(`<div class=kpopc>${kCard(c)}</div><div>${msg}</div>`,cls,1900);kSfx(snd)}}
 else if(P.turn!==me&&cur.turn!==P.turn&&cur.dl==P.dl&&cur.cnt[P.turn]>P.cnt[P.turn]){kPop(`🂠 <b>${nm(P.turn)}</b> سحب ورقة ومرّر`,'soft',1300);kSfx('draw')}
+// أوراق تُعطى لأحد المنافسين (+2/+4 أو سحب): أوراق تطير من الكومة إلى اسمه، ونافذة يراها الجميع
+st.order.forEach(u=>{if(u===me)return;const d=cur.cnt[u]-P.cnt[u];if(d<=0)return;const chip=$('#ko_'+u),deck=$('.kdeck');if(chip){chip.classList.add('kgot');later(()=>chip.classList.remove('kgot'),1600)}
+ for(let i=0;i<Math.min(d,6);i++)later(()=>{if(!chip||!deck)return;const a=deck.getBoundingClientRect(),b=chip.getBoundingClientRect(),f=document.createElement('div');f.className='kfly';f.innerHTML='<div class="kc kbk"></div>';f.style.left=a.left+a.width/2-31+'px';f.style.top=a.top+a.height/2-46+'px';app.appendChild(f);
+ requestAnimationFrame(()=>f.style.transform=`translate(${b.left+b.width/2-(a.left+a.width/2)}px,${b.top+b.height/2-(a.top+a.height/2)}px) scale(.45) rotate(${R(40)-20}deg)`);later(()=>f.remove(),520)},(cur.dl>P.dl?650:100)+i*160);
+ const v=cur.dl>P.dl?kVal(cur.top):'';if(d>=2&&(v=='D'||v=='4')){const giver=st.order.find(x=>cur.cnt[x]<P.cnt[x])||P.turn;later(()=>kPop(`<div class=kpbig>🎁</div><div><b>${giver===me?'أنت':nm(giver)}</b> ${giver===me?'أعطيتَ':'أعطى'} <b>${nm(u)}</b><br><span class=kbig>+${d} أوراق</span></div>`,'give',2200),giver===me?150:1950)}});
 // أوراق جديدة دخلت يدي: أوراق تطير من الكومة وتستقر في يدي، وتلمع
 const add=cur.my-P.my;if(add>0){const left=P.hand.slice(),nw=[];cur.hand.forEach(c=>{const i=left.indexOf(c);if(i>=0)left.splice(i,1);else nw.push(c)});const all=[...document.querySelectorAll('#khand .kc')],els=[];nw.forEach(c=>{const e=all.find(x=>x.dataset.c==c&&!els.includes(x));if(e)els.push(e)});els.forEach(e=>e.classList.add('knew'));const deck=$('.kdeck');
  els.forEach((e,i)=>{e.style.visibility='hidden';later(()=>{if(!deck||!document.body.contains(e)){e.style.visibility='';return}const a=deck.getBoundingClientRect(),b=e.getBoundingClientRect(),f=document.createElement('div');f.className='kfly';f.innerHTML='<div class="kc kbk"></div>';
