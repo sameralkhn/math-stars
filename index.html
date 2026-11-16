@@ -461,12 +461,22 @@ svg[class^=mv]{transform-origin:50% 85%}
 .kdirb.flip{animation:kflip .6s}
 .kringt{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:9px;color:#b07800;font-weight:700}
 .kseq{text-align:right;margin:6px 0 0;padding-right:22px}.kseq li{padding:4px 0;font-size:15px}.kseq li.on{color:#ff8a1f;font-weight:800}.kseq i{font-style:normal;font-size:12px;color:#e8579a;font-weight:800}
+
+.ktable{position:relative}
+.klogb{position:absolute;right:12px;bottom:12px;z-index:3;border:0;border-radius:14px;background:#fff;box-shadow:0 3px 0 #0002;padding:4px 8px;display:flex;flex-direction:column;align-items:center;font:inherit;font-size:20px;line-height:1;cursor:pointer}.klogb small{font-size:10px;font-weight:800;color:#8a63ff;margin-top:2px}
+.ksheetw{position:fixed;inset:0;z-index:48;background:#0000;transition:background .25s}.ksheetw.show{background:#0006}
+.ksheet{position:absolute;left:0;right:0;bottom:0;max-height:62vh;background:#fff;border-radius:22px 22px 0 0;box-shadow:0 -8px 24px #0003;transform:translateY(100%);transition:transform .28s cubic-bezier(.3,1,.4,1);display:flex;flex-direction:column}
+.ksheetw.show .ksheet{transform:none}.kgrab{width:44px;height:5px;border-radius:3px;background:#d5dbe6;margin:8px auto 2px}
+.kshh{display:flex;justify-content:center;align-items:center;position:relative;padding:4px 12px 8px;font-size:17px;border-bottom:1px solid #eef1f6}.kshh .kpx{top:2px}
+.kshl{overflow-y:auto;padding:6px 12px 18px}.klr{display:flex;align-items:center;gap:10px;padding:7px 2px;border-bottom:1px solid #f2f4f8;font-size:15px}.klr span{flex:1}.klr small{color:#8a94a6;font-size:11px}.klr.new{background:#fff6e5;border-radius:10px}
+.klr .kc.klc{width:30px!important;height:44px!important;border-width:2px;border-radius:6px;cursor:default;flex:0 0 auto}.klr .kc.klc .kcs{font-size:14px}.klr .kc.klc i{display:none}.klr .kc.klc::before{inset:4px 3px}
+.klic{width:30px;text-align:center;font-size:20px;flex:0 0 auto}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.11.2';
+const VER='2.12.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1062,7 +1072,7 @@ Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){if(
 let BACKHOOK=null;
 function backGuard(fn){if(!BACKHOOK)history.pushState(Object.assign({},history.state,{g:1}),'');BACKHOOK=fn}
 const BNOOP=()=>{};function backRelease(){if(BACKHOOK&&BACKHOOK!==BNOOP){BACKHOOK=BNOOP;history.back()}}
-addEventListener('popstate',e=>{if(BACKHOOK){const f=BACKHOOK;BACKHOOK=null;return f()}clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
+addEventListener('popstate',e=>{const ks=$('.ksheetw');if(ks)ks.remove();if(BACKHOOK){const f=BACKHOOK;BACKHOOK=null;return f()}clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
 // ===== خمس ألعاب إضافية =====
 let GX={};
 const qHTML=(a,b)=>`<div class=q>${a} × ${b} = <bdi>؟</bdi></div>`;
@@ -1117,7 +1127,10 @@ ids.forEach(u=>st.hands[u]=st.deck.splice(0,7));let f;do{f=st.deck.shift();if(kW
 function kDraw(st,u,n){for(let i=0;i<n;i++){if(!st.deck.length){const top=st.disc.pop();st.deck=sh(st.disc);st.disc=[top]}if(st.deck.length)st.hands[u].push(st.deck.shift())}}
 const kNext=(st,k=1)=>((st.turn+st.dir*k)%st.order.length+st.order.length)%st.order.length;
 // تطبيق حركة: لعب ورقة (مع لون للأوراق الملوّنة)، أو سحب، أو تمرير
-function kMove(st,u,mv){const me=st.order[st.turn];if(me!==u||st.winner)return false;const h=st.hands[u],nm=st.names[u];
+// سجل الأحداث: كل حركة ناجحة تُضاف إلى st.log (آخر 80)
+function kLogAdd(st,m,c){st.log=st.log||[];st.log.push({m,c:c||'',t:Date.now()});if(st.log.length>80)st.log.splice(0,st.log.length-80)}
+function kMove(st,u,mv){const n0=st.disc.length,ok=kMove0(st,u,mv);if(ok)kLogAdd(st,st.msg,st.disc.length>n0?st.disc[st.disc.length-1]:(mv.t=='draw'?'draw':''));return ok}
+function kMove0(st,u,mv){const me=st.order[st.turn];if(me!==u||st.winner)return false;const h=st.hands[u],nm=st.names[u];
 if(mv.t=='draw'){if(st.drew)return false;kDraw(st,u,1);const c=h[h.length-1];if(kCan(c,st)){st.drew=c;st.msg=nm+' سحب ورقة'}else{st.drew=null;st.msg=nm+' سحب ومرّر';st.turn=kNext(st)}delete st.one[u];return true}
 if(mv.t=='pass'){if(!st.drew)return false;st.drew=null;st.msg=nm+' مرّر';st.turn=kNext(st);return true}
 const c=mv.c,i=h.indexOf(c);if(i<0||!kCan(c,st)||(st.drew&&c!==st.drew))return false;h.splice(i,1);st.disc.push(c);st.drew=null;st.color=kWild(c)?(mv.col||'r'):c[0];
@@ -1165,15 +1178,15 @@ function kPickDone(c,k){KG.pick=0;KGB();kDo({t:'play',c,col:k})}
 // أثناء الجولة: زر الرجوع يسأل قبل المغادرة (حتى لا تضيع الرسوم)
 function KGB(){if(KG&&KG.st&&!KG.st.winner&&$('.khand'))backGuard(kLeaveAsk);else backRelease()}
 function kLeaveAsk(){if(confirm('هل تريد مغادرة الجولة؟ لن تُعاد رسوم المشاركة.')){KG&&KG.uns&&KG.uns();KG=null;history.back()}else{backGuard(kLeaveAsk)}}
-function kOne(){const g=KG,st=g.st;st.one=st.one||{};if(g.mode=='net')return kTx(s=>{s.one=s.one||{};s.one[UID]=1;s.msg=s.names[UID]+': ورقة! 🙋';return true});st.one[g.me]=1;tone(880,.15,'square',.12);toast('🙋 ورقة!');kRender()}
+function kOne(){const g=KG,st=g.st;st.one=st.one||{};if(g.mode=='net')return kTx(s=>{s.one=s.one||{};s.one[UID]=1;s.msg=s.names[UID]+': ورقة! 🙋';kLogAdd(s,s.msg,'one');return true});st.one[g.me]=1;kLogAdd(st,st.names[g.me]+': ورقة! 🙋','one');tone(880,.15,'square',.12);toast('🙋 ورقة!');kRender()}
 function kDo(mv){const g=KG;if(g.mode=='net')return kTx(s=>kMove(s,UID,mv));if(!kMove(g.st,g.me,mv))return;kSfx(mv.t=='play'?(kWild(mv.c)?'wild':'card'):'draw');kRender();if(g.st.winner)return kEnd();kBotTick()}
 function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me]||[],myTurn=st.order[st.turn]===me&&!st.winner,top=st.disc[st.disc.length-1],n=st.order.length;
 const opp=kRing(st,me);
-shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class=ktable style="--kc:${KC[st.color]}"><span class=kdot title="اللون المطلوب: ${KN[st.color]}" style="background:${KC[st.color]}"></span><div class=kpile>${kCard(top,'ktop')}</div>
+shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class=ktable style="--kc:${KC[st.color]}"><button class=klogb onclick=kLogPop() aria-label="سجل الأحداث">📜<small>السجل</small></button><span class=kdot title="اللون المطلوب: ${KN[st.color]}" style="background:${KC[st.color]}"></span><div class=kpile>${kCard(top,'ktop')}</div>
 <button class=kdeck onclick="kDo({t:'draw'})" ${myTurn&&!st.drew?'':'disabled'}><span>🂠</span><small>سحب</small></button><span class=kdir>${st.dir>0?'↻':'↺'}</span></div>
 <p class=kmsg>${esc(st.msg||'')}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(st.names[st.order[st.turn]]||'')}</p>
 <div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)).join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
-<div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>30000?`<button class="buy kskip" onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB();kAlerts()}
+<div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>30000?`<button class="buy kskip" onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB();kAlerts();const sl=$('#kshl');if(sl)sl.innerHTML=kLogRows()}
 function kEnd(){const g=KG,st=g.st,win=st.winner===g.me,wn=esc(st.names[st.winner]||'');backRelease();
 if(win){kPrize(g.key,g.pot);good()}kSfx('win');clap(win?25:12);cpRain();vib(win?[100,60,100,60,300]:[200]);say(win?'أحسنت يا بطل':'مبروك للفائز');
 const P=st.order.map(u=>({n:st.names[u],c:st.hands[u].length,u})).sort((a,b)=>a.c-b.c),md=['🥇','🥈','🥉'];
@@ -1191,6 +1204,12 @@ let h='';for(let i=0;i<n;i++){const am=(ang(i)+ang(i+1))/2,[x,y]=pos(am),rot=am*
 O.forEach((u,i)=>{const[x,y]=pos(ang(i)),c=st.hands[u].length;h+=`<div class="kseat${u===cu?' on':''}${u===nx&&u!==cu?' nx':''}${u===me?' me':''}" ${big?'':`id="ko_${u}"`} style="left:${x}%;top:${y}%"><b>${u===me?'أنت':esc(st.names[u]||'?')}</b><span>🃏 ${c}</span>${big&&c==1?'<small>ورقة!</small>':''}${big?(u===cu?'<i class=ktag>🎯 الدور</i>':u===nx?'<i class="ktag kn">التالي</i>':''):''}</div>`});
 return `<div class="kring${big?' big':''}">${h}<div class=kmid><span class="kdirb${st.dir>0?'':' rev'}">${st.dir>0?'↻':'↺'}</span>${big?`<small>${st.dir>0?'باتجاه عقارب الساعة':'عكس عقارب الساعة'}</small>`:''}</div></div>`}
 function kRing(st,me){return `<button class=kringb onclick=kRingPop() aria-label="ترتيب اللاعبين">${kRingH(st,me,0)}<small class=kringt>👆 التفاصيل</small></button>`}
+function kLogRows(){const st=KG&&KG.st;if(!st)return'';const L=(st.log||[]).slice().reverse(),ic=c=>c=='draw'?'<span class=klic>🂠</span>':c=='skip'?'<span class=klic>⏭️</span>':c=='one'?'<span class=klic>🙋</span>':c?kCard(c,'klc'):'<span class=klic>•</span>';
+const d=document.createElement('div');d.className='ksheetw';d.onclick=e=>{if(e.target===d)kSheetClose(d)};
+return L.length?L.map((x,i)=>`<div class="klr${i==0?' new':''}">${ic(x.c)}<span>${esc(x.m||'')}</span><small>${new Date(x.t).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})}</small></div>`).join(''):'<p>لم تحدث حركات بعد</p>'}
+function kLogPop(){if(!KG||!KG.st)return;$('.ksheetw')&&$('.ksheetw').remove();const d=document.createElement('div');d.className='ksheetw';d.onclick=e=>{if(e.target===d)kSheetClose(d)};
+d.innerHTML=`<div class=ksheet><div class=kgrab></div><div class=kshh><b>📜 سجل الأحداث</b><button class=kpx onclick="kSheetClose(this.closest('.ksheetw'))" aria-label="إغلاق">✖</button></div><div class=kshl id=kshl>${kLogRows()}</div></div>`;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'))}
+function kSheetClose(d){if(!d)return;d.classList.remove('show');setTimeout(()=>d.remove(),280)}
 function kRingPop(){const g=KG,st=g&&g.st;if(!st)return;const O=st.order,n=O.length,seq=[];for(let k=0;k<n;k++)seq.push(O[((st.turn+st.dir*k)%n+n)%n]);
 const d=document.createElement('div');d.className='kpick';d.onclick=e=>{if(e.target===d)d.remove()};
 d.innerHTML=`<div class="card" style="text-align:center;position:relative"><button class=kpx onclick="this.closest('.kpick').remove()" aria-label="إغلاق">✖</button><h3 style="margin:4px 0">ترتيب اللاعبين</h3>${kRingH(st,g.me,1)}<ol class=kseq>${seq.map((u,i)=>`<li class="${i==0?'on':''}"><b>${u===g.me?'أنت':esc(st.names[u])}</b> <span>🃏 ${st.hands[u].length}</span>${i==0?' <i>🎯 الدور الآن</i>':i==1?' <i>التالي</i>':''}</li>`).join('')}</ol></div>`;app.appendChild(d)}
@@ -1259,9 +1278,9 @@ if(!g.paid){g.paid=1;if(!kPay(key))toast('⚠️ رصيدك لا يكفي للر
 function kLobby(){const r=KG.room||{},ns=r.names||{},host=r.host==UID;shell('طاولة آخر ورقة 🃏',`<div id=kx></div><div class="card cpt"><p class=sm>رقم الطاولة:</p><div class=cpcode dir=ltr>${KG.code}</div><p class=sm>يفتح كل لاعب «آخر ورقة ← 📱 مع العائلة» ويكتب هذا الرقم. رسوم كل لاعب 🪙 ${FEE}، والفائز يأخذ الكل.</p>
 <h3>اللاعبون (${Object.keys(ns).length}/6)</h3><div class=cppl>${Object.keys(ns).map(u=>`<span>${esc(ns[u])}${u==r.host?' 👑':''}</span>`).join('')}</div>${host?`<button class=big ${Object.keys(ns).length>=2?'':'disabled'} onclick=kStart()>🃏 ابدأ اللعبة</button>`:'<p>⏳ بانتظار صاحب الطاولة ليبدأ…</p>'}</div>`)}
 function kStart(){const r=KG.room,ids=sh(Object.keys(r.names));const st=kNew(ids,r.names);roomRef(KG.code).update(Object.assign(st,{state:'play',started:Date.now()})).catch(netErr)}
-function kTx(fn){const ref=roomRef(KG.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();if(s.winner)s.state='end';tx.update(ref,{hands:s.hands,deck:s.deck,disc:s.disc,color:s.color,turn:s.turn,dir:s.dir,one:s.one||{},drew:s.drew||null,winner:s.winner||null,msg:s.msg,ts:s.ts,state:s.state})}).then(()=>tone(660,.08,'triangle',.12)).catch(e=>{if(e!=='no')netErr(e);else oops()})}
+function kTx(fn){const ref=roomRef(KG.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();if(s.winner)s.state='end';tx.update(ref,{log:s.log||[],hands:s.hands,deck:s.deck,disc:s.disc,color:s.color,turn:s.turn,dir:s.dir,one:s.one||{},drew:s.drew||null,winner:s.winner||null,msg:s.msg,ts:s.ts,state:s.state})}).then(()=>tone(660,.08,'triangle',.12)).catch(e=>{if(e!=='no')netErr(e);else oops()})}
 setInterval(()=>{const g=KG;if(g&&g.mode=='net'&&g.st&&g.st.order&&!g.st.winner&&!g.pick&&$('.khand')&&g.st.order[g.st.turn]!==UID&&Date.now()-(g.st.ts||0)>30000&&!$('.kbtns .kskip'))kRender()},5000);
-function kSkip(){kTx(s=>{if(s.winner)return false;s.drew=null;s.msg='تم تخطّي '+s.names[s.order[s.turn]]+' (لم يلعب)';s.turn=kNext(s);return true})}
+function kSkip(){kTx(s=>{if(s.winner)return false;s.drew=null;s.msg='تم تخطّي '+s.names[s.order[s.turn]]+' (لم يلعب)';kLogAdd(s,s.msg,'skip');s.turn=kNext(s);return true})}
 // ===== 🦖 الهروب من الديناصور: حلّ المسائل لتأخذ طاقة وتركض أسرع، واقفز فوق مخاطر الغابة =====
 let DN=null;
 const DNE={50:36,40:30,25:24,20:20,10:14,5:10,1:6},DNOB=[['🕸️','علقت في شبكة العنكبوت!'],['🐍','ثعبان في الطريق!'],['🪨','تعثّرت بصخرة!'],['🌵','شوك!'],['🕳️','حفرة!'],['🪵','جذع شجرة!']];
