@@ -317,12 +317,16 @@ svg[class^=mv]{transform-origin:50% 85%}
 .lds{text-align:center;background:linear-gradient(135deg,#fff8dc,#ffe9a8)}.ldd{margin:12px 0 4px;font-size:15px;color:#5b6b8c}
 .ldr{display:flex;justify-content:space-between;align-items:center;padding:8px 2px;border-bottom:1px solid #eef1f6}.ldr span{display:flex;flex-direction:column;font-weight:700}.ldr small{font-size:11px;color:#8a94a6;font-weight:600}
 .lup{color:#18a959;font-size:18px;direction:ltr}.ldn{color:#e8453c;font-size:18px;direction:ltr}
+.kpbar{width:100%;background:#fff;border-radius:18px;padding:10px;box-shadow:0 -2px 0 #0001,0 6px 14px #0002;position:relative;text-align:center}
+.kpc2{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.kpc2 button{border:0;border-radius:14px;height:56px;color:#fff;font:inherit;font-weight:800;font-size:16px;cursor:pointer;box-shadow:0 4px 0 #0003}
+.kpx{position:absolute;top:6px;left:8px;border:0;background:#eef1f6;border-radius:50%;width:32px;height:32px;font-size:16px;cursor:pointer}
+.khand .kc.kpk{transform:translateY(-22px) scale(1.08);box-shadow:0 0 0 4px #8a63ff,0 10px 14px #0005;filter:none}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.6.0';
+const VER='2.6.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -914,7 +918,11 @@ const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
 Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){if(LV[n]===2||n=='learn'||n=='cards')CURG=n;const d=curD(),l=LV[n]=='r'?Math.min(d+1,3):LV[n],st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
-addEventListener('popstate',e=>{clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
+// BACKHOOK: شاشة داخلية (مثل نافذة اختيار اللون أو جولة أوراق جارية) تلتقط زر الرجوع بدل مغادرة الصفحة
+let BACKHOOK=null;
+function backGuard(fn){if(!BACKHOOK)history.pushState(Object.assign({},history.state,{g:1}),'');BACKHOOK=fn}
+function backRelease(){if(BACKHOOK){BACKHOOK=()=>{};history.back()}}
+addEventListener('popstate',e=>{if(BACKHOOK){const f=BACKHOOK;BACKHOOK=null;return f()}clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
 // ===== خمس ألعاب إضافية =====
 let GX={};
 const qHTML=(a,b)=>`<div class=q>${a} × ${b} = <bdi>؟</bdi></div>`;
@@ -1007,7 +1015,14 @@ const kBest=h=>{const n={r:0,y:0,g:0,b:0};h.forEach(c=>{if(!kWild(c))n[c[0]]++})
 // حركة اللاعب
 function kPlay(c){const g=KG,st=g.st;if(st.order[st.turn]!==g.me||st.winner)return;if(!kCan(c,st)||(st.drew&&c!==st.drew))return oops();
 if(kWild(c))return kPick(c);kDo({t:'play',c})}
-function kPick(c){const d=document.createElement('div');d.className='kpick';d.innerHTML=`<div class=card><h3>اختر اللون</h3><div class=kpc>${'rygb'.split('').map(k=>`<button style="background:${KC[k]}" onclick="this.closest('.kpick').remove();kDo({t:'play',c:'${c}',col:'${k}'})">${KN[k]}</button>`).join('')}</div></div>`;document.body.appendChild(d)}
+function kPick(c){const b=$('.kbtns');if(!b)return;document.querySelectorAll('.khand .kc').forEach(e=>{const on=e.getAttribute('onclick')==`kPlay('${c}')`;e.classList.toggle('kpk',on);if(on)e.parentNode.scrollLeft=e.offsetLeft-e.parentNode.clientWidth/2+e.clientWidth/2});
+b.innerHTML=`<div class=kpbar><b>🌈 اختر اللون:</b><div class=kpc2>${'rygb'.split('').map(k=>`<button style="background:${KC[k]}" aria-label="${KN[k]}" onclick="kPickDone('${c}','${k}')">${KN[k]}</button>`).join('')}</div><button class=kpx onclick=kPickClose() aria-label="إغلاق">✖</button></div>`;b.scrollIntoView({behavior:'smooth',block:'end'});
+KG.pick=1;backGuard(()=>{KG.pick=0;kRender()})}
+function kPickClose(){KG.pick=0;KGB();kRender()}
+function kPickDone(c,k){KG.pick=0;KGB();kDo({t:'play',c,col:k})}
+// أثناء الجولة: زر الرجوع يسأل قبل المغادرة (حتى لا تضيع الرسوم)
+function KGB(){if(KG&&KG.st&&!KG.st.winner&&$('.khand'))backGuard(kLeaveAsk);else backRelease()}
+function kLeaveAsk(){if(confirm('هل تريد مغادرة الجولة؟ لن تُعاد رسوم المشاركة.')){KG&&KG.uns&&KG.uns();KG=null;history.back()}else{backGuard(kLeaveAsk)}}
 function kOne(){const g=KG,st=g.st;st.one=st.one||{};if(g.mode=='net')return kTx(s=>{s.one=s.one||{};s.one[UID]=1;s.msg=s.names[UID]+': ورقة! 🙋';return true});st.one[g.me]=1;tone(880,.15,'square',.12);toast('🙋 ورقة!');kRender()}
 function kDo(mv){const g=KG;if(g.mode=='net')return kTx(s=>kMove(s,UID,mv));if(!kMove(g.st,g.me,mv))return;tone(mv.t=='play'?660:400,.08,'triangle',.12);kRender();if(g.st.winner)return kEnd();kBotTick()}
 function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me]||[],myTurn=st.order[st.turn]===me&&!st.winner,top=st.disc[st.disc.length-1],n=st.order.length;
@@ -1016,9 +1031,9 @@ shell('آخر ورقة 🃏',`<div id=kx></div><div class=kops>${opp}</div><div 
 <button class=kdeck onclick="kDo({t:'draw'})" ${myTurn&&!st.drew?'':'disabled'}><span>🂠</span><small>سحب</small></button><span class=kdir>${st.dir>0?'↻':'↺'}</span></div>
 <p class=kmsg>${esc(st.msg||'')}</p><p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(st.names[st.order[st.turn]]||'')}</p>
 <div class=khand>${my.map(c=>kCard(c,myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':'',`onclick="kPlay('${c}')"`)).join('')}</div>
-<div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>45000?`<button class=buy onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`)}
-function kEnd(){const g=KG,st=g.st,win=st.winner===g.me;if(win){kPrize(g.key,g.pot);good();clap(25);cpRain();say('أحسنت يا بطل')}else oops();
-const d=document.createElement('div');d.className='kpick';d.innerHTML=`<div class="card" style="text-align:center"><div class=res>${win?'🏆':'🃏'}</div><h2>${win?'فزت! +🪙 '+g.pot.toLocaleString('en'):'فاز '+esc(st.names[st.winner])+'!'}</h2><p>رصيدك: 🪙 ${GD().toLocaleString('en')}</p><button class=big onclick="this.closest('.kpick').remove();cardsHome()">🃏 جولة جديدة</button><button class=big style="background:#18a999" onclick="this.closest('.kpick').remove();history.back()">🎮 الألعاب</button></div>`;document.body.appendChild(d)}
+<div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>45000?`<button class=buy onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB()}
+function kEnd(){const g=KG,st=g.st,win=st.winner===g.me;backRelease();if(win){kPrize(g.key,g.pot);good();clap(25);cpRain();say('أحسنت يا بطل')}else oops();
+const d=document.createElement('div');d.className='kpick';(app.firstElementChild?app:document.body).appendChild(d);d.innerHTML=`<div class="card" style="text-align:center"><div class=res>${win?'🏆':'🃏'}</div><h2>${win?'فزت! +🪙 '+g.pot.toLocaleString('en'):'فاز '+esc(st.names[st.winner])+'!'}</h2><p>رصيدك: 🪙 ${GD().toLocaleString('en')}</p><button class=big onclick="this.closest('.kpick').remove();cardsHome()">🃏 جولة جديدة</button><button class=big style="background:#18a999" onclick="this.closest('.kpick').remove();history.back()">🎮 الألعاب</button></div>`}
 // مع العائلة: طاولة برقم، وكل حركة عبر Firestore
 async function kCreate(){const n=($('#kn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{let code=null;for(const c of [...sh([10,20,30,40,50,60,70,80,90]),...sh([11,22,33,44,55,66,77,88,99])]){const d=await roomRef(String(c)).get(),r=d.exists?d.data():null;if(!r||Date.now()-(r.ts||0)>3*3600e3||(r.state=='end'&&Date.now()-(r.ts||0)>600e3)){code=String(c);break}}if(!code)code=String(100+R(900));
 await roomRef(code).set({kind:'cards',host:UID,state:'wait',ts:Date.now(),names:{[UID]:n}});kRoom(code)}catch(e){netErr(e)}}
