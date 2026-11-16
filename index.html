@@ -14,7 +14,7 @@
 <script defer src="firebase-config.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;800&display=swap" rel="stylesheet">
 <style>
-:root{--navy:#1b2a5c;--sky:#bfe6ff;--sun:#ffc531;--coral:#ff6b5b;--mint:#3ed6a0;--grape:#8a63ff;--paper:#fffaf0}
+:root{--navy:#1b2a5c;--ink:#1b2a5c;--sky:#bfe6ff;--sun:#ffc531;--coral:#ff6b5b;--mint:#3ed6a0;--grape:#8a63ff;--paper:#fffaf0}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;min-height:100%}
 body{font-family:'Baloo Bhaijaan 2',Tahoma,Arial,sans-serif;color:var(--navy);background:linear-gradient(#bfe6ff,#fffaf0 70%) fixed;user-select:none}
@@ -251,7 +251,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.0.6';
+const VER='2.0.7';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
