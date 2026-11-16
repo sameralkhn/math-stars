@@ -203,7 +203,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='1.6.0';
+const VER='1.6.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -638,7 +638,7 @@ if(dc==8)out+=`<rect x="18" y="${cy-3}" width="12" height="6" rx="2" fill="#ff2d
 if(dc==9)out+=`<rect x="5" y="${yr-6}" width="50" height="6" rx="2" fill="${T}"/><rect x="7" y="${yr-5}" width="46" height="2" rx="1" fill="${A}"/><rect x="14" y="${yr-10}" width="3" height="5" fill="${T}"/><rect x="43" y="${yr-10}" width="3" height="5" fill="${T}"/>`;
 return `<svg viewBox="0 0 60 110" width="${(h*60/110).toFixed(1)}" height="${h}" aria-hidden="true">${defs}${out}</svg>`}
 // ----- سيارات من صور حقيقية: cars/<id>-side.webp (جانبية للسباق العرضي)، -rear (خلفية للطولي)، -front (للكراج) -----
-const PCARS=[{id:'p0',n:'جيب الطرق الوعرة'}];
+const PCARS=[{id:'p0',n:'جيب الطرق الوعرة',top:30}];// top: رقم السيارة المرسومة التي تمثّلها من الأعلى في السباق الطولي (حتى تتوفر صورة من الخلف تمامًا)
 const isP=s=>typeof s=='string';
 function hexHsl(c){const n=parseInt(c.slice(1),16),r=(n>>16)/255,g=(n>>8&255)/255,b=(n&255)/255,mx=Math.max(r,g,b),mn=Math.min(r,g,b),l=(mx+mn)/2,d=mx-mn;let h=0,sa=0;
 if(d){sa=d/(1-Math.abs(2*l-1));h=mx==r?((g-b)/d)%6:mx==g?(b-r)/d+2:(r-g)/d+4;h*=60;if(h<0)h+=360}return[h,sa,l]}
@@ -670,7 +670,7 @@ for(let x=-300;x<r.FIN+900;x+=pt?190:260)w+=`<div class="wo tr" style="${pt?'lef
 r.items.forEach((it,i)=>{if(!it.t)w+=`<div class="wo it" id=it${i} style="${L(it.l)}" data-w=${it.w}>${it.k=='c'?'🪙':'🛢️'}</div>`});
 r.ob.forEach((o,i)=>w+=`<div class="wo ro${i<r.oi?' gone':''}" id=ro${i} data-w=${r.OW[i]}>${o[0]}${o[0]}${o[0]}</div><div class="wo rhp" id=rh${i} style="${L(0)}" data-w=${r.OW[i]}>${o[2]}</div>`);
 w+=`<div class="wo fl" data-w=${r.FIN}></div>`;const mc=myCar(),drv=a=>`<span class=dv>${a}</span>`;
-app.innerHTML=`<div id=jv class="race ${pt?'pt':'ls'}">${pt?'':'<div class=hl id=hlB></div><div class=hl id=hlA></div>'}<div class=road><div class=ln></div></div><div id=rw>${w}<div class="wo car" id=rcar style="${L(0)}"><span class=cb>${carSVG(r.rcar.s,r.rcar.c,72)}<span class=nf>🔥</span></span>${drv(AV(r.ri,CH[r.ri].c,NQ))}</div><div class="wo car${isP(mc.s)?' ph':''}" id=pcar><span class=cb>${isP(mc.s)?carPic(mc,pt?'rear':'side',pt?84:60):carSVG(mc.s,mc.c,76)}<span class=nf>🔥</span></span>${isP(mc.s)?'':drv(AV())}</div></div><div id=jh></div><div id=pan></div>
+app.innerHTML=`<div id=jv class="race ${pt?'pt':'ls'}">${pt?'':'<div class=hl id=hlB></div><div class=hl id=hlA></div>'}<div class=road><div class=ln></div></div><div id=rw>${w}<div class="wo car" id=rcar style="${L(0)}"><span class=cb>${carSVG(r.rcar.s,r.rcar.c,72)}<span class=nf>🔥</span></span>${drv(AV(r.ri,CH[r.ri].c,NQ))}</div>${(()=>{const ph=isP(mc.s)&&!pt,tp=isP(mc.s)?((PCARS.find(q=>q.id==mc.s)||{}).top??30):mc.s;return `<div class="wo car${ph?' ph':''}" id=pcar><span class=cb>${ph?carPic(mc,'side',60):carSVG(tp,mc.c,76)}<span class=nf>🔥</span></span>${ph?'':drv(AV())}</div>`})()}</div><div id=jh></div><div id=pan></div>
 <div class=pedals><button class="pd brk" id=pbk aria-label="فرامل">🛑<small>فرامل</small></button><button class="pd gas" id=pgs aria-label="بنزين">🦶<small>بنزين</small></button></div>
 <div class=lpad><button class="pd tbo" id=ptb onclick="rturbo()" aria-label="توربو">🚀<small>توربو</small><b id=tbn></b></button><div class=steer><button class="pd st1" id=psl aria-label="يسار">${pt?'◀':'▲'}</button><button class="pd st1" id=psr aria-label="يمين">${pt?'▶':'▼'}</button></div></div></div>`;
 r.els=[...document.querySelectorAll('#rw [data-w]')];rpedals();rjh()}
