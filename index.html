@@ -443,12 +443,30 @@ svg[class^=mv]{transform-origin:50% 85%}
 .karr{font-style:normal;font-size:13px;color:#ff8a1f}
 .kmini{width:34px;height:34px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #e8579a;display:inline-flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;color:#e8579a;margin-right:4px}
 .kmini.flip{animation:kflip .6s}
+
+.kring,.kseat,.karw,.kmid{display:revert}.kops2{display:none}
+.kringb{display:block;width:100%;border:0;background:none;padding:0;cursor:pointer;position:relative;font:inherit}
+.kring{position:relative;height:118px;margin:0 auto 6px;max-width:330px;background:radial-gradient(ellipse at center,#fff 0 30%,#ffe9d6 70%);border-radius:50%/42%;box-shadow:inset 0 0 0 2px #ffc9a3}
+.kring.big{height:240px;max-width:none;margin:8px 0}
+.kseat{position:absolute;transform:translate(-50%,-50%);background:#fff;border-radius:10px;padding:2px 6px;text-align:center;box-shadow:0 2px 0 #0002,0 0 0 2px #ffd9bd;display:flex;flex-direction:column;align-items:center;line-height:1.15;z-index:2}
+.kseat b{font-size:10px;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.kseat span{font-weight:800;font-size:11px;color:#e8453c}
+.kring.big .kseat{padding:10px 10px 4px;min-width:74px;border-radius:14px}.kring.big .kseat b{font-size:13px;max-width:96px}.kring.big .kseat span{font-size:14px}.kring.big .kseat small{color:#e8453c;font-weight:800;font-size:11px}
+.kseat.me{background:#f1ecff;box-shadow:0 2px 0 #0002,0 0 0 2px #8a63ff}
+.kseat.on{background:linear-gradient(135deg,#ffc531,#ff8a1f);color:#fff;transform:translate(-50%,-50%) scale(1.12);box-shadow:0 0 0 3px #fff,0 0 0 5px #ff8a1f;z-index:3}.kseat.on span{color:#fff}
+.kseat.nx{box-shadow:0 2px 0 #0002,0 0 0 2px #e8579a}
+.ktag{position:absolute;top:-12px;font-style:normal;font-size:10px;font-weight:800;background:#e8453c;color:#fff;border-radius:8px;padding:1px 6px;white-space:nowrap}.ktag.kn{background:#e8579a}
+.karw{position:absolute;font-size:11px;color:#ff8a1f;z-index:1}.kring.big .karw{font-size:16px}
+.kmid{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center}
+.kdirb{font-size:26px;line-height:1;color:#e8579a;font-weight:900;display:inline-block}.kring.big .kdirb{font-size:44px}.kmid small{font-size:10px;color:#8a6a55;font-weight:700}
+.kdirb.flip{animation:kflip .6s}
+.kringt{position:absolute;bottom:0;left:50%;transform:translateX(-50%);font-size:9px;color:#b07800;font-weight:700}
+.kseq{text-align:right;margin:6px 0 0;padding-right:22px}.kseq li{padding:4px 0;font-size:15px}.kseq li.on{color:#ff8a1f;font-weight:800}.kseq i{font-style:normal;font-size:12px;color:#e8579a;font-weight:800}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.11.1';
+const VER='2.11.2';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1167,10 +1185,15 @@ shell('آخر ورقة 🃏',`<div id=kx></div><div class="card kend"><div class
 <button class=big onclick="cardsHome()">🃏 جولة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button></div>`);
 kPop(`🏆 <b>${win?'فزت بالجولة!':'فاز '+wn+'!'}</b> <small>+🪙 ${g.pot.toLocaleString('en')}${win?'':' للفائز'}</small>`,'turn',2600)}
 // دائرة اللاعبين: الترتيب، والاتجاه بأسهم، وصاحب الدور، والتالي — يراها الجميع
-// صف اللاعبين بالمظهر القديم، مرتّبين حسب الأدوار القادمة من اليمين: التالي أولًا، بينهم أسهم صغيرة، وفي الآخر دائرة صغيرة للاتجاه
-function kRing(st,me){const O=st.order,n=O.length,cu=O[st.turn],mi=O.indexOf(me),seq=[];for(let k=1;k<=n;k++)seq.push(O[((mi+st.dir*k)%n+n)%n]);
-const chip=u=>{const c=st.hands[u].length;return `<div class="kop${u===cu?' on':''}${u===me?' kme':''}" id="ko_${u}"><b>${u===me?'أنت':esc(st.names[u]||'?')}</b><span class=kback>🃏 <b>${c}</b></span>${c==1?'<small>ورقة!</small>':''}</div>`};
-return `<div class=kops2>${seq.map((u,i)=>(i?'<i class=karr>◀</i>':'')+chip(u)).join('')}<span class="kmini${st.dir>0?'':' rev'}" title="اتجاه اللعب">${st.dir>0?'↻':'↺'}</span></div>`}
+// دائرة اللاعبين الصغيرة: الترتيب والاتجاه وصاحب الدور. الضغط عليها يفتح نافذة بالتفاصيل
+function kRingH(st,me,big){const O=st.order,n=O.length,mi=Math.max(0,O.indexOf(me)),cu=O[st.turn],nx=O[kNext(st)],pos=a=>[50+42*Math.cos(a),50+36*Math.sin(a)],ang=i=>Math.PI/2+(i-mi)*2*Math.PI/n;
+let h='';for(let i=0;i<n;i++){const am=(ang(i)+ang(i+1))/2,[x,y]=pos(am),rot=am*180/Math.PI+90+(st.dir>0?0:180);h+=`<span class=karw style="left:${x}%;top:${y}%;transform:translate(-50%,-50%) rotate(${rot}deg)">➤</span>`}
+O.forEach((u,i)=>{const[x,y]=pos(ang(i)),c=st.hands[u].length;h+=`<div class="kseat${u===cu?' on':''}${u===nx&&u!==cu?' nx':''}${u===me?' me':''}" ${big?'':`id="ko_${u}"`} style="left:${x}%;top:${y}%"><b>${u===me?'أنت':esc(st.names[u]||'?')}</b><span>🃏 ${c}</span>${big&&c==1?'<small>ورقة!</small>':''}${big?(u===cu?'<i class=ktag>🎯 الدور</i>':u===nx?'<i class="ktag kn">التالي</i>':''):''}</div>`});
+return `<div class="kring${big?' big':''}">${h}<div class=kmid><span class="kdirb${st.dir>0?'':' rev'}">${st.dir>0?'↻':'↺'}</span>${big?`<small>${st.dir>0?'باتجاه عقارب الساعة':'عكس عقارب الساعة'}</small>`:''}</div></div>`}
+function kRing(st,me){return `<button class=kringb onclick=kRingPop() aria-label="ترتيب اللاعبين">${kRingH(st,me,0)}<small class=kringt>👆 التفاصيل</small></button>`}
+function kRingPop(){const g=KG,st=g&&g.st;if(!st)return;const O=st.order,n=O.length,seq=[];for(let k=0;k<n;k++)seq.push(O[((st.turn+st.dir*k)%n+n)%n]);
+const d=document.createElement('div');d.className='kpick';d.onclick=e=>{if(e.target===d)d.remove()};
+d.innerHTML=`<div class="card" style="text-align:center;position:relative"><button class=kpx onclick="this.closest('.kpick').remove()" aria-label="إغلاق">✖</button><h3 style="margin:4px 0">ترتيب اللاعبين</h3>${kRingH(st,g.me,1)}<ol class=kseq>${seq.map((u,i)=>`<li class="${i==0?'on':''}"><b>${u===g.me?'أنت':esc(st.names[u])}</b> <span>🃏 ${st.hands[u].length}</span>${i==0?' <i>🎯 الدور الآن</i>':i==1?' <i>التالي</i>':''}</li>`).join('')}</ol></div>`;app.appendChild(d)}
 // ترتيب أوراقي: الألوان معًا (أحمر، أصفر، أخضر، أزرق، ثم الملوّنة)، والأرقام تصاعديًا ثم الأوراق الخاصة
 const KORD='rygbW',KVO=v=>/^\d$/.test(v)?+v:{S:10,R:11,D:12,'':13,'4':14}[v]??15;
 const kSort=h=>h.slice().sort((a,b)=>KORD.indexOf(a[0])-KORD.indexOf(b[0])||KVO(kVal(a))-KVO(kVal(b)));
@@ -1198,7 +1221,7 @@ function kFly(fromEl,card){const pile=$('.ktop');if(!fromEl||!pile)return;const 
 f.style.left=a.left+a.width/2-31+'px';f.style.top=a.top+a.height/2-46+'px';app.appendChild(f);pile.style.visibility='hidden';
 requestAnimationFrame(()=>{f.style.transform=`translate(${b.left+b.width/2-(a.left+a.width/2)}px,${b.top+b.height/2-(a.top+a.height/2)}px) rotate(${360+R(40)-20}deg) scale(1.25)`});later(()=>{f.remove();pile.style.visibility=''},560)}
 function kAlerts(){const g=KG,st=g&&g.st;if(!st||!st.hands)return;const me=g.me,P=g.prev,cur={hand:(st.hands[me]||[]).slice(),turn:st.order[st.turn],dl:st.disc.length,top:st.disc[st.disc.length-1],color:st.color,dir:st.dir,cnt:{},my:(st.hands[me]||[]).length};
-st.order.forEach(u=>cur.cnt[u]=st.hands[u].length);g.prev=cur;if(!P||st.winner)return;if(cur.top!==P.top){const tp=$('.ktop');if(tp){tp.classList.add('kland');const r=tp.getBoundingClientRect();later(()=>kSpark(r.left+r.width/2,r.top+r.height/2,KC[st.color]),cur.turn!==me&&P.turn!==me?520:60)}}const nm=u=>esc(st.names[u]||'');if(cur.dir!==P.dir){const d=$('.kmini');d&&d.classList.add('flip');kPop(`⇄ <b>انعكس الاتجاه!</b> <small>التالي: ${nm(st.order[kNext(st)])}</small>`,'warn',1800)}
+st.order.forEach(u=>cur.cnt[u]=st.hands[u].length);g.prev=cur;if(!P||st.winner)return;if(cur.top!==P.top){const tp=$('.ktop');if(tp){tp.classList.add('kland');const r=tp.getBoundingClientRect();later(()=>kSpark(r.left+r.width/2,r.top+r.height/2,KC[st.color]),cur.turn!==me&&P.turn!==me?520:60)}}const nm=u=>esc(st.names[u]||'');if(cur.dir!==P.dir){const d=$('.kdirb');d&&d.classList.add('flip');kPop(`⇄ <b>انعكس الاتجاه!</b> <small>التالي: ${nm(st.order[kNext(st)])}</small>`,'warn',1800)}
 // من لعب؟ (الورقة الجديدة في الكومة)
 if(cur.dl>P.dl&&cur.top!==P.top){const who=st.order.find(u=>cur.cnt[u]<P.cnt[u])||P.turn;if(who!==me){const c=cur.top,v=kVal(c);kFly($('#ko_'+who),c);
  let msg=`<b>${nm(who)}</b> لعب`,cls='',snd='card';
