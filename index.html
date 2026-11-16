@@ -342,12 +342,47 @@ svg[class^=mv]{transform-origin:50% 85%}
 .kback b{font-size:20px;color:#e8453c}
 .kpop:not(.turn){flex-direction:row;min-width:260px;justify-content:center}.kpop .kpbig+b{display:block}
 .khand .kc.kgrp{margin-right:10px!important}
+/* الهروب من الديناصور */
+.m16{background:linear-gradient(135deg,#1f5a2a,#4a8a2f)!important}
+.dnw{position:relative}.dnsc{position:relative;height:250px;border-radius:20px;overflow:hidden;background:linear-gradient(#0d1b3a,#27445e 55%,#2f5a33)}
+.dnmoon{position:absolute;top:10px;left:16px;font-size:36px;filter:drop-shadow(0 0 14px #fff8)}
+.dnl{position:absolute;left:-600px;right:-600px;background-repeat:repeat-x}
+.dnl1{bottom:60px;height:120px;opacity:.55;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M20 120L40 30L60 120ZM70 120L95 10L120 120Z' fill='%23123020'/%3E%3C/svg%3E");background-position:var(--p1) bottom}
+.dnl2{bottom:44px;height:100px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect x='46' y='60' width='8' height='40' fill='%235b3a24'/%3E%3Ccircle cx='50' cy='45' r='26' fill='%231f6b2c'/%3E%3Ccircle cx='38' cy='55' r='16' fill='%23287a35'/%3E%3Ccircle cx='62' cy='55' r='16' fill='%23287a35'/%3E%3C/svg%3E");background-position:var(--p2) bottom}
+.dnground{position:absolute;left:0;right:0;bottom:0;height:46px;background:linear-gradient(#5b3a24,#3d2716);border-top:4px solid #2f7a35}
+#dnw2 span{position:absolute;transform:translateX(-50%);line-height:1}.dnob{bottom:40px;font-size:34px;transition:opacity .3s}.dnob.dnok{opacity:.35}.dnhome{bottom:38px;font-size:70px}
+.dnbat{font-size:22px;opacity:.85;animation:mk0 1.6s infinite}
+.dnkid{position:absolute;bottom:42px;width:52px;height:60px;transform:translateX(-50%);transition:bottom .15s}.dnkid .dnav svg{width:52px;height:60px;display:block}
+.dnkid.dnrun .dnav{display:block;animation:mk0 .3s infinite}.dnkid.dnjmp{bottom:110px;transition:bottom .25s cubic-bezier(.2,1.4,.5,1)}.dnkid.dnstum{animation:shk .35s 2}
+.dnrex{position:absolute;bottom:34px;font-size:84px;transform:translateX(-50%) scaleX(1);line-height:1;filter:drop-shadow(0 4px 4px #0006)}.dnrex.dnrun{animation:dnstomp .45s infinite}
+@keyframes dnstomp{50%{transform:translateX(-50%) translateY(-6px) rotate(-4deg)}}
+.dnred{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 60px 20px #ff1f3d;opacity:0;transition:opacity .3s}
+.dnhud{display:flex;align-items:center;gap:10px;margin:8px 0}.dnmeter{position:relative;flex:1;height:16px;background:#fff;border-radius:9px;box-shadow:0 3px 0 #0002;margin-left:20px}
+.dnmeter i{position:absolute;top:-8px;font-size:20px;font-style:normal;transform:translateX(50%)}.dnmeter b{position:absolute;left:-22px;top:-8px;font-size:20px}
+.dnen{display:flex;align-items:center;gap:4px;font-weight:800;background:#fff;border-radius:12px;padding:4px 8px}
+.dnbtns{position:fixed;left:12px;bottom:16px;z-index:8}.dnj{background:linear-gradient(#ffb340,#f07800);width:92px;height:92px}
+#dnp{text-align:center}
+
+/* آخر ورقة: ألوان دافئة وحركات للأوراق فقط، والشاشة ثابتة */
+.ktable{background:radial-gradient(circle at 30% 20%,#ffffff22,transparent 40%),linear-gradient(135deg,#ff6b5b,#ff8a1f 30%,#e8579a 65%,#8a63ff)!important;background-size:200% 200%!important;box-shadow:inset 0 0 0 4px #ffffff55,0 8px 20px #e8579a44}
+.kglow{animation:none!important;box-shadow:inset 0 0 0 5px #ff8a1f!important;border-radius:0}
+.kturn.me{animation:none!important;color:#ff6b5b!important;background:linear-gradient(90deg,#fff1e0,#ffe0ef);border-radius:14px;padding:4px 0}
+.kop.on{animation:none!important;background:linear-gradient(135deg,#ffc531,#ff8a1f)!important;color:#fff}
+.kpop{border:0!important;background:#fff;box-shadow:0 0 0 4px #ff8a1f,0 10px 30px #0004}
+.kpop.turn{top:6px!important;flex-direction:row!important;font-size:18px!important;padding:10px 16px!important;background:linear-gradient(90deg,#ff6b5b,#ff8a1f,#e8579a)!important;color:#fff;box-shadow:0 8px 20px #ff6b5b66!important}.kpop.turn small{color:#fff!important}.kpop.turn b[style]{background:#fff;border-radius:8px;padding:0 6px}
+.kpop.bad{box-shadow:0 0 0 4px #e8453c,0 10px 30px #0004;animation:none!important}.kpop.warn{box-shadow:0 0 0 4px #ffc531,0 10px 30px #0004}.kpop.soft{box-shadow:0 0 0 3px #c9b8ff,0 10px 30px #0003}
+.ktop.kland{animation:kland .45s cubic-bezier(.3,1.6,.5,1)}@keyframes kland{0%{transform:scale(1.7) rotate(-14deg)}100%{transform:scale(1.25) rotate(0)}}
+.khand .kc.kok{box-shadow:0 0 0 3px #ff8a1f,0 8px 12px #ff6b5b55!important}
+.kspk{position:fixed;width:9px;height:9px;border-radius:50%;z-index:46;pointer-events:none;animation:kspk .65s ease-out forwards}
+@keyframes kspk{to{transform:translate(var(--dx),var(--dy)) scale(.2);opacity:0}}
+.kdeck{background:repeating-linear-gradient(45deg,#8a63ff 0 8px,#e8579a 8px 16px)!important}
+.khand.khit{animation:shk .35s 2;background:#ffe0e8}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.7.2';
+const VER='2.8.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -411,7 +446,7 @@ const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+
 const key=(a,b)=>a+'x'+b;
 // الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
 // سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
-let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة'};
+let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور'};
 function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
 if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150}
 const gSince=ms=>(S.gl||[]).filter(x=>x.ts>=ms&&x.d>0).reduce((a,x)=>a+x.d,0);
@@ -931,10 +966,10 @@ function fcGrid(){shell('البطاقات 🎴',fcOpts()+`<div class=gtools><but
 function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){const[a,b]=FC.q[i];tone(660,.1,'triangle',.12);say(`${a} ضرب ${b} يساوي ${a*b}`);FC.seen.add(i);if(FC.seen.size==FC.q.length&&!FC.gd){FC.gd=1;good();clap(10);$('#gc').textContent='🎉 قلبت كل البطاقات! أحسنت'}}}
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
-function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
+function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 m16" onclick="dino()"><i>🦖</i>الهروب من الديناصور <small>حلّ لتركض أسرع!</small></button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,dino:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -1045,7 +1080,7 @@ function kPickDone(c,k){KG.pick=0;KGB();kDo({t:'play',c,col:k})}
 function KGB(){if(KG&&KG.st&&!KG.st.winner&&$('.khand'))backGuard(kLeaveAsk);else backRelease()}
 function kLeaveAsk(){if(confirm('هل تريد مغادرة الجولة؟ لن تُعاد رسوم المشاركة.')){KG&&KG.uns&&KG.uns();KG=null;history.back()}else{backGuard(kLeaveAsk)}}
 function kOne(){const g=KG,st=g.st;st.one=st.one||{};if(g.mode=='net')return kTx(s=>{s.one=s.one||{};s.one[UID]=1;s.msg=s.names[UID]+': ورقة! 🙋';return true});st.one[g.me]=1;tone(880,.15,'square',.12);toast('🙋 ورقة!');kRender()}
-function kDo(mv){const g=KG;if(g.mode=='net')return kTx(s=>kMove(s,UID,mv));if(!kMove(g.st,g.me,mv))return;kSfx('card');kRender();if(g.st.winner)return kEnd();kBotTick()}
+function kDo(mv){const g=KG;if(g.mode=='net')return kTx(s=>kMove(s,UID,mv));if(!kMove(g.st,g.me,mv))return;kSfx(mv.t=='play'?(kWild(mv.c)?'wild':'card'):'draw');kRender();if(g.st.winner)return kEnd();kBotTick()}
 function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me]||[],myTurn=st.order[st.turn]===me&&!st.winner,top=st.disc[st.disc.length-1],n=st.order.length;
 const opp=st.order.filter(u=>u!==me).map(u=>{const i=st.order.indexOf(u);return `<div class="kop${st.order[st.turn]==u?' on':''}" id="ko_${u}"><b>${esc(st.names[u]||'?')}</b><span class=kback>🃏 <b>${st.hands[u].length}</b> ${st.hands[u].length==1?'ورقة':st.hands[u].length<=10&&st.hands[u].length>2?'أوراق':'ورقة'}</span>${st.hands[u].length==1?'<small>ورقة!</small>':''}</div>`}).join('');
 shell('آخر ورقة 🃏',`<div id=kx></div><div class=kops>${opp}</div><div class=ktable><div class=kpile>${kCard(top,'ktop')}<span class=kcol style="background:${KC[st.color]}">${KN[st.color]}</span></div>
@@ -1053,23 +1088,36 @@ shell('آخر ورقة 🃏',`<div id=kx></div><div class=kops>${opp}</div><div 
 <p class=kmsg>${esc(st.msg||'')}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(st.names[st.order[st.turn]]||'')}</p>
 <div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)).join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
 <div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>45000?`<button class=buy onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB();kAlerts()}
-function kEnd(){const g=KG,st=g.st,win=st.winner===g.me;backRelease();if(win){kPrize(g.key,g.pot);good();clap(25);cpRain();say('أحسنت يا بطل')}else oops();
+function kEnd(){const g=KG,st=g.st,win=st.winner===g.me;backRelease();if(win){kPrize(g.key,g.pot);kSfx('win');clap(25);cpRain();say('أحسنت يا بطل')}else oops();
 const d=document.createElement('div');d.className='kpick';(app.firstElementChild?app:document.body).appendChild(d);d.innerHTML=`<div class="card" style="text-align:center"><div class=res>${win?'🏆':'🃏'}</div><h2>${win?'فزت! +🪙 '+g.pot.toLocaleString('en'):'فاز '+esc(st.names[st.winner])+'!'}</h2><p>رصيدك: 🪙 ${GD().toLocaleString('en')}</p><button class=big onclick="this.closest('.kpick').remove();cardsHome()">🃏 جولة جديدة</button><button class=big style="background:#18a999" onclick="this.closest('.kpick').remove();history.back()">🎮 الألعاب</button></div>`}
 // ترتيب أوراقي: الألوان معًا (أحمر، أصفر، أخضر، أزرق، ثم الملوّنة)، والأرقام تصاعديًا ثم الأوراق الخاصة
 const KORD='rygbW',KVO=v=>/^\d$/.test(v)?+v:{S:10,R:11,D:12,'':13,'4':14}[v]??15;
 const kSort=h=>h.slice().sort((a,b)=>KORD.indexOf(a[0])-KORD.indexOf(b[0])||KVO(kVal(a))-KVO(kVal(b)));
 // ----- تنبيهات «آخر ورقة»: صوت، اهتزاز، كلام، نافذة منبثقة، ورقة طائرة، وألوان -----
-function kSfx(k){const T=(f,d,t,v,a)=>tone(f,d,t||'triangle',v||.15,a||0);
-if(k=='turn'){T(523,.12);T(659,.12,0,.15,.12);T(784,.25,0,.17,.24);T(1046,.3,0,.12,.4)}else if(k=='card'){T(180,.05,'square',.08);T(120,.08,'sawtooth',.06,.03)}
-else if(k=='bad'){T(300,.15,'sawtooth',.12);T(200,.25,'sawtooth',.12,.15)}else if(k=='skip'){T(440,.1,'square',.1);T(330,.1,'square',.1,.12)}else if(k=='rev'){T(500,.08);T(700,.08,0,.15,.08);T(500,.08,0,.15,.16)}
-else if(k=='wild'){[523,587,659,698,784,880].forEach((f,i)=>T(f,.07,'sine',.12,i*.05))}else if(k=='one'){T(880,.1,'square',.12);T(880,.1,'square',.12,.18)}}
+function kSpark(x,y,col){const cols=[col,'#ff6b5b','#ff8a1f','#ffc531','#e8579a','#8a63ff','#fff'];for(let i=0;i<16;i++){const e=document.createElement('i');e.className='kspk';e.style.left=x+'px';e.style.top=y+'px';e.style.background=cols[i%cols.length];const a=i/16*Math.PI*2,d=50+R(50);e.style.setProperty('--dx',Math.cos(a)*d+'px');e.style.setProperty('--dy',Math.sin(a)*d+'px');app.appendChild(e);setTimeout(()=>e.remove(),700)}}
+// أصوات «آخر ورقة»: أجراس ناعمة (صندوق موسيقى) وحفيف أوراق
+function kAC(){AC=AC||new(window.AudioContext||webkitAudioContext)();if(AC.state=='suspended')AC.resume();return AC}
+function kNote(f,at,d,type,vol){if(!S.sound)return;try{const c=kAC(),o=c.createOscillator(),g=c.createGain(),t=c.currentTime+(at||0);o.type=type||'sine';o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol||.12,t+.012);g.gain.exponentialRampToValueAtTime(.0004,t+d);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+d+.05)}catch(e){}}
+const kBell=(f,at,v=.11)=>{kNote(f,at,1.1,'sine',v);kNote(f*2,at,.6,'sine',v*.35);kNote(f*3.01,at,.35,'sine',v*.15)};
+function kSwish(at,v=.13,f1=900,f2=3200,d=.16){if(!S.sound)return;try{const c=kAC(),n=c.sampleRate*d,b=c.createBuffer(1,n,c.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n);
+const s=c.createBufferSource(),bp=c.createBiquadFilter(),g=c.createGain(),t=c.currentTime+(at||0);s.buffer=b;bp.type='bandpass';bp.Q.value=1.2;bp.frequency.setValueAtTime(f1,t);bp.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.value=v;s.connect(bp);bp.connect(g);g.connect(c.destination);s.start(t)}catch(e){}}
+const PENTA=[1046,1175,1318,1568,1760,2093];
+function kSfx(k){if(k=='card'){kSwish(0);kBell(PENTA[R(PENTA.length)],.06,.09)}
+else if(k=='turn'){[523,659,784,1046,1318].forEach((f,i)=>kBell(f,i*.09,.1))}
+else if(k=='draw'){kSwish(0,.1,2500,700,.12);kNote(330,.05,.25,'triangle',.08)}
+else if(k=='bad'){kSwish(0);kNote(523,.05,.3,'triangle',.12);kNote(466,.25,.3,'triangle',.12);kNote(392,.45,.6,'triangle',.12)}
+else if(k=='skip'){kSwish(0);kBell(1318,.05);kBell(988,.18)}
+else if(k=='rev'){kSwish(0);[784,1046,1318,1046,784].forEach((f,i)=>kBell(f,.05+i*.07,.08))}
+else if(k=='wild'){kSwish(0);PENTA.concat([2349,2637]).forEach((f,i)=>kBell(f,.04+i*.05,.07))}
+else if(k=='one'){kBell(1568,0,.12);kBell(1568,.16,.12);kBell(2093,.32,.12)}
+else if(k=='win'){[[523,659,784],[587,740,880],[659,830,988],[784,988,1175,1568]].forEach((ch,i)=>ch.forEach(f=>kBell(f,i*.22,.09)))}}
 const vib=p=>{try{navigator.vibrate&&navigator.vibrate(p)}catch(e){}};
 function kPop(html,cls,ms){let e=$('#kpop');if(e)e.remove();e=document.createElement('div');e.id='kpop';e.className='kpop '+(cls||'');e.innerHTML=html;app.appendChild(e);requestAnimationFrame(()=>e.classList.add('show'));later(()=>{e.classList.remove('show');later(()=>e.remove(),350)},ms||1700)}
 function kFly(fromEl,card){const pile=$('.ktop');if(!fromEl||!pile)return;const a=fromEl.getBoundingClientRect(),b=pile.getBoundingClientRect(),f=document.createElement('div');f.className='kfly';f.innerHTML=kCard(card);
 f.style.left=a.left+a.width/2-31+'px';f.style.top=a.top+a.height/2-46+'px';app.appendChild(f);pile.style.visibility='hidden';
 requestAnimationFrame(()=>{f.style.transform=`translate(${b.left+b.width/2-(a.left+a.width/2)}px,${b.top+b.height/2-(a.top+a.height/2)}px) rotate(${360+R(40)-20}deg) scale(1.25)`});later(()=>{f.remove();pile.style.visibility=''},560)}
 function kAlerts(){const g=KG,st=g&&g.st;if(!st||!st.hands)return;const me=g.me,P=g.prev,cur={hand:(st.hands[me]||[]).slice(),turn:st.order[st.turn],dl:st.disc.length,top:st.disc[st.disc.length-1],color:st.color,dir:st.dir,cnt:{},my:(st.hands[me]||[]).length};
-st.order.forEach(u=>cur.cnt[u]=st.hands[u].length);g.prev=cur;if(!P||st.winner)return;const nm=u=>esc(st.names[u]||'');
+st.order.forEach(u=>cur.cnt[u]=st.hands[u].length);g.prev=cur;if(!P||st.winner)return;if(cur.top!==P.top){const tp=$('.ktop');if(tp){tp.classList.add('kland');const r=tp.getBoundingClientRect();later(()=>kSpark(r.left+r.width/2,r.top+r.height/2,KC[st.color]),cur.turn!==me&&P.turn!==me?520:60)}}const nm=u=>esc(st.names[u]||'');
 // من لعب؟ (الورقة الجديدة في الكومة)
 if(cur.dl>P.dl&&cur.top!==P.top){const who=st.order.find(u=>cur.cnt[u]<P.cnt[u])||P.turn;if(who!==me){const c=cur.top,v=kVal(c);kFly($('#ko_'+who),c);
  let msg=`<b>${nm(who)}</b> لعب`,cls='',snd='card';
@@ -1078,7 +1126,7 @@ if(cur.dl>P.dl&&cur.top!==P.top){const who=st.order.find(u=>cur.cnt[u]<P.cnt[u])
  else if(v=='R'){msg+=' ⇄ <b>عكس الاتجاه</b>';snd='rev'}
  if(kWild(c)){msg+=`<br>🌈 اللون الآن: <b style="color:${KC[st.color]}">${KN[st.color]}</b>`;snd=snd=='bad'?'bad':'wild';const t=$('.ktable');if(t){t.style.setProperty('--fl',KC[st.color]);t.classList.add('kflash');later(()=>t.classList.remove('kflash'),900)}}
  kPop(`<div class=kpopc>${kCard(c)}</div><div>${msg}</div>`,cls,1900);kSfx(snd)}}
-else if(P.turn!==me&&cur.turn!==P.turn&&cur.dl==P.dl&&cur.cnt[P.turn]>P.cnt[P.turn]){kPop(`🂠 <b>${nm(P.turn)}</b> سحب ورقة ومرّر`,'soft',1300);kSfx('card')}
+else if(P.turn!==me&&cur.turn!==P.turn&&cur.dl==P.dl&&cur.cnt[P.turn]>P.cnt[P.turn]){kPop(`🂠 <b>${nm(P.turn)}</b> سحب ورقة ومرّر`,'soft',1300);kSfx('draw')}
 // أوراق جديدة دخلت يدي: أوراق تطير من الكومة وتستقر في يدي، وتلمع
 const add=cur.my-P.my;if(add>0){const left=P.hand.slice(),nw=[];cur.hand.forEach(c=>{const i=left.indexOf(c);if(i>=0)left.splice(i,1);else nw.push(c)});const all=[...document.querySelectorAll('#khand .kc')],els=[];nw.forEach(c=>{const e=all.find(x=>x.dataset.c==c&&!els.includes(x));if(e)els.push(e)});els.forEach(e=>e.classList.add('knew'));const deck=$('.kdeck');
  els.forEach((e,i)=>{e.style.visibility='hidden';later(()=>{if(!deck||!document.body.contains(e)){e.style.visibility='';return}const a=deck.getBoundingClientRect(),b=e.getBoundingClientRect(),f=document.createElement('div');f.className='kfly';f.innerHTML='<div class="kc kbk"></div>';
@@ -1088,7 +1136,7 @@ const add=cur.my-P.my;if(add>0){const left=P.hand.slice(),nw=[];cur.hand.forEach
 // ورقة واحدة عند أحد الخصوم
 st.order.forEach(u=>{if(u!==me&&cur.cnt[u]==1&&P.cnt[u]>1){later(()=>{kPop(`⚠️ <b>${nm(u)}</b> بقيت معه <b>ورقة واحدة!</b>`,'warn',1800);kSfx('one');vib(100)},cur.dl>P.dl?1900:200)}});
 // صار دوري
-if(cur.turn===me&&P.turn!==me){later(()=>{if(KG!==g||g.st.order[g.st.turn]!==me)return;kPop(`<div class=kpbig>🎯</div><b>دورك يا ${esc(st.names[me]||NM())}!</b><small>طابِق اللون <b style="color:${KC[st.color]}">${KN[st.color]}</b> أو الرقم</small>`,'turn',1800);kSfx('turn');vib([60,40,60]);say('دورك');
+if(cur.turn===me&&P.turn!==me){later(()=>{if(KG!==g||g.st.order[g.st.turn]!==me)return;kPop(`🎯 <b>دورك يا ${esc(st.names[me]||NM())}!</b> <small>طابِق اللون <b style="color:${KC[st.color]}">${KN[st.color]}</b> أو الرقم</small>`,'turn',2200);kSfx('turn');vib([60,40,60]);say('دورك');
  document.title='🎯 دورك! — آخر ورقة';later(()=>document.title='نجوم الضرب',4000)},cur.dl>P.dl&&P.turn!==me?1250:250)}}
 // مع العائلة: طاولة برقم، وكل حركة عبر Firestore
 async function kCreate(){const n=($('#kn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{let code=null;for(const c of [...sh([10,20,30,40,50,60,70,80,90]),...sh([11,22,33,44,55,66,77,88,99])]){const d=await roomRef(String(c)).get(),r=d.exists?d.data():null;if(!r||Date.now()-(r.ts||0)>3*3600e3||(r.state=='end'&&Date.now()-(r.ts||0)>600e3)){code=String(c);break}}if(!code)code=String(100+R(900));
@@ -1104,6 +1152,41 @@ function kLobby(){const r=KG.room||{},ns=r.names||{},host=r.host==UID;shell('ط�
 function kStart(){const r=KG.room,ids=sh(Object.keys(r.names));const st=kNew(ids,r.names);roomRef(KG.code).update(Object.assign(st,{state:'play',started:Date.now()})).catch(netErr)}
 function kTx(fn){const ref=roomRef(KG.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();if(s.winner)s.state='end';tx.update(ref,{hands:s.hands,deck:s.deck,disc:s.disc,color:s.color,turn:s.turn,dir:s.dir,one:s.one||{},drew:s.drew||null,winner:s.winner||null,msg:s.msg,ts:s.ts,state:s.state})}).then(()=>tone(660,.08,'triangle',.12)).catch(e=>{if(e!=='no')netErr(e);else oops()})}
 function kSkip(){kTx(s=>{if(s.winner)return false;s.drew=null;s.msg='تم تخطّي '+s.names[s.order[s.turn]]+' (لم يلعب)';s.turn=kNext(s);return true})}
+// ===== 🦖 الهروب من الديناصور: حلّ المسائل لتأخذ طاقة وتركض أسرع، واقفز فوق مخاطر الغابة =====
+let DN=null;
+const DNE={50:36,40:30,25:24,20:20,10:14,5:10,1:6},DNOB=[['🕸️','علقت في شبكة العنكبوت!'],['🐍','ثعبان في الطريق!'],['🪨','تعثّرت بصخرة!'],['🌵','شوك!'],['🕳️','حفرة!'],['🪵','جذع شجرة!']];
+function dino(){clr();const lv=S.dnl||1;DN={lv,d:0,dd:-320,v:0,en:60,jump:0,e:0,ok:0,t:0,on:1,FIN:5200+lv*900,dv:118+lv*14,ob:[],last:'',ph:'intro',warn:0};
+for(let w=500;w<DN.FIN-300;w+=520+R(380))DN.ob.push({w,k:R(DNOB.length)});
+shell('الهروب من الديناصور 🦖',`<div class=dnw><div class=dnsc id=dnsc><div class=dnmoon>🌕</div><div class="dnl dnl1"></div><div class="dnl dnl2"></div><div class=dnground></div>
+<div id=dnw2>${DN.ob.map((o,i)=>`<span class=dnob id=dno${i} data-w=${o.w}>${DNOB[o.k][0]}</span>`).join('')}<span class=dnhome data-w=${DN.FIN}>🏡</span>${[...Array(14)].map((_,i)=>`<span class=dnbat data-w=${300+i*420} style="top:${10+R(30)}%">${['🦇','👀','🦉','🕷️'][i%4]}</span>`).join('')}</div>
+<div class=dnkid id=dnkid><span class=dnav>${AV()}</span></div><div class=dnrex id=dnrex>🦖</div><div class=dnred id=dnred></div></div>
+<div class=dnhud><span class=dnmeter><i id=dnmk style="right:0">🧒</i><i id=dnmr style="right:0">🦖</i><b>🏡</b></span><span class=dnen>⚡<span class=fgw><i id=dneg></i></span></span></div></div>
+<div id=dnp class=card></div><div class=dnbtns><button class="pd dnj" id=dnj aria-label="اقفز">🦘<small>اقفز</small></button></div>`);
+$('#dnj').addEventListener('pointerdown',e=>{e.preventDefault();dnJump()});
+$('#dnp').innerHTML=`<h2>🦖 الديناصور جائع!</h2><p>اركض في الغابة حتى تصل إلى البيت 🏡. كل إجابة صحيحة تعطيك ⚡ طاقة لتركض أسرع — والأسرع في الإجابة يأخذ طاقة أكثر! واضغط <b>🦘 اقفز</b> فوق المخاطر.</p><div class=seg>${[1,2,3].map(n=>`<button class="${lv==n?'on':''}" onclick="S.dnl=${n};save();dino()">${['🙂 سهل','😬 متوسط','😱 صعب'][n-1]}</button>`).join('')}</div><button class=big onclick=dnGo()>🏃 اهرب!</button>`;
+DN.els=[...document.querySelectorAll('#dnw2 [data-w]')];dnDraw()}
+function dnGo(){const g=DN;g.ph='run';g.t=0;dnQ();tone(120,.4,'sawtooth',.12);tone(90,.5,'sawtooth',.12,.2);requestAnimationFrame(t=>dnLoop(t,g))}
+function dnQ(){const g=DN;if(g.ph!='run')return;const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;g.lock=0;
+$('#dnp').innerHTML=`${qHTML(a,b)}<div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=dnA(this,${v})>${v}</button>`).join('')}</div><div id=dnf class=cpf></div>`}
+function dnA(el,v){const g=DN;if(g.lock||g.ph!='run')return;g.lock=1;const ok=v==g.a*g.b;rec(g.a,g.b,ok);document.querySelectorAll('#dnp .opt').forEach(o=>o.disabled=true);
+if(ok){const add=DNE[LASTG.g]||6;g.en=Math.min(100,g.en+add);g.ok++;el.classList.add('ok');$('#dnf').innerHTML=`+${add} ⚡`;tone(880,.08,'triangle',.12)}
+else{g.en=Math.max(0,g.en-15);g.e++;el.classList.add('no');document.querySelectorAll('#dnp .opt').forEach(o=>{if(+o.textContent==g.a*g.b)o.classList.add('ok')});$('#dnf').innerHTML='<span style="color:#e8453c">−15 ⚡</span>';oops();const k=$('#dnkid');k&&k.classList.add('dnstum');later(()=>k&&k.classList.remove('dnstum'),500)}
+later(dnQ,ok?260:900)}
+function dnJump(){const g=DN;if(!g||g.ph!='run'||g.jump>0)return;g.jump=.75;tone(600,.12,'triangle',.12);tone(900,.1,'triangle',.1,.08)}
+function dnLoop(t,g){if(g!==DN||!g.on||!$('#dnsc'))return;const dt=Math.min(.05,(t-(g.tt||t))/1000);g.tt=t;if(g.ph=='run'){g.t+=dt;
+ g.en=Math.max(0,g.en-5.5*dt);g.v=70+g.en*2.4;g.d+=g.v*dt;g.dv+=(1.3+g.lv*.5)*dt;g.dd+=g.dv*dt;if(g.jump>0)g.jump-=dt;
+ g.ob.forEach((o,i)=>{if(o.hit||Math.abs(o.w-g.d)>22)return;o.hit=1;if(g.jump>0){const e=$('#dno'+i);e&&e.classList.add('dnok')}else{g.en=Math.max(0,g.en-18);g.d-=40;toast(DNOB[o.k][0]+' '+DNOB[o.k][1]+' اقفز في المرة القادمة 🦘');tone(150,.2,'square',.1);const k=$('#dnkid');k&&k.classList.add('dnstum');later(()=>k&&k.classList.remove('dnstum'),600)}});
+ const gap=g.d-g.dd;if(gap<170&&!g.warn){g.warn=1;tone(90,.6,'sawtooth',.15);toast('🦖 الديناصور يقترب! أجب بسرعة!');try{navigator.vibrate&&navigator.vibrate(200)}catch(e){}}if(gap>260)g.warn=0;
+ if(g.d>=g.FIN)return dnEnd(1);if(gap<=0)return dnEnd(0)}
+dnDraw();requestAnimationFrame(t=>dnLoop(t,g))}
+function dnDraw(){const g=DN,sc=$('#dnsc');if(!sc)return;const W=sc.clientWidth,KX=W*.42,gap=g.d-g.dd;
+g.els.forEach(e=>e.style.left=(KX-(e.dataset.w-g.d))+'px');$('#dnrex').style.left=Math.min(W-10,KX+gap*.75+40)+'px';
+const k=$('#dnkid');k.style.left=KX+'px';k.classList.toggle('dnjmp',g.jump>0);k.classList.toggle('dnrun',g.ph=='run');$('#dnrex').classList.toggle('dnrun',g.ph=='run');
+sc.style.setProperty('--p1',(g.d*.25)%600+'px');sc.style.setProperty('--p2',(g.d*.6)%400+'px');$('#dnred').style.opacity=g.ph=='run'?Math.max(0,Math.min(.6,(220-gap)/220)):0;
+$('#dneg').style.width=g.en+'%';$('#dnmk').style.right=Math.min(100,g.d/g.FIN*100)+'%';$('#dnmr').style.right=Math.max(0,Math.min(100,g.dd/g.FIN*100))+'%'}
+function dnEnd(win){const g=DN;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;
+if(win){award(n);good();clap(20);say('أحسنت يا بطل');for(let i=0;i<6;i++)later(()=>burst(R(innerWidth),R(300)+60),i*250)}else{tone(80,.8,'sawtooth',.18);oops()}
+$('#dnp').innerHTML=`<div class=res>${win?'🏡🎉':'🦖😱'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'نجوت من الديناصور!':'أمسكك الديناصور!'}</h2><p>${win?`وصلت البيت في ${Math.round(g.t)} ثانية • ✅ ${g.ok} إجابة`:'أجب أسرع لتأخذ طاقة أكثر، واقفز فوق المخاطر 🦘'}</p>${U}<button class=big onclick=dino()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
