@@ -285,12 +285,15 @@ svg[class^=mv]{transform-origin:50% 85%}
 .tfb{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tfb .opt{font-size:26px;padding:20px 0}.tfy{background:#c9f5df!important}.tfn{background:#ffd6d6!important}
 .seq{display:flex;justify-content:center;align-items:center;gap:4px;flex-wrap:wrap;font-size:34px!important}.seq i{font-style:normal;opacity:.4}.sqm{color:var(--coral);border:3px dashed var(--coral);border-radius:12px;padding:0 10px}
 .gx-end{text-align:center}
+.cpgms{grid-template-columns:1fr 1fr 1fr}.cpgms button{flex-direction:column;font-size:13px;gap:2px}
+.cpriver{position:relative;height:46px;background:linear-gradient(#5bb8ff,#2e8bff);border-radius:14px;margin:6px 0}.cpfrog{position:absolute;top:6px;font-size:30px;transform:translateX(50%);transition:right .5s cubic-bezier(.3,1.5,.5,1)}.cpisl{position:absolute;left:6px;top:6px;font-size:30px}
+.cptw{height:200px}.cptwn{position:absolute;top:8px;right:12px;font-weight:800;font-size:20px}.cpsp{height:300px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.3.0';
+const VER='2.4.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -933,12 +936,12 @@ function cpAdd(){const l=$('#cpl');if(l.children.length<10)l.insertAdjacentHTML(
 const newP=n=>({n,g:0,ok:0,q:0,t:0,done:false});
 function cpStartLocal(solo){const names=solo?[($('#cpn1').value||'').trim()||NM()]:[...document.querySelectorAll('.cpr input')].map(e=>e.value.trim()).filter(Boolean);
 if(!solo&&names.length<2)return toast('اكتب اسمي متسابقَين على الأقل');if(!solo){S.cpn=names;save()}
-const N=S.cpq||100;CP={mode:solo?'solo':'local',game:S.cpgm||'q',N,Q:genQs(N,solo?tabs():cpTabs(),Date.now()%1e9),P:names.map(newP),i:0};cpTurn()}
+const N=S.cpq||100;CP={mode:solo?'solo':'local',game:S.cpgm||'q',seed:Date.now()%1e6,N,Q:genQs(N,solo?tabs():cpTabs(),Date.now()%1e9),P:names.map(newP),i:0};cpTurn()}
 function cpTurn(){const p=CP.P[CP.i];shell('تجميع الذهب 🏆',`<div id=cpx></div><div class="card cpt"><div class=res>🎯</div><h2>${CP.mode=='local'?'دور '+esc(p.n):'مستعد يا '+esc(p.n)+'؟'}</h2><p><b>${cpGName()}</b> • ${CP.N} سؤال • أجب بسرعة لتجمع ذهبًا أكثر!</p>${CP.mode=='local'&&CP.i?cpBoard(CP.P.slice(0,CP.i)):''}<button class=big onclick=cpGo()>🚀 أنا جاهز</button></div>`)}
 function cpGo(){CP.rp=0;const ct=$('.cpt');let n=3;const step=()=>{if(!$('#cpx'))return;if(n){ct.innerHTML=`<div class="res cd">${n}</div>`;tone(440,.2,'square',.1);n--;later(step,700)}else cpQ()};step()}
 const cpMe=()=>CP.mode=='net'?CP.me:CP.P[CP.i];
 // ----- ألعاب المسابقة: كلها بنفس الأسئلة ونفس ذهب السرعة -----
-const CPG={q:['⚡','أسئلة سريعة'],b:['🎈','فرقعة البالونات'],r:['🏎️','سباق السيارات'],m:['🃏','طابق البطاقات']};
+const CPG={q:['⚡','أسئلة سريعة'],b:['🎈','فرقعة البالونات'],r:['🏎️','سباق السيارات'],m:['🃏','طابق البطاقات'],f:['🐸','قفزة الضفدع'],t:['🏗️','برج المكعبات'],x:['☄️','حارس الأرض'],v:['✅','صح أم خطأ'],s:['🪜','السلسلة المفقودة']};
 const cpGame=()=>CP.game||'q',cpGName=()=>CPG[cpGame()].join(' ');
 function cpGameUI(){const g=S.cpgm||'q';return `<h3>اللعبة</h3><div class=cpgms>${Object.keys(CPG).map(k=>`<button class="${g==k?'on':''}" onclick="S.cpgm='${k}';save();this.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x==this))"><i>${CPG[k][0]}</i>${CPG[k][1]}</button>`).join('')}</div>`}
 function cpHead(p){return `<div class=cph><span>${esc(p.n)}</span><span>${CPG[cpGame()][0]} ❓ ${Math.min(p.q+1,CP.N)}/${CP.N}</span></div><div class=cpgold><span class=cpcoin>🪙</span><b id=cpgt>${p.g}</b></div><div class=prog><i style="width:${p.q*100/CP.N}%"></i></div><div class=cptimer><span id=cptm>0.0</span><small>ثانية</small><span class=cpnext id=cpnx>🪙 50</span></div>`}
@@ -951,7 +954,7 @@ if(ok){g=miss?1:goldFor(t);p.g+=g;if(!miss)p.ok++;tone(1046,.08,'triangle',.15);
 const f=$('#cpf');if(f)f.innerHTML=ok?`+${g} 🪙 <small>⏱️ ${t.toFixed(1)} ث${g==50?' ⚡':''}</small>`:`<small>${a} × ${b} = ${a*b}</small>`;
 if(CP.mode=='net')cpPush();return g}
 const cpWrap=(inner,extra='')=>shell('تجميع الذهب 🏆',`<div id=cpx></div><div class="card cpcard">${cpHead(cpMe())}${inner}<div id=cpf class=cpf></div></div>${extra}${CP.mode=='net'?'<div id=cplive></div>':''}`);
-function cpQ(){const p=cpMe();if(p.q>=CP.N)return cpDone();CP.lock=0;({q:cpQQ,b:cpQB,r:cpQR,m:cpQM})[cpGame()]();if(CP.mode=='net')cpLive()}
+function cpQ(){const p=cpMe();if(p.q>=CP.N)return cpDone();CP.lock=0;({q:cpQQ,b:cpQB,r:cpQR,m:cpQM,f:cpQF,t:cpQT,x:cpQX,v:cpQV,s:cpQS})[cpGame()]();if(CP.mode=='net')cpLive()}
 // ⚡ أسئلة سريعة
 function cpQQ(){const[a,b]=CP.Q[cpMe().q];CP.a=a;CP.b=b;cpWrap(`<div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=cpA(this,${v})>${v}</button>`).join('')}</div>`);cpTimer()}
 function cpA(el,v){if(CP.lock)return;CP.lock=1;CP.tk++;const ok=v==CP.a*CP.b,t=(performance.now()-CP.qt)/1000;document.querySelectorAll('.opt').forEach(o=>o.disabled=true);
@@ -972,6 +975,30 @@ later(()=>{if(cpMe().q!==qi||CP.lock)return;CP.lock=1;CP.tk++;document.querySele
 function cpBal(el,v){if(CP.lock)return;CP.lock=1;CP.tk++;const ok=v==CP.a*CP.b,t=(performance.now()-CP.qt)/1000;document.querySelectorAll('.cpbal').forEach(e=>e.disabled=true);
 if(ok){el.classList.add('pop');const r=el.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2)}else{el.classList.add('bad');document.querySelectorAll('.cpbal').forEach(e=>{if(+e.textContent==CP.a*CP.b)e.classList.add('right')})}
 cpScore(ok,t,0,CP.a,CP.b);later(cpQ,ok?450:1100)}
+// 🐸 الضفدع في المسابقة
+function cpQF(){const p=cpMe(),[a,b]=CP.Q[p.q];CP.a=a;CP.b=b;const o=sh(opts(a,b)).slice(0,3);if(!o.includes(a*b))o[R(3)]=a*b;const pos=p.q*100/CP.N;
+cpWrap(`<div class=cpriver><span class=cpfrog style="right:${pos}%">🐸</span><span class=cpisl>🏝️</span></div>${qHTML(a,b)}<div class=pads>${o.map(v=>`<button class=pad onclick="cpPad(this,${v})"><span>${v}</span></button>`).join('')}</div>`);cpTimer()}
+function cpPad(el,v){if(CP.lock)return;CP.lock=1;CP.tk++;const ok=v==CP.a*CP.b,t=(performance.now()-CP.qt)/1000;document.querySelectorAll('.pad').forEach(e=>e.disabled=true);
+if(ok)el.classList.add('hop');else{el.classList.add('sink');document.querySelectorAll('.pad').forEach(e=>{if(+e.textContent==CP.a*CP.b)e.classList.add('right')})}
+cpScore(ok,t,0,CP.a,CP.b);const f=$('.cpfrog');if(ok&&f)f.style.right=cpMe().q*100/CP.N+'%';later(cpQ,ok?500:1100)}
+// 🏗️ البرج في المسابقة: الطوابق = الإجابات الصحيحة (يظهر آخر 10)
+function cpQT(){const p=cpMe(),[a,b]=CP.Q[p.q];CP.a=a;CP.b=b;const h=p.ok,sh0=Math.max(0,h-10);
+cpWrap(`<div class="twr cptw">${Array.from({length:h-sh0},(_,i)=>`<i style="background:${TWC[(i+sh0)%TWC.length]};width:${120-((i+sh0)%10)*3}px"></i>`).join('')}<b class=twbase></b><span class=cptwn>🏗️ ${h}</span></div>${qHTML(a,b)}<div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=cpA(this,${v})>${v}</button>`).join('')}</div>`);cpTimer()}
+// ☄️ النيازك في المسابقة
+function cpQX(){const p=cpMe(),[a,b]=CP.Q[p.q],qi=p.q;CP.a=a;CP.b=b;const o=sh(opts(a,b)).slice(0,3);if(!o.includes(a*b))o[R(3)]=a*b;const xs=sh([8,40,72]);
+cpWrap(`${qHTML(a,b)}<div class="space cpsp">${o.map((v,i)=>`<button class=met style="left:${xs[i]}%;animation-duration:7s" onclick="cpMet(this,${v})"><span>${v}</span></button>`).join('')}<div class=earth>🌍🏙️🌳🏠🌳🏙️🌍</div></div>`);cpTimer();
+later(()=>{if(cpMe().q!==qi||CP.lock)return;CP.lock=1;CP.tk++;document.querySelectorAll('.met').forEach(e=>{e.disabled=true;if(+e.textContent==a*b)e.classList.add('right')});cpScore(false,7,0,a,b);later(cpQ,1100)},7000)}
+function cpMet(el,v){if(CP.lock)return;CP.lock=1;CP.tk++;const ok=v==CP.a*CP.b,t=(performance.now()-CP.qt)/1000;document.querySelectorAll('.met').forEach(e=>{e.disabled=true;e.style.animationPlayState='paused'});
+if(ok){el.classList.add('boom');tone(300,.2,'square',.12)}else{el.classList.add('bad');document.querySelectorAll('.met').forEach(e=>{if(+e.textContent==CP.a*CP.b)e.classList.add('right')})}
+cpScore(ok,t,0,CP.a,CP.b);later(cpQ,ok?450:1100)}
+// ✅ صح أم خطأ في المسابقة: نفس المعادلة (صحيحة أو خاطئة) لكل المتسابقين
+function cpQV(){const p=cpMe(),[a,b]=CP.Q[p.q],r=rng((CP.seed||7)+p.q*131),w=[a*b+a,a*b-a,a*b+b,a*b+1,a*b-1,a*(b+1)].filter(x=>x>0&&x!=a*b);CP.a=a;CP.b=b;CP.c=r()<.5?a*b:w[Math.floor(r()*w.length)];
+cpWrap(`<div class=q>${a} × ${b} = ${CP.c}</div><div class=tfb><button class="opt tfy" onclick=cpTF(this,1)>✅ صح</button><button class="opt tfn" onclick=cpTF(this,0)>❌ خطأ</button></div>`);cpTimer()}
+function cpTF(el,y){if(CP.lock)return;CP.lock=1;CP.tk++;const ok=!!y==(CP.c==CP.a*CP.b),t=(performance.now()-CP.qt)/1000;document.querySelectorAll('.opt').forEach(e=>e.disabled=true);el.classList.add(ok?'ok':'no');
+cpScore(ok,t,0,CP.a,CP.b);later(cpQ,ok?380:1100)}
+// 🪜 السلسلة في المسابقة: الرقم الناقص هو ناتج المسألة
+function cpQS(){const p=cpMe(),[a,b]=CP.Q[p.q];CP.a=a;CP.b=b;const m=Math.min(b-1,1+p.q%3),k=b-m,terms=[0,1,2,3,4].map(i=>a*(k+i));
+cpWrap(`<div class="q seq">${terms.map((t,i)=>i==m?'<b class=sqm>؟</b>':`<span>${t}</span>`).join('<i>،</i>')}</div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=cpA(this,${v})>${v}</button>`).join('')}</div>`);cpTimer()}
 // 🃏 طابق البطاقات: كل مسألة مع ناتجها، الذهب حسب الوقت حتى كل مطابقة
 function cpQM(){const p=cpMe(),k=Math.min(4,CP.N-p.q),items=CP.Q.slice(p.q,p.q+k).map(([a,b],i)=>({a,b,i,miss:0,done:0}));CP.mr={items,sel:null};
 const cards=sh([...items.map(it=>({k:'q',i:it.i,t:`${it.a} × ${it.b}`})),...items.map(it=>({k:'a',i:it.i,t:it.a*it.b}))]);
@@ -1042,7 +1069,7 @@ const mine=(r.players||{})[UID];if(!mine)await roomRef(code).update({['players.'
 function cpRoom(code){cpOff();CP={mode:'net',code,view:'lobby',P:[],me:null};cpLobby();CP.uns=roomRef(code).onSnapshot(cpSnap,netErr)}
 function cpSnap(d){if(!CP||CP.mode!='net')return;if(!$('#cpx')&&CP.view!='lobby')return cpOff();if(!d.exists)return;const r=CP.room=d.data(),pl=r.players||{};CP.game=r.game||'q';
 CP.P=Object.keys(pl).map(u=>Object.assign({u},pl[u]));CP.host=r.host==UID;
-if(CP.view=='lobby'){if(r.state=='wait')return cpLobby();if(r.state=='play'||r.state=='end'){CP.N=r.N;CP.Q=genQs(r.N,r.tabs,r.seed);CP.me=Object.assign({},pl[UID]||newP(S.cpme||NM()));CP.view='play';
+if(CP.view=='lobby'){if(r.state=='wait')return cpLobby();if(r.state=='play'||r.state=='end'){CP.N=r.N;CP.seed=r.seed;CP.Q=genQs(r.N,r.tabs,r.seed);CP.me=Object.assign({},pl[UID]||newP(S.cpme||NM()));CP.view='play';
  if(r.state=='end'||CP.me.done)return cpWait();return cpNetGo()}}
 const all=CP.P.length&&CP.P.every(p=>p.done);
 if(r.state=='end'||all){if(CP.host&&r.state!='end')roomRef(CP.code).update({state:'end'}).catch(()=>{});if(CP.view!='end'){CP.view='end';cpEnd(CP.P)}return}
