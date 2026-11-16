@@ -264,12 +264,33 @@ svg[class^=mv]{transform-origin:50% 85%}
 .cphb{display:block;margin:0 auto 10px}
 .cph1{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;font:inherit;text-align:right;cursor:pointer;gap:8px;margin-bottom:10px}
 .cph1 div{display:flex;flex-direction:column}.cph1>div:first-child{flex:1;min-width:0}.cph1 small{font-size:12px;color:#5b6b8c}.cphw{align-items:flex-end;font-weight:800;color:#e8a000;flex-shrink:0;white-space:nowrap;font-size:17px}
+/* الألعاب الخمس */
+.m10{background:linear-gradient(135deg,#3ed6a0,#18a959)!important}.m11{background:linear-gradient(135deg,#ff8a1f,#ffc531)!important}.m12{background:linear-gradient(135deg,#3949ab,#8a63ff)!important}.m13{background:linear-gradient(135deg,#18b6c9,#4aa3ff)!important}.m14{background:linear-gradient(135deg,#e8579a,#ff8ad8)!important}
+.frg{display:flex;justify-content:space-between;background:linear-gradient(#4aa3ff,#2e8bff);border-radius:16px;padding:10px 6px;font-size:22px;direction:rtl}.frg .d{opacity:.35}
+.pads{display:flex;justify-content:space-around;margin:12px 0;background:linear-gradient(#5bb8ff,#2e8bff);border-radius:20px;padding:22px 6px}
+.pad{border:0;width:30%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 40%,#7fe07a,#2f9a3a);box-shadow:0 6px 0 #1f6b28;cursor:pointer;position:relative}
+.pad span{font-family:inherit;font-weight:900;font-size:34px;color:#fff;-webkit-text-stroke:4px #1b2a5c;paint-order:stroke fill}
+.pad.hop{animation:hop .6s}.pad.sink{animation:sink .8s forwards}.pad.right{outline:5px solid #ffc531}
+@keyframes sink{to{transform:scale(.5) translateY(30px);opacity:.2}}
+.twr{position:relative;height:270px;display:flex;flex-direction:column-reverse;align-items:center;background:linear-gradient(#bfe6ff,#eaf7ff);border-radius:16px;padding-bottom:10px;overflow:hidden}
+.twr i{display:block;height:22px;margin-top:2px;border-radius:5px;box-shadow:inset 0 -5px 0 #0002,inset 0 4px 0 #fff5}.twbase{display:block;width:170px;height:10px;background:#8d5a3b;border-radius:4px}
+.twflag{position:absolute;font-size:22px;left:calc(50% + 70px)}@keyframes twdrop{from{transform:translateY(-200px)}to{transform:none}}
+.mth{display:flex;justify-content:space-between;font-weight:800;font-size:20px}
+.space{position:relative;height:330px;border-radius:16px;overflow:hidden;background:radial-gradient(#fff 1px,transparent 1.5px) 0 0/34px 34px,linear-gradient(#0b1a33,#2a3f7a);margin-top:6px}
+.met{position:absolute;top:-80px;width:24%;height:74px;border:0;background:none;cursor:pointer;animation:mfall linear forwards;padding:0}
+.met span{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d9a066,#8d5a3b 60%,#5b3a24);box-shadow:0 -14px 18px -4px #ff8a1f;font-family:inherit;font-weight:900;font-size:30px;color:#fff;-webkit-text-stroke:4px #1b2a5c;paint-order:stroke fill}
+.met.boom{animation:none;transform:scale(1.6);opacity:0;transition:.3s}.met.bad span{filter:grayscale(1)}.met.right span{outline:4px solid #3ed6a0}
+@keyframes mfall{to{top:236px}}.earth{position:absolute;bottom:0;left:0;right:0;text-align:center;font-size:30px;background:#2f9a3a;padding:2px 0}
+.tfbar{display:flex;justify-content:space-around;font-weight:800;font-size:20px}.tftm{color:#ff1f3d}.tftm b{font-size:34px}.tfbar .hot,.tftm.hot b{animation:cpbeat .5s infinite}
+.tfb{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tfb .opt{font-size:26px;padding:20px 0}.tfy{background:#c9f5df!important}.tfn{background:#ffd6d6!important}
+.seq{display:flex;justify-content:center;align-items:center;gap:4px;flex-wrap:wrap;font-size:34px!important}.seq i{font-style:normal;opacity:.4}.sqm{color:var(--coral);border:3px dashed var(--coral);border-radius:12px;padding:0 10px}
+.gx-end{text-align:center}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.2.1';
+const VER='2.3.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -838,15 +859,57 @@ function fcGrid(){shell('البطاقات 🎴',fcOpts()+`<div class=gtools><but
 function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){const[a,b]=FC.q[i];tone(660,.1,'triangle',.12);say(`${a} ضرب ${b} يساوي ${a*b}`);FC.seen.add(i);if(FC.seen.size==FC.q.length&&!FC.gd){FC.gd=1;good();clap(10);$('#gc').textContent='🎉 قلبت كل البطاقات! أحسنت'}}}
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
-function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
+function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
 Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){const d=curD(),l=LV[n]=='r'?Math.min(d+1,3):LV[n],st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
 addEventListener('popstate',e=>{clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
+// ===== خمس ألعاب إضافية =====
+let GX={};
+const qHTML=(a,b)=>`<div class=q>${a} × ${b} = <bdi>؟</bdi></div>`;
+const optB=(vals,fn)=>`<div class=opts>${vals.map(v=>`<button class=opt onclick="${fn}(this,${v})">${v}</button>`).join('')}</div>`;
+const optOff=(right)=>document.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(right!=null&&+o.textContent==right)o.classList.add('ok')});
+const starsBy=(e,a,b)=>e<=a?3:e<=b?2:1;
+function gEnd(title,emo,msg,n,again){award(n);if(n>=2){good();clap(14);for(let i=0;i<4;i++)later(()=>burst(R(innerWidth),R(300)+120),i*250)}say(n>=2?'أحسنت يا بطل':'حاول مرة أخرى');
+shell(title,`<div class="card gx-end"><div class=res>${emo}</div><div class=res>${'⭐'.repeat(n)||'💪'}</div><h2>${msg}</h2>${U}<button class=big onclick="${again}()">🔁 العب مرة أخرى</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button></div>`)}
+// 1) 🐸 قفزة الضفدع: اقفز على زهرة اللوتس الصحيحة حتى تصل للجزيرة
+function frog(){clr();GX={s:0,e:0,N:10,last:''};frQ()}
+function frQ(){const g=GX;if(g.s>=g.N)return gEnd('قفزة الضفدع 🐸','🏝️🐸','وصل الضفدع إلى الجزيرة!',starsBy(g.e,1,4),'frog');const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;
+const o=sh(opts(a,b)).slice(0,3);if(!o.includes(a*b))o[R(3)]=a*b;
+shell('قفزة الضفدع 🐸',`<div class=frg>${Array.from({length:g.N+1},(_,i)=>`<span class="${i<g.s?'d':''}">${i==g.s?'🐸':i==g.N?'🏝️':'🪷'}</span>`).join('')}</div>${qHTML(a,b)}<p class=sm style="text-align:center;margin:0">اقفز على الزهرة التي عليها الجواب</p><div class=pads>${o.map(v=>`<button class=pad onclick="frA(this,${v})"><span>${v}</span></button>`).join('')}</div><p class=sm style="text-align:center">🌊 السقطات: ${g.e}</p>`);say(`${a} ضرب ${b}`)}
+function frA(el,v){const g=GX,ok=v==g.a*g.b;document.querySelectorAll('.pad').forEach(p=>p.disabled=true);rec(g.a,g.b,ok);
+if(ok){el.classList.add('hop');g.s++;good();tone(700,.1,'triangle',.15);later(frQ,650)}else{el.classList.add('sink');g.e++;oops();document.querySelectorAll('.pad').forEach(p=>{if(+p.textContent==g.a*g.b)p.classList.add('right')});later(frQ,1300)}}
+// 2) 🏗️ برج المكعبات: كل إجابة صحيحة تضيف طابقًا، والخطأ يُسقط طابقًا
+const TWC=['#ff6b5b','#ffc531','#3ed6a0','#4aa3ff','#8a63ff','#ff8ad8','#ff8a1f','#18b6c9'];
+function tower(){clr();GX={h:0,e:0,goal:10,last:''};twQ()}
+function twQ(){const g=GX;if(g.h>=g.goal)return gEnd('برج المكعبات 🏗️','🏰','بنيت برجًا من '+g.goal+' طوابق!',starsBy(g.e,1,4),'tower');const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;
+shell('برج المكعبات 🏗️',`<div class=twr><div class=twflag style="bottom:${g.goal*24+6}px">🚩</div>${Array.from({length:g.h},(_,i)=>`<i style="background:${TWC[i%TWC.length]};width:${120-i*4}px${i==g.h-1&&g.drop?';animation:twdrop .4s':''}"></i>`).join('')}<b class=twbase></b></div><p class=sm style="text-align:center;margin:4px 0">🏗️ ${g.h}/${g.goal} طوابق</p>${qHTML(a,b)}${optB(opts(a,b),'twA')}`);g.drop=0;say(`${a} ضرب ${b}`)}
+function twA(el,v){const g=GX,ok=v==g.a*g.b;optOff(g.a*g.b);rec(g.a,g.b,ok);if(ok){el.classList.add('ok');g.h++;g.drop=1;good();later(twQ,500)}else{el.classList.add('no');g.e++;oops();if(g.h>0){g.h--;toast('💥 سقط طابق!')}later(twQ,1300)}}
+// 3) ☄️ حارس الأرض: أسقط النيزك الذي يحمل الجواب قبل أن يصل للأرض. 3 قلوب
+function meteor(){clr();GX={sc:0,lv:3,last:''};mtQ()}
+function mtQ(){const g=GX;if(g.lv<=0){const n=g.sc>=15?3:g.sc>=8?2:g.sc>=3?1:0;return gEnd('حارس الأرض ☄️','🌍🛡️','حميت الأرض من '+g.sc+' نيزكًا!',n,'meteor')}
+const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;g.lock=0;const dur=Math.max(3.2,7-g.sc*.2),o=sh(opts(a,b)).slice(0,3);if(!o.includes(a*b))o[R(3)]=a*b;const xs=sh([8,40,72]);
+shell('حارس الأرض ☄️',`<div class=mth><span>❤️ ${'❤️'.repeat(g.lv-1)}${'🖤'.repeat(3-g.lv)}</span><span>☄️ ${g.sc}</span></div>${qHTML(a,b)}<div class=space>${o.map((v,i)=>`<button class=met style="left:${xs[i]}%;animation-duration:${dur}s" ${v==a*b?'id=mtR':''} onclick="mtA(this,${v})"><span>${v}</span></button>`).join('')}<div class=earth>🌍🏙️🌳🏠🌳🏙️🌍</div></div>`);
+const R0=$('#mtR');R0.addEventListener('animationend',()=>{if(g.lock||GX!==g)return;g.lock=1;g.lv--;rec(a,b,false);oops();R0.classList.add('boom');toast('💥 وصل النيزك للأرض!');later(mtQ,1000)})}
+function mtA(el,v){const g=GX;if(g.lock)return;g.lock=1;const ok=v==g.a*g.b;rec(g.a,g.b,ok);document.querySelectorAll('.met').forEach(m=>m.style.animationPlayState='paused');
+if(ok){el.classList.add('boom');g.sc++;good();tone(300,.2,'square',.12);later(mtQ,500)}else{el.classList.add('bad');g.lv--;oops();$('#mtR').classList.add('right');later(mtQ,1100)}}
+// 4) ✅❌ صح أم خطأ: أكبر عدد من الإجابات في 60 ثانية
+function tfg(){clr();GX={sc:0,e:0,st:0,best:0,end:Date.now()+60000,last:''};tfQ();const tick=()=>{const g=GX,e=$('#tft');if(!e||g.done)return;const r=Math.max(0,(g.end-Date.now())/1000);e.textContent=Math.ceil(r);e.parentNode.classList.toggle('hot',r<10);if(r<=0)return tfEnd();requestAnimationFrame(tick)};requestAnimationFrame(tick)}
+function tfQ(){const g=GX;const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;const right=Math.random()<.5,w=opts(a,b).filter(x=>x!=a*b);g.c=right?a*b:w[R(w.length)];g.lock=0;
+shell('صح أم خطأ ✅❌',`<div class=tfbar><span class=tftm><b id=tft>60</b> ث</span><span>✅ ${g.sc}</span><span>🔥 ${g.st}</span></div><div class=q>${a} × ${b} = ${g.c}</div><div class=tfb><button class="opt tfy" onclick=tfA(1)>✅ صح</button><button class="opt tfn" onclick=tfA(0)>❌ خطأ</button></div><div id=tff class=cpf></div>`)}
+function tfA(y){const g=GX;if(g.lock||g.done)return;g.lock=1;const truth=g.c==g.a*g.b,ok=!!y==truth;rec(g.a,g.b,ok);
+if(ok){g.sc++;g.st++;g.best=Math.max(g.best,g.st);tone(900,.06,'triangle',.12)}else{g.e++;g.st=0;oops()}
+$('#tff').innerHTML=ok?'👍':`<small>${g.a} × ${g.b} = ${g.a*g.b}</small>`;later(()=>{if(!g.done)tfQ()},ok?220:900)}
+function tfEnd(){const g=GX;g.done=1;const n=g.sc>=25?3:g.sc>=15?2:g.sc>=6?1:0;gEnd('صح أم خطأ ✅❌','⏱️',`${g.sc} إجابة صحيحة في دقيقة! أطول سلسلة 🔥 ${g.best}`,n,'tfg')}
+// 5) 🪜 السلسلة المفقودة: أكمل الرقم الناقص في مضاعفات الجدول
+function seqg(){clr();GX={r:0,e:0,N:10};sqQ()}
+function sqQ(){const g=GX;if(g.r>=g.N)return gEnd('السلسلة المفقودة 🪜','🧩','أكملت كل السلاسل!',starsBy(g.e,1,4),'seqg');const ts=tabs(),a=ts[R(ts.length)],k=1+R(6),miss=1+R(4),terms=[0,1,2,3,4].map(i=>a*(k+i));g.a=a;g.b=k+miss;
+shell('السلسلة المفقودة 🪜',`<p class=tip>💡 كل رقم يزيد ${a} عن الذي قبله.</p><p class=sm style="text-align:center;margin:0">${g.r+1}/${g.N}</p><div class="q seq">${terms.map((t,i)=>i==miss?'<b class=sqm>؟</b>':`<span>${t}</span>`).join('<i>،</i>')}</div>${optB(opts(a,k+miss),'sqA')}`);say(`جدول ${a}`)}
+function sqA(el,v){const g=GX,ok=v==g.a*g.b;optOff(g.a*g.b);rec(g.a,g.b,ok);g.r++;if(ok){el.classList.add('ok');good();later(sqQ,600)}else{el.classList.add('no');g.e++;oops();later(sqQ,1300)}}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
