@@ -221,7 +221,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='1.8.1';
+const VER='1.9.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -283,7 +283,14 @@ $('#vl').innerHTML=ar.length>1?'<p class=sm>جرّب صوتًا عربيًا آ�
 function burst(x,y){const E=['⭐','🎈','✨','🎉','💛'];for(let i=0;i<14;i++){const s=document.createElement('span');s.className='fx';s.textContent=E[R(5)];s.style.left=x+'px';s.style.top=y+'px';s.style.setProperty('--dx',(R(260)-130)+'px');s.style.setProperty('--dy',(R(260)-200)+'px');document.body.appendChild(s);setTimeout(()=>s.remove(),1000)}}
 const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+r.height/2]};
 const key=(a,b)=>a+'x'+b;
-const rec=(a,b,ok)=>{const o=S.f[key(a,b)]=S.f[key(a,b)]||{o:0,x:0};ok?o.o++:o.x++;if(ok)earn();save()};
+// الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
+let QT=Date.now(),LASTG={g:0,t:0};
+const GTIER=[[.5,50],[1,40],[1.5,25],[2,20],[3,10],[4,5]],goldFor=t=>(GTIER.find(x=>t<=x[0])||[0,1])[1];
+// يبدأ العدّ لحظة ظهور سؤال جديد على الشاشة
+let QTX='';new MutationObserver(()=>{const q=document.querySelector('.q,#fc:not(.on) .fq,.bl');const k=q?q.textContent+(q.closest('[id]')||{}).id:'';if(k&&k!==QTX){QTX=k;QT=Date.now()}}).observe(document.body,{childList:true,subtree:true});
+const fuelFor=g=>({50:25,40:20,25:15,20:12,10:8,5:5}[g]||3);
+const rec=(a,b,ok)=>{const o=S.f[key(a,b)]=S.f[key(a,b)]||{o:0,x:0};ok?o.o++:o.x++;const t=(Date.now()-QT)/1000;QT=Date.now();
+if(ok){const g=goldFor(t);LASTG={g,t};S.gd=GD()+g;tone(1046,.1,'triangle',.15);if(g>=20)tone(1318,.2,'triangle',.15,.08);toast(`🪙 +${g} • ⏱️ ${t<10?t.toFixed(1):Math.round(t)} ث${g==50?' ⚡ برق!':''}`)}else LASTG={g:0,t};save()};
 const tabs=()=>{if(!cur)return[1,2,3,4,5,6,7,8,9,10];if(S.scope=='one')return[cur];return Array.from({length:cur},(_,i)=>i+1)};
 // ذكاء التكرار: الحقائق التي يخطئ فيها الطفل تظهر أكثر
 function pick(avoid){const L=[];tabs().forEach(a=>{for(let b=1;b<=10;b++){const o=S.f[key(a,b)]||{o:0,x:0};L.push([a,b,Math.max(1,1+3*o.x-.5*o.o)])}});let r=Math.random()*L.reduce((s,x)=>s+x[2],0);for(const x of L){r-=x[2];if(r<=0&&key(x[0],x[1])!==avoid)return x}return L[R(L.length)]}
@@ -585,7 +592,6 @@ const CNT={o:100,n:NC.length,b:BR.length,e:EA.length,m:8,c:50},PR={o:50,n:50,b:5
 const CAT=[['c','🐰','شخصية'],['o','👗','أثواب'],['n','📿','قلائد'],['b','💍','أساور'],['e','✨','أقراط'],['m','🕺','حركات']];
 let SH='o';
 function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2400)}
-function earn(){S.cc=(S.cc||0)+1;if(S.cc%3==0){const m=cur||10,g=10*m;S.gd=GD()+g;tone(1046,.15,'triangle',.2);tone(1318,.3,'triangle',.2,.12);toast('🪙 +'+g+' ليرة ذهبية! (جدول '+(cur||'الكل')+' ×'+m+')')}}
 const GD=()=>S.gd||0;let TY={};S.own=S.own||{};if(!S.own.c)S.own.c=[...new Set([0,S.ch|0])];
 function shop(){clr();TY={};shell('المتجر 🛍️',`<div class="card stk"><div id=sp class=sp></div><div id=sb></div></div><div class=seg id=st></div><div class=gr id=sg></div>`);dS(1)}
 function dS(full){$('#sp').innerHTML=AV(null,null,TY);const t=TY[SH];
@@ -748,10 +754,10 @@ requestAnimationFrame(t=>rloop(t,r))}
 // سؤال عند العائق (3 إجابات تستدعي المساعد، وتعطي بنزينًا قليلًا) أو في محطة البنزين (كل إجابة تملأ الخزان)
 function rq(){const r=RC;if(r.ph!='ask'&&r.ph!='fuel')return;const f=pick(r.last),a=f[0],b=f[1];r.last=key(a,b);r.a=a;r.b=b;let head;
 if(r.ph=='ask'){const o=r.ob[r.oi];head=`<div class=dots>${o[0]} ${'⭐'.repeat(r.c)+'☆'.repeat(RK-r.c)} <small>${r.msg||o[1]+'! أجب '+RK+' إجابات صحيحة لنطلب المساعدة'}</small></div>`;if(!r.c&&!r.msg)say(o[1])}
-else head=`<div class=dots>⛽ <small>${r.msg||'محطة البنزين: كل إجابة صحيحة = '+FUEL1+' لترًا'}</small></div>${gauge()}<p class=sm style="margin:0">${r.fuel>=5?'👉 اضغط 🦶 البنزين متى أردت أن تنطلق':'أجب لتملأ الخزان'}</p>`;
+else head=`<div class=dots>⛽ <small>${r.msg||'محطة البنزين: أجب بسرعة لتملأ أكثر! ⚡ نصف ثانية = 25 لترًا'}</small></div>${gauge()}<p class=sm style="margin:0">${r.fuel>=5?'👉 اضغط 🦶 البنزين متى أردت أن تنطلق':'أجب لتملأ الخزان'}</p>`;
 $('#pan').innerHTML=`<div class=card>${head}<div class=q>${a} × ${b} = <bdi>؟</bdi></div><div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ra(this,${v})>${v}</button>`).join('')}</div></div>`;say(`${a} ضرب ${b}`)}
 function ra(el,v){const r=RC;if(!r||(r.ph!='ask'&&r.ph!='fuel'))return;const ok=v==r.a*r.b;document.querySelectorAll('.opt').forEach(o=>o.disabled=true);rec(r.a,r.b,ok);
-if(ok){const add=r.ph=='ask'?4:FUEL1;r.fuel=Math.min(100,r.fuel+add);let tb='';if(r.ph=='ask')r.c++;else if(++r.fc%3==0){r.tb++;rtbn();tb=' 🚀+1'}good();clap(3);const p=mid(el);burst(p[0],p[1]);el.classList.add('ok');r.msg=G[R(G.length)]+` +⛽${add}`+tb;later(r.ph=='ask'&&r.c>=RK?rhelp:rq,800)}
+if(ok){const add=r.ph=='ask'?4:fuelFor(LASTG.g);r.fuel=Math.min(100,r.fuel+add);let tb='';if(r.ph=='ask')r.c++;else if(++r.fc%3==0){r.tb++;rtbn();tb=' 🚀+1'}good();clap(3);const p=mid(el);burst(p[0],p[1]);el.classList.add('ok');r.msg=G[R(G.length)]+` +⛽${add}`+tb;later(r.ph=='ask'&&r.c>=RK?rhelp:rq,800)}
 else{r.e++;r.rb+=90;oops();el.classList.add('no');document.querySelectorAll('.opt').forEach(o=>{if(+o.textContent==r.a*r.b)o.classList.add('ok')});r.msg=`${CH[r.ri].n} تقدّم قليلًا، ركّز وستسبقه! 💪`;later(rq,1500)}}
 function rhelp(){const r=RC;if(r.ph!='ask')return;r.ph='help';r.msg='';r.tb++;rtbn();const i=r.oi,o=r.ob[i];
 $('#pan').innerHTML=`<div class=card><div class=res>${o[2]}</div><h2>${o[3]}!</h2><p class=sm style="margin:0">🚀 ربحت توربو! اضغط 🦶 البنزين لتكمل</p></div>`;say(o[3]);clap(10);$('#rh'+i).classList.add('show');
