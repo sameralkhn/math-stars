@@ -406,12 +406,14 @@ svg[class^=mv]{transform-origin:50% 85%}
 .aw.awbump{animation:awb .4s}@keyframes awb{40%{transform:translate(var(--bx),var(--by))}}
 .aw.awhit{animation:shk .35s;filter:brightness(1.4)}.aw.awno{animation:shk .35s;filter:grayscale(1)}
 #awp{text-align:center;margin-top:10px}#awp.awglow{box-shadow:0 0 0 4px #ffc531,0 0 24px #ffc531}
+.kpile{gap:26px!important}.kcol{font-size:17px!important;padding:5px 14px!important;border:3px solid #fff!important;box-shadow:0 3px 8px #0004;white-space:nowrap;z-index:2;position:relative}.kcol b{font-size:20px}
+.ktable{box-shadow:inset 0 0 0 6px var(--kc),0 8px 20px #0003!important}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.10.0';
+const VER='2.10.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1112,7 +1114,7 @@ function kOne(){const g=KG,st=g.st;st.one=st.one||{};if(g.mode=='net')return kTx
 function kDo(mv){const g=KG;if(g.mode=='net')return kTx(s=>kMove(s,UID,mv));if(!kMove(g.st,g.me,mv))return;kSfx(mv.t=='play'?(kWild(mv.c)?'wild':'card'):'draw');kRender();if(g.st.winner)return kEnd();kBotTick()}
 function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me]||[],myTurn=st.order[st.turn]===me&&!st.winner,top=st.disc[st.disc.length-1],n=st.order.length;
 const opp=st.order.filter(u=>u!==me).map(u=>{const i=st.order.indexOf(u);return `<div class="kop${st.order[st.turn]==u?' on':''}" id="ko_${u}"><b>${esc(st.names[u]||'?')}</b><span class=kback>🃏 <b>${st.hands[u].length}</b> ${st.hands[u].length==1?'ورقة':st.hands[u].length<=10&&st.hands[u].length>2?'أوراق':'ورقة'}</span>${st.hands[u].length==1?'<small>ورقة!</small>':''}</div>`}).join('');
-shell('آخر ورقة 🃏',`<div id=kx></div><div class=kops>${opp}</div><div class=ktable><div class=kpile>${kCard(top,'ktop')}<span class=kcol style="background:${KC[st.color]}">${KN[st.color]}</span></div>
+shell('آخر ورقة 🃏',`<div id=kx></div><div class=kops>${opp}</div><div class=ktable style="--kc:${KC[st.color]}"><div class=kpile><span class=kcol style="background:${KC[st.color]}">🎨 اللون المطلوب: <b>${KN[st.color]}</b></span>${kCard(top,'ktop')}</div>
 <button class=kdeck onclick="kDo({t:'draw'})" ${myTurn&&!st.drew?'':'disabled'}><span>🂠</span><small>سحب</small></button><span class=kdir>${st.dir>0?'↻':'↺'}</span></div>
 <p class=kmsg>${esc(st.msg||'')}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(st.names[st.order[st.turn]]||'')}</p>
 <div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)).join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
