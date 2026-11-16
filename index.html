@@ -386,12 +386,22 @@ svg[class^=mv]{transform-origin:50% 85%}
 .dnkid{width:64px!important;height:70px!important}.dnrunner{display:block;font-size:62px;line-height:1;filter:drop-shadow(0 4px 3px #0006)}
 .dnkid.dnrun .dnrunner{animation:dnbob .32s infinite}@keyframes dnbob{50%{transform:translateY(-5px) rotate(-6deg)}}
 .dnkid.dnjmp{bottom:120px!important}.dnkid.dnjmp .dnrunner{transform:rotate(-20deg)}
+/* القطة والسمك */
+.m17{background:linear-gradient(135deg,#ff8ad8,#ffb340)!important}
+.ctsc{position:relative;height:230px;border-radius:20px;overflow:hidden;background:linear-gradient(#ffe9c7 0 62%,#d9a066 62%);box-shadow:inset 0 0 0 4px #fff8}
+.ctwin{position:absolute;top:12px;right:18px;font-size:54px;opacity:.9}.ctrug{position:absolute;left:50%;bottom:10px;width:220px;height:44px;margin-left:-110px;border-radius:50%;background:repeating-radial-gradient(#e8579a 0 6px,#ff8ad8 6px 12px);opacity:.7}
+.ctcat{position:absolute;left:50%;bottom:44px;margin-left:-48px;width:96px;text-align:center;transition:transform .4s;transform-origin:bottom}.ctcat span{font-size:90px;line-height:1;display:block;filter:drop-shadow(0 4px 3px #0003)}
+.ctcat.cteat span{animation:cteat .5s}@keyframes cteat{30%{transform:scale(1.18) rotate(-6deg)}60%{transform:scale(.95) rotate(4deg)}}
+.ctbowl{position:absolute;left:calc(50% + 50px);bottom:30px;font-size:44px}.ctz{position:absolute;left:calc(50% + 34px);bottom:150px;font-size:30px;animation:mk0 1.4s infinite}
+.cthud{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0}.ctfull,.ctfish{background:#fff;border-radius:12px;padding:5px 10px;font-weight:800;display:flex;align-items:center;gap:6px}.ctfish b{font-size:20px;color:#2e8bff}
+.ctfly{position:fixed;z-index:45;font-size:40px;transition:transform .55s cubic-bezier(.3,.9,.4,1);pointer-events:none}
+#ctp{text-align:center}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.8.4';
+const VER='2.9.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -455,7 +465,7 @@ const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+
 const key=(a,b)=>a+'x'+b;
 // الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
 // سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
-let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور'};
+let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك'};
 function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
 if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150}
 const gSince=ms=>(S.gl||[]).filter(x=>x.ts>=ms&&x.d>0).reduce((a,x)=>a+x.d,0);
@@ -975,10 +985,10 @@ function fcGrid(){shell('البطاقات 🎴',fcOpts()+`<div class=gtools><but
 function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){const[a,b]=FC.q[i];tone(660,.1,'triangle',.12);say(`${a} ضرب ${b} يساوي ${a*b}`);FC.seen.add(i);if(FC.seen.size==FC.q.length&&!FC.gd){FC.gd=1;good();clap(10);$('#gc').textContent='🎉 قلبت كل البطاقات! أحسنت'}}}
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
-function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 m16" onclick="dino()"><i>🦖</i>الهروب من الديناصور <small>حلّ لتركض أسرع!</small></button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
+function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 m16" onclick="dino()"><i>🦖</i>الهروب من الديناصور <small>حلّ لتركض أسرع!</small></button><button class="mode m5 m17" onclick="catg()"><i>🐱</i>القطة والسمك <small>أطعمها بالإجابات 🐟</small></button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,dino:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,dino:2,catg:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -1204,6 +1214,30 @@ $('#dneg').style.width=g.en+'%';$('#dnmk').style.right=Math.min(100,g.d/g.FIN*10
 function dnEnd(win){const g=DN;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;
 if(win){award(n);good();clap(20);say('أحسنت يا بطل');for(let i=0;i<6;i++)later(()=>burst(R(innerWidth),R(300)+60),i*250)}else{tone(80,.8,'sawtooth',.18);oops()}
 $('#dnp').innerHTML=`<div class=res>${win?'🏡🎉':'🦖😱'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'نجوت من الديناصور!':'أمسكك الديناصور!'}</h2><p>${win?`وصلت البيت في ${Math.round(g.t)} ثانية • ✅ ${g.ok} إجابة`:'أجب أسرع لتأخذ طاقة أكثر ⚡ — الطاقة تجعلك تركض وتقفز'}</p>${U}<button class=big onclick=dino()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
+// ===== 🐱 القطة والسمك: أطعم القطة بالإجابات الصحيحة قبل أن يفرغ شبعها =====
+let CT=null;
+const CTF={50:['🐠',26],40:['🐠',22],25:['🐟',18],20:['🐟',15],10:['🐟',12],5:['🦐',9],1:['🦐',6]};
+function catg(){clr();const lv=S.ctl||1;CT={lv,full:70,fish:0,goal:15,e:0,on:1,ph:'intro',drain:3.2+lv*1.3,last:''};
+shell('القطة والسمك 🐱',`<div class=ctsc id=ctsc><div class=ctwin>🪟</div><div class=ctrug></div><div class=ctcat id=ctcat><span id=ctface>😺</span></div><div class=ctbowl id=ctbowl>🥣</div><div class=ctz id=ctz></div></div>
+<div class=cthud><span class=ctfull>🍽️ الشبع <span class=fgw><i id=ctbar></i></span></span><span class=ctfish>🐟 <b id=ctn>0</b>/${CT.goal}</span></div><div id=ctp class=card></div>`);
+$('#ctp').innerHTML=`<h2>🐱 القطة جائعة!</h2><p>كل إجابة صحيحة تعطيها سمكة 🐟، والإجابة الأسرع سمكة أكبر 🐠 تُشبعها أكثر. شبع القطة ينقص مع الوقت — أطعمها ${CT.goal} سمكة لتنام سعيدة 😻</p><div class=seg>${[1,2,3].map(n=>`<button class="${lv==n?'on':''}" onclick="S.ctl=${n};save();catg()">${['🙂 سهل','😬 متوسط','😱 صعب'][n-1]}</button>`).join('')}</div><button class=big onclick=ctGo()>🐟 ابدأ الإطعام</button>`;ctDraw()}
+function ctGo(){const g=CT;g.ph='play';ctQ();requestAnimationFrame(t=>ctLoop(t,g));ctMeow(1)}
+function ctMeow(happy){if(!S.sound)return;try{const c=kAC(),o=c.createOscillator(),gn=c.createGain(),t=c.currentTime;o.type='triangle';const f=happy?620:480;o.frequency.setValueAtTime(f,t);o.frequency.linearRampToValueAtTime(f*1.35,t+.12);o.frequency.linearRampToValueAtTime(f*(happy?1.1:.8),t+.38);gn.gain.setValueAtTime(0,t);gn.gain.linearRampToValueAtTime(.12,t+.04);gn.gain.exponentialRampToValueAtTime(.001,t+.45);o.connect(gn);gn.connect(c.destination);o.start(t);o.stop(t+.5)}catch(e){}}
+function ctQ(){const g=CT;if(g.ph!='play')return;const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;g.lock=0;
+$('#ctp').innerHTML=`${qHTML(a,b)}<div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=ctA(this,${v})>${v}</button>`).join('')}</div><div id=ctf class=cpf></div>`;say(`${a} ضرب ${b}`)}
+function ctA(el,v){const g=CT;if(g.lock||g.ph!='play')return;g.lock=1;const ok=v==g.a*g.b;rec(g.a,g.b,ok);document.querySelectorAll('#ctp .opt').forEach(o=>o.disabled=true);
+if(ok){el.classList.add('ok');const[fe,add]=CTF[LASTG.g]||['🦐',6];ctThrow(el,fe,()=>{g.full=Math.min(100,g.full+add);g.fish++;$('#ctn').textContent=g.fish;const c=$('#ctcat');c&&(c.classList.remove('cteat'),void c.offsetWidth,c.classList.add('cteat'));ctMeow(1);kBell(1318,0,.07);if(g.fish>=g.goal)ctEnd(1)});$('#ctf').innerHTML=`${fe} +${add} شبع`}
+else{el.classList.add('no');g.e++;g.full=Math.max(0,g.full-5);document.querySelectorAll('#ctp .opt').forEach(o=>{if(+o.textContent==g.a*g.b)o.classList.add('ok')});$('#ctf').innerHTML='<span style="color:#e8453c">😿 لا سمك هذه المرة</span>';ctMeow(0)}
+later(ctQ,ok?650:1100)}
+function ctThrow(from,fe,done){const to=$('#ctbowl');if(!to)return done();const a=from.getBoundingClientRect(),b=to.getBoundingClientRect(),f=document.createElement('div');f.className='ctfly';f.textContent=fe;f.style.left=a.left+a.width/2-20+'px';f.style.top=a.top+'px';app.appendChild(f);
+requestAnimationFrame(()=>{f.style.transform=`translate(${b.left+b.width/2-(a.left+a.width/2)}px,${b.top-a.top}px) rotate(540deg) scale(1.3)`});setTimeout(()=>{f.remove();done()},600)}
+function ctLoop(t,g){if(g!==CT||!g.on||!$('#ctsc'))return;const dt=Math.min(.05,(t-(g.tt||t))/1000);g.tt=t;if(g.ph=='play'){g.full=Math.max(0,g.full-g.drain*dt);if(g.full<=0)return ctEnd(0);
+ if(g.full<25&&!g.warn){g.warn=1;toast('🙀 القطة جائعة جدًا! أسرع!');ctMeow(0);try{navigator.vibrate&&navigator.vibrate(150)}catch(e){}}if(g.full>35)g.warn=0}ctDraw();requestAnimationFrame(t=>ctLoop(t,g))}
+function ctDraw(){const g=CT,b=$('#ctbar'),f=$('#ctface');if(!b)return;b.style.width=g.full+'%';const m=g.full>70?'😻':g.full>40?'😺':g.full>20?'😿':'🙀';if(f.textContent!==m)f.textContent=m;
+$('#ctcat').style.transform=`scale(${1+g.fish*.025})`;$('#ctz').textContent=g.full<20?'💭🐟':''}
+function ctEnd(win){const g=CT;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;const f=$('#ctface');if(f)f.textContent=win?'😻':'😿';
+if(win){award(n);good();clap(18);say('أحسنت يا بطل');$('#ctz').textContent='💤💕';for(let i=0;i<5;i++)later(()=>burst(R(innerWidth),R(260)+80),i*250)}else{ctMeow(0);oops();$('#ctz').textContent='💭🐟'}
+$('#ctp').innerHTML=`<div class=res>${win?'😻💤':'😿'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'شبعت القطة ونامت سعيدة!':'القطة ما زالت جائعة!'}</h2><p>${win?`أطعمتها ${g.fish} سمكة 🐟`:`أطعمتها ${g.fish} من ${g.goal} سمكة — أجب أسرع لتعطيها سمكًا أكبر 🐠`}</p>${U}<button class=big onclick=catg()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
