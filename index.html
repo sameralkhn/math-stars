@@ -396,12 +396,22 @@ svg[class^=mv]{transform-origin:50% 85%}
 .cthud{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:8px 0}.ctfull,.ctfish{background:#fff;border-radius:12px;padding:5px 10px;font-weight:800;display:flex;align-items:center;gap:6px}.ctfish b{font-size:20px;color:#2e8bff}
 .ctfly{position:fixed;z-index:45;font-size:40px;transition:transform .55s cubic-bezier(.3,.9,.4,1);pointer-events:none}
 #ctp{text-align:center}
+/* متاهة الأسهم */
+.m18{background:linear-gradient(135deg,#8a63ff,#ff6b5b)!important}
+.awtop{display:flex;justify-content:space-between;font-weight:800;font-size:17px;margin-bottom:8px}.awen{background:#fff6d0;border-radius:12px;padding:2px 10px;border:2px solid #ffc531}.awen b{font-size:22px;color:#e8a000}.awen.pop{animation:cppop .45s}
+.awgrid{display:grid;gap:5px;direction:ltr;background:#1b2a5c;padding:8px;border-radius:18px;overflow:hidden;box-shadow:0 6px 0 #0003}
+.aw,.awe{aspect-ratio:1;border-radius:12px}.awe{background:#ffffff10;display:block}
+.aw{border:0;background:var(--c);color:#fff;font-size:clamp(22px,7vw,34px);font-weight:900;cursor:pointer;box-shadow:inset 0 -5px 0 #0003,0 3px 0 #0003;transition:transform .35s cubic-bezier(.5,0,.8,.4),opacity .35s;padding:0;line-height:1}
+.aw.awout{transform:translate(var(--fx),var(--fy));opacity:0}
+.aw.awbump{animation:awb .4s}@keyframes awb{40%{transform:translate(var(--bx),var(--by))}}
+.aw.awhit{animation:shk .35s;filter:brightness(1.4)}.aw.awno{animation:shk .35s;filter:grayscale(1)}
+#awp{text-align:center;margin-top:10px}#awp.awglow{box-shadow:0 0 0 4px #ffc531,0 0 24px #ffc531}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.9.0';
+const VER='2.10.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -465,7 +475,7 @@ const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+
 const key=(a,b)=>a+'x'+b;
 // الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
 // سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
-let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك'};
+let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم'};
 function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
 if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150}
 const gSince=ms=>(S.gl||[]).filter(x=>x.ts>=ms&&x.d>0).reduce((a,x)=>a+x.d,0);
@@ -985,10 +995,10 @@ function fcGrid(){shell('البطاقات 🎴',fcOpts()+`<div class=gtools><but
 function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){const[a,b]=FC.q[i];tone(660,.1,'triangle',.12);say(`${a} ضرب ${b} يساوي ${a*b}`);FC.seen.add(i);if(FC.seen.size==FC.q.length&&!FC.gd){FC.gd=1;good();clap(10);$('#gc').textContent='🎉 قلبت كل البطاقات! أحسنت'}}}
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
-function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 m16" onclick="dino()"><i>🦖</i>الهروب من الديناصور <small>حلّ لتركض أسرع!</small></button><button class="mode m5 m17" onclick="catg()"><i>🐱</i>القطة والسمك <small>أطعمها بالإجابات 🐟</small></button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
+function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 m16" onclick="dino()"><i>🦖</i>الهروب من الديناصور <small>حلّ لتركض أسرع!</small></button><button class="mode m5 m17" onclick="catg()"><i>🐱</i>القطة والسمك <small>أطعمها بالإجابات 🐟</small></button><button class="mode m5 m18" onclick="arrows()"><i>🏹</i>متاهة الأسهم <small>حلّ لتشحن الطاقة ⚡</small></button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,dino:2,catg:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -1238,6 +1248,34 @@ $('#ctcat').style.transform=`scale(${1+g.fish*.025})`;$('#ctz').textContent=g.fu
 function ctEnd(win){const g=CT;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;const f=$('#ctface');if(f)f.textContent=win?'😻':'😿';
 if(win){award(n);good();clap(18);say('أحسنت يا بطل');$('#ctz').textContent='💤💕';for(let i=0;i<5;i++)later(()=>burst(R(innerWidth),R(260)+80),i*250)}else{ctMeow(0);oops();$('#ctz').textContent='💭🐟'}
 $('#ctp').innerHTML=`<div class=res>${win?'😻💤':'😿'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'شبعت القطة ونامت سعيدة!':'القطة ما زالت جائعة!'}</h2><p>${win?`أطعمتها ${g.fish} سمكة 🐟`:`أطعمتها ${g.fish} من ${g.goal} سمكة — أجب أسرع لتعطيها سمكًا أكبر 🐠`}</p>${U}<button class=big onclick=catg()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
+// ===== 🏹 متاهة الأسهم: اضغط السهم ليخرج في اتجاهه إن كان طريقه فارغًا. كل سهم يحتاج ⚡ طاقة، والطاقة من حل المسائل =====
+let AW=null;
+const ADIR={u:[-1,0,'↑'],d:[1,0,'↓'],l:[0,-1,'←'],r:[0,1,'→']},ACOL={u:'#ff6b5b',d:'#2e8bff',l:'#18a959',r:'#8a63ff'},AEN={50:4,40:3,25:3,20:2,10:2,5:1,1:1};
+// لوحة قابلة للحل دائمًا: كل سهم يُوضع وطريقه للخارج فارغ، فالحل هو إخراجها بالعكس
+function awGen(n,fill){const g=Array.from({length:n},()=>Array(n).fill(null));let placed=0,tries=0;const free=(r,c,d)=>{let[y,x]=[r+ADIR[d][0],c+ADIR[d][1]];while(y>=0&&y<n&&x>=0&&x<n){if(g[y][x])return false;y+=ADIR[d][0];x+=ADIR[d][1]}return true};
+while(placed<n*n*fill&&tries<4000){tries++;const r=R(n),c=R(n);if(g[r][c])continue;const ds=sh(['u','d','l','r']).filter(d=>free(r,c,d));if(!ds.length)continue;g[r][c]=ds[0];placed++}return g}
+function arrows(){clr();const lv=S.awl||1,n=[5,6,7][lv-1];AW={lv,n,g:awGen(n,.72),en:4,e:0,moves:0,ph:'play',last:''};AW.total=AW.g.flat().filter(Boolean).length;awRender();awQ()}
+function awRender(){const g=AW,left=g.g.flat().filter(Boolean).length;
+shell('متاهة الأسهم 🏹',`<div class=awtop><span>🏹 باقي <b>${left}</b></span><span class=awen id=awen>⚡ <b>${g.en}</b></span><span>${'⭐'.repeat(3-Math.min(2,Math.floor(g.e/3)))}</span></div>
+<div class=awgrid style="grid-template-columns:repeat(${g.n},1fr)">${g.g.map((row,r)=>row.map((d,c)=>d?`<button class=aw id=aw${r}_${c} style="--c:${ACOL[d]}" onclick=awTap(${r},${c})>${ADIR[d][2]}</button>`:`<i class=awe></i>`).join('')).join('')}</div>
+<p class=sm style="text-align:center;margin:4px 0">اضغط السهم الذي طريقه فارغ ليخرج • كل سهم يحتاج ⚡ واحدة</p><div id=awp class=card></div>`,undefined);
+if(g.ph=='play')awQ(1)}
+function awQ(keep){const g=AW;if(g.ph!='play')return;if(keep&&g.a){$('#awp').innerHTML=g.qh;return}const f=pick(g.last),a=f[0],b=f[1];g.last=key(a,b);g.a=a;g.b=b;g.lock=0;
+g.qh=`<p class=sm style="margin:0">⚡ حلّ لتشحن الطاقة (الأسرع يعطي طاقة أكثر)</p>${qHTML(a,b)}<div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=awA(this,${v})>${v}</button>`).join('')}</div><div id=awf class=cpf></div>`;$('#awp').innerHTML=g.qh}
+function awA(el,v){const g=AW;if(g.lock||g.ph!='play')return;g.lock=1;const ok=v==g.a*g.b;rec(g.a,g.b,ok);document.querySelectorAll('#awp .opt').forEach(o=>o.disabled=true);
+if(ok){const add=AEN[LASTG.g]||1;g.en=Math.min(12,g.en+add);el.classList.add('ok');$('#awf').innerHTML=`+${add} ⚡`;kBell(1046,0,.08);const e=$('#awen');if(e){e.innerHTML=`⚡ <b>${g.en}</b>`;e.classList.remove('pop');void e.offsetWidth;e.classList.add('pop')}}
+else{el.classList.add('no');document.querySelectorAll('#awp .opt').forEach(o=>{if(+o.textContent==g.a*g.b)o.classList.add('ok')});oops()}
+g.a=0;later(()=>awQ(),ok?500:1100)}
+function awTap(r,c){const g=AW;if(g.ph!='play'||!g.g[r][c])return;const el=$(`#aw${r}_${c}`);
+if(g.en<1){el.classList.add('awno');later(()=>el.classList.remove('awno'),400);toast('⚡ نفدت الطاقة! حلّ مسألة لتشحنها');const p=$('#awp');p&&p.classList.add('awglow');later(()=>p&&p.classList.remove('awglow'),900);return}
+const d=g.g[r][c],[dy,dx]=ADIR[d];let y=r+dy,x=c+dx,steps=0,blocked=null;while(y>=0&&y<g.n&&x>=0&&x<g.n){if(g.g[y][x]){blocked=[y,x];break}y+=dy;x+=dx;steps++}
+g.en--;g.moves++;const e=$('#awen');if(e)e.innerHTML=`⚡ <b>${g.en}</b>`;
+if(blocked){g.e++;g.en=Math.max(0,g.en-1);if(e)e.innerHTML=`⚡ <b>${g.en}</b>`;el.style.setProperty('--bx',dx*(steps*100+30)+'%');el.style.setProperty('--by',dy*(steps*100+30)+'%');el.classList.add('awbump');const b=$(`#aw${blocked[0]}_${blocked[1]}`);b&&b.classList.add('awhit');
+ later(()=>{el.classList.remove('awbump');b&&b.classList.remove('awhit')},450);tone(160,.15,'square',.1);toast('💥 الطريق مسدود! −2 ⚡');return}
+g.g[r][c]=null;el.style.setProperty('--fx',dx*900+'%');el.style.setProperty('--fy',dy*900+'%');el.classList.add('awout');kSwish(0,.1);kBell(PENTA[R(PENTA.length)],.04,.06);
+later(()=>{el.outerHTML='<i class=awe></i>';const left=g.g.flat().filter(Boolean).length;const L=$('.awtop b');L&&(L.textContent=left);if(!left)awEnd()},380)}
+function awEnd(){const g=AW;g.ph='end';const n=g.e<=1?3:g.e<=4?2:1;award(n);good();clap(18);kSfx('win');say('أحسنت يا بطل');for(let i=0;i<5;i++)later(()=>burst(R(innerWidth),R(300)+80),i*250);
+$('#awp').innerHTML=`<div class=res>🏹🎉</div><div class=res>${'⭐'.repeat(n)}</div><h2>أخرجت كل الأسهم!</h2><p>${g.total} سهمًا • اصطدامات: ${g.e}</p>${U}<div class=seg>${[1,2,3].map(l=>`<button class="${g.lv==l?'on':''}" onclick="S.awl=${l};save();arrows()">${['🙂 5×5','😬 6×6','😱 7×7'][l-1]}</button>`).join('')}</div><button class=big onclick=arrows()>🔁 لوحة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
