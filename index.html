@@ -478,12 +478,22 @@ svg[class^=mv]{transform-origin:50% 85%}
 .kpto{margin:6px 0 0;font-size:14px}.kpto b{color:#e8579a}
 .karw{font-size:24px!important;color:#e8453c!important;-webkit-text-stroke:1.5px #fff;text-shadow:0 2px 3px #0005;font-weight:900}.kring.big .karw{font-size:32px!important}
 .kseat .kcnt{font-size:20px!important;font-weight:900;line-height:1;display:flex;align-items:center;gap:2px;color:#e8453c}.kseat .kcnt small{font-size:11px}.kseat.on .kcnt{color:#fff}.kring.big .kseat .kcnt{font-size:26px!important}
+
+.gstat{display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:8px 12px;box-shadow:0 3px 0 #0001,0 6px 16px #1b2a5c12;margin-bottom:6px}
+.gsav{width:44px;height:50px;flex:0 0 auto}.gsav svg{width:100%;height:100%;display:block}.gstat div{flex:1;display:flex;flex-direction:column;line-height:1.25}.gstat div b{font-size:16px}.gstat small{color:#5b6b8c;font-size:12px}
+.gsg,.gsb{font-weight:800;border-radius:12px;padding:4px 8px;font-size:14px;white-space:nowrap}.gsg{background:#fff6d0;color:#b07800}.gsb{background:#e9f6ff;color:#2e6bb0}
+.gsh{display:flex;align-items:center;gap:8px;margin:16px 4px 8px;font-size:17px;color:var(--ink)}.gsh span{width:30px;height:30px;border-radius:10px;background:var(--c);display:inline-flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 3px 0 #0002}
+.ggd{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}@media (min-width:560px){.ggd{grid-template-columns:repeat(3,1fr)}}
+.gt{border:0;font:inherit;cursor:pointer;background:#fff;border-radius:18px;padding:14px 8px 12px;display:flex;flex-direction:column;align-items:center;gap:4px;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 45%,#0000),0 6px 14px #1b2a5c12;border-top:5px solid var(--c);transition:transform .12s;min-height:126px}
+.gt:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--c) 45%,#0000)}
+.gt i{font-style:normal;font-size:30px;width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 14%,#fff)}
+.gt b{font-size:15px;color:var(--ink);line-height:1.25;text-align:center}.gt small{font-size:11px;color:#7a869a;text-align:center}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.12.6';
+const VER='2.13.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1067,7 +1077,14 @@ function fcGrid(){shell('البطاقات 🎴',fcOpts()+`<div class=gtools><but
 function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){const[a,b]=FC.q[i];tone(660,.1,'triangle',.12);say(`${a} ضرب ${b} يساوي ${a*b}`);FC.seen.add(i);if(FC.seen.size==FC.q.length&&!FC.gd){FC.gd=1;good();clap(10);$('#gc').textContent='🎉 قلبت كل البطاقات! أحسنت'}}}
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
-function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 m16" onclick="dino()"><i>🦖</i>الهروب من الديناصور <small>حلّ لتركض أسرع!</small></button><button class="mode m5 m17" onclick="catg()"><i>🐱</i>القطة والسمك <small>أطعمها بالإجابات 🐟</small></button><button class="mode m5 m18" onclick="arrows()"><i>🏹</i>متاهة الأسهم <small>حلّ لتشحن الطاقة ⚡</small></button><button class="mode m10" onclick="frog()"><i>🐸</i>قفزة الضفدع</button><button class="mode m11" onclick="tower()"><i>🏗️</i>برج المكعبات</button><button class="mode m12" onclick="meteor()"><i>☄️</i>حارس الأرض</button><button class="mode m13" onclick="tfg()"><i>✅</i>صح أم خطأ</button><button class="mode m5 m14" onclick="seqg()"><i>🪜</i>السلسلة المفقودة</button><button class="mode m5 m15" onclick="cardsHome()"><i>🃏</i>آخر ورقة <small>لعبة أوراق جماعية • 🪙 1500</small></button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
+// صفحة الألعاب: أقسام منظّمة، وبطاقات بنفس الحجم والتصميم، ولكل قسم لون واحد
+const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية • 🪙 1500']]],
+['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
+['⚡','سرعة','#2e8bff',[['balloons','🎈','فرقعة البالونات','اضرب البالونة الصحيحة'],['meteor','☄️','حارس الأرض','أسقط النيازك'],['tfg','✅','صح أم خطأ','60 ثانية'],['frog','🐸','قفزة الضفدع','إلى الجزيرة']]],
+['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول']]]];
+function games(){clr();const sc=cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول 1–'+cur):'كل الجداول';
+shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><div><b>${esc(NM())}</b><small>🎯 ${sc}</small></div><span class=gsg>🪙 ${GD().toLocaleString('en')}</span><span class=gsb>🦘 ${BK()}</span></div>
+${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="${f}()"><i>${e}</i><b>${n}</b><small>${d}</small></button>`).join('')}</div>`).join('')}`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
 const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
