@@ -488,12 +488,28 @@ svg[class^=mv]{transform-origin:50% 85%}
 .gt:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--c) 45%,#0000)}
 .gt i{font-style:normal;font-size:30px;width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 14%,#fff)}
 .gt b{font-size:15px;color:var(--ink);line-height:1.25;text-align:center}.gt small{font-size:11px;color:#7a869a;text-align:center}
+
+/* الرئيسية بنفس أسلوب صفحة الألعاب */
+.hhello{display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 3px 0 #0001,0 6px 16px #1b2a5c12;margin-bottom:10px}
+.hhello div{display:flex;flex-direction:column;line-height:1.35}.hhello b{font-size:17px}.hhello small{font-size:12px;color:#5b6b8c}
+.balc{background:#fff!important;box-shadow:0 4px 0 #f0b40066,0 6px 14px #1b2a5c12!important;border-top:5px solid #f0a400;padding:10px 12px!important}
+.balc .balg b{font-size:38px!important}.balc .cpcoin{font-size:40px}.balm{font-size:15px!important}
+.hchips{display:grid;grid-template-columns:repeat(6,1fr);gap:7px}
+.hchip{border:0;font:inherit;cursor:pointer;background:#fff;border-radius:14px;padding:7px 0 5px;display:flex;flex-direction:column;align-items:center;box-shadow:0 3px 0 #2e8bff40,0 4px 10px #1b2a5c10}
+.hchip b{font-size:21px;line-height:1.1;color:var(--ink)}.hchip small{font-size:10px;color:#f0a400;letter-spacing:-1px}.hchip small span{color:#d6dbe5}
+.hchip:first-child b{font-size:15px;line-height:1.5}
+.hchip.on{background:#2e8bff;box-shadow:0 3px 0 #1a5fc0}.hchip.on b{color:#fff}.hchip.on small{color:#ffe27a}.hchip.on small span{color:#ffffff66}
+.seg{margin-top:10px}
+.hacts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ht{grid-column:1/-1;border:0;font:inherit;cursor:pointer;background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 45%,#0000),0 6px 14px #1b2a5c12;border-right:6px solid var(--c);text-align:right}
+.ht i{font-style:normal;font-size:30px;width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 14%,#fff);flex:0 0 auto}
+.ht div{flex:1;display:flex;flex-direction:column}.ht b{font-size:18px;color:var(--ink)}.ht small{font-size:12px;color:#7a869a}.ht em{font-style:normal;font-size:22px;color:var(--c);font-weight:900}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.13.0';
+const VER='2.14.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -578,9 +594,9 @@ const award=n=>{const w=S.stars[tk()]||0;S.stars[tk()]=Math.max(w,n);save();U=(f
 const total=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
 function shell(title,body,back){app.innerHTML=`<header>${back===false?'':(typeof curD=='function'&&curD()>=2?'<button class=ic aria-label="رجوع" onclick="history.back()">↩️</button>':'<button class=ic aria-label="الرئيسية" onclick="home()">🏠</button>')}<h1>${title}</h1>${back===false?'<button class=ic aria-label="حسابي" onclick="acc()">'+(UID?'☁️':'👤')+'</button><button class=ic aria-label="الإعدادات" onclick="settings()">⚙️</button>':''}<button class=ic aria-label="الصوت" onclick="S.sound=!S.sound;save();this.textContent=S.sound?'🔊':'🔇'">${S.sound?'🔊':'🔇'}</button><span class=st>⭐ ${total()}</span></header>${body}<footer class=ver>نجوم الضرب • الإصدار ${VER}</footer>`}
 const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
-function home(){clr();let c='';for(let t=1;t<=10;t++){const n=S.stars[t]||0;c+=`<button class="chip ${cur==t?'on':''}" onclick="cur=S.cur=${t};save();home()">${false?'🔒':t}<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`}
-const n=S.stars.m||0;c+=`<button class="chip ${cur==0?'on':''}" style="font-size:20px" onclick="cur=S.cur=0;save();home()">الكل<small>${'★'.repeat(n)+'☆'.repeat(3-n)}</small></button>`;
-shell('نجوم الضرب 🌟',`<div class=owl><span class=av>${AV()}</span><p>مرحبًا ${NM()}! اختر جدولًا ثم العب! اللعبة تتذكر الأرقام الصعبة وتعيدها أكثر حتى تحفظها.</p></div>${balCard()}<div class=chips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<div class=modes><button class="mode m5 m4" onclick="learn()"><i>📖</i>تعلّم وردّد <small>جدول ${cur||"الكل"}</small></button><button class="mode m9" onclick="cards()"><i>🎴</i>البطاقات</button><button class="mode mg" onclick="games()"><i>🎮</i>الألعاب</button></div>`,false)}
+function home(){clr();const ch=(t,lbl,n)=>`<button class="hchip${cur==t?' on':''}" onclick="cur=S.cur=${t};save();home()"><b>${lbl}</b><small>${'★'.repeat(n)}<span>${'★'.repeat(3-n)}</span></small></button>`;
+let c=ch(0,'الكل',S.stars.m||0);for(let t=1;t<=10;t++)c+=ch(t,t,S.stars[t]||0);
+shell('نجوم الضرب 🌟',`<div class=hhello><span class=gsav>${AV()}</span><div><b>مرحبًا ${esc(NM())}! 👋</b><small>اختر جدولًا ثم العب — نعيد لك الأرقام الصعبة حتى تحفظها</small></div></div>${balCard()}<h3 class=gsh style="--c:#2e8bff"><span>🔢</span>اختر الجدول</h3><div class=hchips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<h3 class=gsh style="--c:#ff6b5b"><span>🚀</span>ابدأ</h3><div class=hacts><button class="ht hbig" style="--c:#18a959" onclick="learn()"><i>📖</i><div><b>تعلّم وردّد</b><small>جدول ${cur||1} • استمع وكرّر</small></div><em>←</em></button><button class=gt style="--c:#8a63ff" onclick="cards()"><i>🎴</i><b>البطاقات</b><small>اقلب واحفظ</small></button><button class=gt style="--c:#ff6b5b" onclick="games()"><i>🎮</i><b>الألعاب</b><small>${GSEC.reduce((a,x)=>a+x[3].length,0)} لعبة</small></button></div>`,false)}
 // بطاقة الرصيد في الرئيسية مع عبارة تشجيعية
 const CHEER=['كل إجابة في نصف ثانية = 50 ذهبة ⚡','الأبطال يتدرّبون كل يوم 💪','أسرع قليلًا… والذهب يتضاعف! 🚀','جرّب «حارس الأرض» واجمع ذهبًا أكثر ☄️','سلسلة إجابات صحيحة = كنز من الذهب 🔥','كل يوم تتعلّم فيه تصبح أقوى 🌟','تحدَّ نفسك: اجمع أكثر من الأمس! 🏆'];
 function balCard(){const g=GD(),td=gSince(dayStart()),yd=gSince(dayStart()-864e5)-td,nx=Math.ceil((g+1)/1000)*1000;let m;
