@@ -261,12 +261,15 @@ svg[class^=mv]{transform-origin:50% 85%}
 .cpmg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.cpmc{border:0;border-radius:14px;min-height:70px;font:inherit;font-weight:800;font-size:20px;cursor:pointer;box-shadow:0 4px 0 #0002;direction:ltr}
 .cpmc.q{background:#eef3ff;color:var(--ink)}.cpmc.a{background:#fff6d0;color:#b07800;font-size:24px}.cpmc.sel{outline:4px solid var(--grape);transform:translateY(-3px)}
 .cpmc.bad{background:#ffd6d6;animation:shk .35s}.cpmc.done{opacity:0;transform:scale(.6);transition:.35s;pointer-events:none}
+.cphb{display:block;margin:0 auto 10px}
+.cph1{display:flex;justify-content:space-between;align-items:center;width:100%;border:0;font:inherit;text-align:right;cursor:pointer;gap:8px;margin-bottom:10px}
+.cph1 div{display:flex;flex-direction:column}.cph1>div:first-child{flex:1;min-width:0}.cph1 small{font-size:12px;color:#5b6b8c}.cphw{align-items:flex-end;font-weight:800;color:#e8a000;flex-shrink:0;white-space:nowrap;font-size:17px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.1.0';
+const VER='2.2.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -838,7 +841,7 @@ function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.clas
 function games(){clr();shell('الألعاب 🎮',`<p class=tip>🎯 الألعاب تسألك من ${cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول من 1 إلى '+cur):'كل الجداول'}. غيّر الجدول من الصفحة الرئيسية.</p><div class=modes><button class="mode m5" onclick="journey()"><i class=av2>${AV()}</i>رحلة ${NM()} <small>🦘 ${BK()} • 🪙 ${GD()}</small></button><button class="mode m5 m8" onclick="race()"><i>🏎️</i>سباق السيارات <small>🏁</small></button><button class="mode m1" onclick="balloons()"><i>🎈</i>فرقعة البالونات</button><button class="mode m2" onclick="quiz()"><i>🧠</i>اختبار النجوم</button><button class="mode m5 m3" onclick="match()"><i>🃏</i>لعبة الذاكرة</button><button class="mode m5 mgold" onclick="contest()"><i>🏆</i>تجميع الذهب <small>مسابقة 👤 👥 📱</small></button></div>`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -857,7 +860,7 @@ const gu=cpGameUI();if(m=='solo')body=`<label class=cplb for=cpn1>✏️ اسم 
 else if(m=='local'){const ns=(S.cpn&&S.cpn.length>1?S.cpn:[NM(),'']);body=`<div id=cpl>${ns.map((n,i)=>cpRow(n,i)).join('')}</div><button class=buy onclick=cpAdd()>➕ أضف متسابقًا</button>${qs}${gu}<div id=cptbw>${cpTabUI()}</div><p class=sm>يلعب المتسابقون بالدور على هذا الجهاز، وكلهم يُسألون نفس الأسئلة.</p><button class=big onclick=cpStartLocal(0)>🏁 ابدأ المسابقة</button>`}
 else body=!FB?`<p>☁️ تحتاج هذه المسابقة اتصالًا بالإنترنت وفتح اللعبة من رابطها.</p>`:!UID?`<p>👤 سجّل الدخول أولًا، وكذلك كل من سيشارك من جواله.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`:
 `<label class=cplb for=cpn1>✏️ اسمك في المسابقة — يظهر للآخرين وفي الشهادة، ويمكن أن يختلف عن اسم حسابك</label><input id=cpn1 class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك هنا">${qs}${gu}<div id=cptbw>${cpTabUI()}</div><button class=big onclick=cpCreate()>🏠 أنشئ غرفة</button><h3>أو انضم إلى غرفة</h3><input id=cpcode class=nm inputmode=numeric maxlength=3 placeholder="رقم الغرفة (مثل 50)" dir=ltr><button class=big style="background:#18a999" onclick=cpJoin()>🔑 انضمام</button>`;
-shell('تجميع الذهب 🏆',`<div id=cpx></div><p class=tip>🪙 كل إجابة صحيحة تعطي ذهبًا حسب سرعتك: نصف ثانية 50، ثانية 40، … والأكثر ذهبًا يفوز! الأسئلة ${m=='solo'?'من '+(cur?'جدول '+cur:'كل الجداول'):'من كل جداول الضرب، إلا إذا اختار المنظّم جداول معيّنة'}.</p><div class=card><div class=seg>${b('solo','👤 فردية')+b('local','👥 جهاز واحد')+b('net','📱 عدة أجهزة')}</div>${body}</div>`)}
+shell('تجميع الذهب 🏆',`<div id=cpx></div><p class=tip>🪙 كل إجابة صحيحة تعطي ذهبًا حسب سرعتك: نصف ثانية 50، ثانية 40، … والأكثر ذهبًا يفوز! الأسئلة ${m=='solo'?'من '+(cur?'جدول '+cur:'كل الجداول'):'من كل جداول الضرب، إلا إذا اختار المنظّم جداول معيّنة'}.</p><button class="buy cphb" onclick=cpHist()>📜 سجل المسابقات (${(S.cph||[]).length})</button><div class=card><div class=seg>${b('solo','👤 فردية')+b('local','👥 جهاز واحد')+b('net','📱 عدة أجهزة')}</div>${body}</div>`)}
 const cpTabs=()=>{const t=(S.cptb||[]).filter(x=>x>=1&&x<=10);return t.length?t.sort((a,b)=>a-b):[1,2,3,4,5,6,7,8,9,10]};
 function cpTabUI(){const t=cpTabs(),all=t.length==10;return `<h3>جداول الضرب</h3><div class=cptbs><button class="${all?'on':''}" onclick="S.cptb=[];save();cpTabRe()">الكل</button>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<button class="${!all&&t.includes(n)?'on':''}" onclick="cpTabT(${n})">${n}</button>`).join('')}</div>`}
 function cpTabT(n){let t=all10()?[]:cpTabs();t=t.includes(n)?t.filter(x=>x!=n):[...t,n];S.cptb=t.length==10?[]:t;save();cpTabRe()}
@@ -926,8 +929,13 @@ function cpBoard(P,live){const md=['🥇','🥈','🥉'];return `<table class=cp
 function cpRain(){let d=$('#cprain');if(d)d.remove();d=document.createElement('div');d.id='cprain';document.body.appendChild(d);
 for(let i=0;i<46;i++){const e=document.createElement('span'),bl=i%2==0;e.textContent=bl?['🎈','🎈','🎉'][i%3]:['🌹','🌷','💐','🌸'][i%4];e.className=bl?'up':'dn';e.style.left=R(96)+'%';e.style.fontSize=(26+R(26))+'px';e.style.animationDuration=(4+Math.random()*4)+'s';e.style.animationDelay=(Math.random()*3)+'s';d.appendChild(e)}
 setTimeout(()=>d.remove(),12000)}
-function cpEnd(P){cpOff();CP.final=P;const W=cpRank(P)[0],solo=P.length==1;good();clap(25);cpRain();say('أحسنت يا بطل');
-shell('تجميع الذهب 🏆',`<div id=cpx></div><div class="card cpw"><div class=res>🏆</div><div class=cpflow>🌹🎈🌷🎈🌹</div><p class=sm style="margin:0">${cpGName()}</p><h2>${solo?'أحسنت يا '+esc(W.n)+'!':'الفائز هو '+esc(W.n)+'!'}</h2><p class=cpbig>🪙 ${W.g} ذهبة</p><div class=cpflow>🎈🌹🎈🌷🎈</div>${cpBoard(P)}<button class=big onclick=cpPDF()>📄 مشاركة النتائج PDF</button><button class=big style="background:#18a999" onclick=contest()>🔁 مسابقة جديدة</button></div>`)}
+function cpEnd(P,hist){cpOff();CP.final=P;const W=cpRank(P)[0],solo=P.length==1;
+if(!hist&&!CP.saved){CP.saved=1;CP.ts=Date.now();S.cph=[{ts:CP.ts,game:cpGame(),N:CP.N,mode:CP.mode,P:P.map(p=>({n:p.n,g:p.g,ok:p.ok,q:p.q,t:+(+p.t).toFixed(2)}))},...(S.cph||[])].slice(0,10);save()}
+if(!hist){good();clap(25);cpRain();say('أحسنت يا بطل')}
+shell('تجميع الذهب 🏆',`<div id=cpx></div><div class="card cpw"><div class=res>🏆</div><div class=cpflow>🌹🎈🌷🎈🌹</div><p class=sm style="margin:0">${cpGName()}</p><h2>${solo?'أحسنت يا '+esc(W.n)+'!':'الفائز هو '+esc(W.n)+'!'}</h2><p class=cpbig>🪙 ${W.g} ذهبة</p><div class=cpflow>🎈🌹🎈🌷🎈</div>${cpBoard(P)}<button class=big onclick=cpPDF()>📄 مشاركة النتائج PDF</button>${hist?`<button class=big style="background:#5b6b8c" onclick=cpHist()>📜 رجوع إلى السجل</button>`:`<button class=big style="background:#18a999" onclick=contest()>🔁 مسابقة جديدة</button>`}</div>`)}
+// ----- سجل آخر 10 مسابقات -----
+function cpHist(){const H=S.cph||[];shell('سجل المسابقات 📜',`<div id=cpx></div>${H.length?H.map((h,i)=>{const W=cpRank(h.P)[0];return `<button class="card cph1" onclick=cpHistOpen(${i})><div><b>${(CPG[h.game]||CPG.q)[0]} ${h.P.length==1?'فردية':h.P.length+' متسابقين'}</b><small>${new Date(h.ts).toLocaleString('ar-SA-u-nu-latn',{day:'numeric',month:'short',hour:'numeric',minute:'2-digit'})} • ${h.N} سؤال</small></div><div class=cphw>🏆 ${esc(W.n)}<small>🪙 ${W.g}</small></div></button>`}).join(''):'<div class=card><p>لا توجد مسابقات بعد. العب مسابقة وستظهر هنا 🏆</p></div>'}<p class=sm style="text-align:center">يُحفظ آخر 10 مسابقات في حسابك</p>`)}
+function cpHistOpen(i){const h=(S.cph||[])[i];if(!h)return;CP={mode:h.mode,game:h.game,N:h.N,ts:h.ts,saved:1};cpEnd(h.P,1)}
 async function cpPDF(){const P=cpRank(CP.final),W=P[0],solo=P.length==1;try{await document.fonts.ready}catch(e){}
 const c=document.createElement('canvas'),w=1240,h=1754;c.width=w;c.height=h;const x=c.getContext('2d'),F="'Baloo Bhaijaan 2',Tahoma,Arial,sans-serif";
 const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,'#fff6d8');g.addColorStop(1,'#e8f5ff');x.fillStyle=g;x.fillRect(0,0,w,h);
@@ -935,7 +943,7 @@ x.strokeStyle='#f0b400';x.lineWidth=14;x.strokeRect(30,30,w-60,h-60);x.strokeSty
 const em=(t,X,Y,s)=>{x.font=`${s}px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif`;x.textAlign='center';x.fillText(t,X,Y)};
 [['🎈',150,190,90],['🌹',260,150,70],['🎈',1090,190,90],['🌹',980,150,70],['🌷',130,360,64],['💐',1110,360,64],['🎉',300,300,60],['🎉',940,300,60]].forEach(a=>em(...a));
 x.direction='rtl';x.textAlign='center';x.fillStyle='#1b2a5c';x.font=`800 64px ${F}`;x.fillText('🏆 مسابقة تجميع الذهب',w/2,180);
-x.font=`600 30px ${F}`;x.fillStyle='#5b6b8c';x.fillText('نجوم الضرب • '+new Date().toLocaleDateString('ar-SA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'})+' • '+CP.N+' سؤال • '+CPG[cpGame()][1],w/2,240);
+x.font=`600 30px ${F}`;x.fillStyle='#5b6b8c';x.fillText('نجوم الضرب • '+new Date(CP.ts||Date.now()).toLocaleDateString('ar-SA-u-nu-latn',{year:'numeric',month:'long',day:'numeric'})+' • '+CP.N+' سؤال • '+CPG[cpGame()][1],w/2,240);
 x.fillStyle='#1b2a5c';x.font=`800 52px ${F}`;x.fillText(solo?'أحسنت يا':'الفائز هو',w/2,400);
 let ns=110;x.font=`800 ${ns}px ${F}`;while(x.measureText(W.n).width>w-380&&ns>40){ns-=4;x.font=`800 ${ns}px ${F}`}const nw=x.measureText(W.n).width;x.fillStyle='#e8a000';x.fillText(W.n,w/2,530);x.font=`800 48px ${F}`;x.fillStyle='#1b2a5c';x.fillText('🪙 '+W.g+' ذهبة',w/2,610);
 em('🌹',w/2-nw/2-60,520,72);em('🌹',w/2+nw/2+60,520,72);
