@@ -477,12 +477,13 @@ svg[class^=mv]{transform-origin:50% 85%}
 .kto{position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);background:#e8579a;color:#fff;font-size:10px;font-weight:800;border-radius:8px;padding:1px 6px;white-space:nowrap;max-width:110%;overflow:hidden;text-overflow:ellipsis;z-index:2}
 .kpto{margin:6px 0 0;font-size:14px}.kpto b{color:#e8579a}
 .karw{font-size:24px!important;color:#e8453c!important;-webkit-text-stroke:1.5px #fff;text-shadow:0 2px 3px #0005;font-weight:900}.kring.big .karw{font-size:32px!important}
+.kseat .kcnt{font-size:20px!important;font-weight:900;line-height:1;display:flex;align-items:center;gap:2px;color:#e8453c}.kseat .kcnt small{font-size:11px}.kseat.on .kcnt{color:#fff}.kring.big .kseat .kcnt{font-size:26px!important}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.12.5';
+const VER='2.12.6';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1211,7 +1212,7 @@ const kShort=n=>{const t=String(n||'').replace(/[\p{Extended_Pictographic}\u2600
 const kSm=(m,st)=>{let t=String(m||'');Object.values((st&&st.names)||{}).sort((a,b)=>String(b).length-String(a).length).forEach(n=>{if(n)t=t.split(n).join(kShort(n))});return t};
 function kRingH(st,me,big){const O=st.order,n=O.length,mi=Math.max(0,O.indexOf(me)),cu=O[st.turn],nx=O[kNext(st)],pos=a=>[50+42*Math.cos(a),50+36*Math.sin(a)],ang=i=>Math.PI/2+(i-mi)*2*Math.PI/n;
 let h='';for(let i=0;i<n;i++){const am=(ang(i)+ang(i+1))/2,[x,y]=pos(am),rot=am*180/Math.PI+90+(st.dir>0?0:180);h+=`<span class=karw style="left:${x}%;top:${y}%;transform:translate(-50%,-50%) rotate(${rot}deg)">➤</span>`}
-O.forEach((u,i)=>{const[x,y]=pos(ang(i)),c=st.hands[u].length;h+=`<div class="kseat${u===cu?' on':''}${u===nx&&u!==cu?' nx':''}${u===me?' me':''}" ${big?'':`id="ko_${u}"`} style="left:${x}%;top:${y}%"><b>${u===me?'أنت':esc(kShort(st.names[u]))}</b><span>🃏 ${c}</span>${big&&c==1?'<small>ورقة!</small>':''}${big?(u===cu?'<i class=ktag>🎯 الدور</i>':u===nx?'<i class="ktag kn">التالي</i>':''):''}</div>`});
+O.forEach((u,i)=>{const[x,y]=pos(ang(i)),c=st.hands[u].length;h+=`<div class="kseat${u===cu?' on':''}${u===nx&&u!==cu?' nx':''}${u===me?' me':''}" ${big?'':`id="ko_${u}"`} style="left:${x}%;top:${y}%"><b>${u===me?'أنت':esc(kShort(st.names[u]))}</b><span class=kcnt>${c}<small>🃏</small></span>${big&&c==1?'<small>ورقة!</small>':''}${big?(u===cu?'<i class=ktag>🎯 الدور</i>':u===nx?'<i class="ktag kn">التالي</i>':''):''}</div>`});
 return `<div class="kring${big?' big':''}">${h}<div class=kmid><span class="kdirb${st.dir>0?'':' rev'}">${st.dir>0?'↻':'↺'}</span>${big?`<small>${st.dir>0?'باتجاه عقارب الساعة':'عكس عقارب الساعة'}</small>`:''}</div></div>`}
 function kRing(st,me){return `<button class=kringb onclick=kRingPop() aria-label="ترتيب اللاعبين">${kRingH(st,me,0)}<small class=kringt>👆 التفاصيل</small></button>`}
 function kLogRows(){const st=KG&&KG.st;if(!st)return'';const L=(st.log||[]).slice().reverse(),ic=c=>c=='draw'?'<span class=klic>🂠</span>':c=='skip'?'<span class=klic>⏭️</span>':c=='one'?'<span class=klic>🙋</span>':c?kCard(c,'klc'):'<span class=klic>•</span>';
