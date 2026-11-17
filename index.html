@@ -547,7 +547,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.16.2';
+const VER='2.16.3';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1662,7 +1662,7 @@ else if(g.q)pan=`<p class=sm style="margin:0">🧮 أجب لتتحرك — ال�
 else if(!myT)pan=`<p class=kturn>⏳ دور ${nm(p)}${st.rm?' — يختار حصاة ليأخذها':''}</p>`;
 else pan=`<p class="kturn me">${who}${st.rm?'🎯 إدريس! اختر حصاة من حصى خصمك لتأخذها':st.hand[p]>0?`🎯 ضع حصاة على نقطة فارغة (معك ${st.hand[p]})`:g.sel>=0?'👆 اختر النقطة المجاورة المضيئة':'👆 اختر حصاة لتحرّكها'}</p>`;
 const box=k=>`<span class="${p==k&&!r?'on':''}"><i class="iddot ${k=='X'?'idsx':'idso'}"></i> ${nm(k)}<b>${st.sc[k]}</b></span>`,mine=g.mode=='local'?'X':g.me,oth=IOP(mine),loc=g.mode=='local';
-shell('إدريس 🪨',`<div id=ix></div><div class="xosc idsc">${box('X')}<span>🤝<b>${st.sc.D}</b></span>${box('O')}</div>${idHand(st,oth,nm(oth),0)}<div class="idb ${st.v=='b'?'idbig':''}">${idSvg(st,o)}</div>${idHand(st,mine,nm(mine),!loc)}<div id=xop class=card>${pan}</div>`);
+shell('إدريس 🪨',`<div id=ix></div><div class="xosc idsc">${box('X')}<span>🤝<b>${st.sc.D}</b></span>${box('O')}</div>${idHand(st,mine,nm(mine),!loc)}${idHand(st,oth,nm(oth),0)}<div class="idb ${st.v=='b'?'idbig':''}">${idSvg(st,o)}</div><div id=xop class=card>${pan}</div>`);
 if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv)}else kSfx('bad')}
 const sig=st.b+st.turn+st.rm;if(g.mode=='net'&&myT&&g.pt!==sig){kSfx('turn');vib(60)}g.pt=sig;
 if(g.mode=='bot'&&!r&&p=='O'){clearTimeout(g.bt);g.bt=setTimeout(()=>{if(IG!==g||g.st!==st)return;const m=idBest(st,g.lv);if(m)idDo(m)},st.rm?900:700)}}
