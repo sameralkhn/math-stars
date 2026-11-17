@@ -549,12 +549,14 @@ svg[class^=mv]{transform-origin:50% 85%}
 .admi{display:flex;flex-direction:column;min-width:0}.admi b{font-size:15px}.admi small{font-size:12px;color:#5b6b8c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.admi em{font-style:normal;font-size:11px;border-radius:8px;padding:1px 6px;margin-inline-start:4px}.adbad{background:#efe9ff;color:#6a45d8}.adbbl{background:#ffe3e0;color:#c62f26}.adbnt{background:#e6f0ff}
 .admsh{position:fixed;inset:0;background:#0006;z-index:60;display:flex;align-items:flex-end;justify-content:center}.admsh>.card{width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;margin:0}
 .admgold{background:#fff8e6;border-radius:16px;padding:10px;margin:10px 0}.admmsg{background:linear-gradient(135deg,#fff4d6,#ffe6c7);border-radius:14px;padding:10px 12px;margin-bottom:10px;font-weight:700;color:#7a4b00;box-shadow:0 3px 0 #0001}
+.gt{position:relative}.gfee{position:absolute;top:6px;left:6px;font-style:normal;font-size:11px;font-weight:800;background:#fff4d6;color:#7a4b00;border-radius:10px;padding:1px 6px;box-shadow:0 1px 0 #0001}
+.admgh{margin:10px 0 4px;color:var(--c);font-size:14px}.admg{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 0;border-bottom:1px solid #eef1f6}.admg span{flex:1;min-width:120px;font-weight:700}.admg label{font-size:12px;color:#5b6b8c;display:flex;align-items:center;gap:4px}.admg input{width:76px;border:2px solid #dde3ef;border-radius:10px;padding:5px 6px;font:inherit;font-weight:800;text-align:center}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.17.1';
+const VER='2.18.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1139,13 +1141,22 @@ function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){cons
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
 // صفحة الألعاب: أقسام منظّمة، وبطاقات بنفس الحجم والتصميم، ولكل قسم لون واحد
-const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية • 🪙 1500'],['tarneeb','♠️','الطرنيب','4 لاعبين • 🪙 1500'],['xo','❌','إكس أو','مع صديق أو الكمبيوتر'],['idris','🪨','إدريس','لعبة الحصى الشعبية']]],
+const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية'],['tarneeb','♠️','الطرنيب','4 لاعبين'],['xo','❌','إكس أو','مع صديق أو الكمبيوتر'],['idris','🪨','إدريس','لعبة الحصى الشعبية']]],
 ['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
 ['⚡','سرعة','#2e8bff',[['balloons','🎈','فرقعة البالونات','اضرب البالونة الصحيحة'],['meteor','☄️','حارس الأرض','أسقط النيازك'],['tfg','✅','صح أم خطأ','60 ثانية'],['frog','🐸','قفزة الضفدع','إلى الجزيرة']]],
 ['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول']]]];
+const GDEF={cardsHome:1500,tarneeb:1500},GINT=['cardsHome','tarneeb'];
+const gFee=f=>{const v=((typeof CFG=='object'&&CFG.fees)||{})[f];return v==null?(GDEF[f]||0):Math.max(0,v|0)};
+const gBonus=f=>{const v=((typeof CFG=='object'&&CFG.bonus)||{})[f];return v==null?1500:Math.max(0,v|0)};
+function gFeeSet(f){FEE=gFee(f);BONUS=gBonus(f)}
+const gName=f=>{for(const s of GSEC)for(const g of s[3])if(g[0]==f)return g[1]+' '+g[2];return f};
+function gEnter(f){const fee=gFee(f);if(!fee||GINT.includes(f))return window[f]();const g=GD();
+if(g<fee)return kPop(`🔒 <b>${esc(gName(f))}</b> <small>الدخول بـ 🪙 ${fee.toLocaleString('en')} — معك 🪙 ${g.toLocaleString('en')}. اجمع المزيد من الألعاب المجانية 💪</small>`,'turn',3500);
+if(!confirm(`دخول «${gName(f)}» بـ ${fee.toLocaleString('en')} ذهبة؟\nرصيدك الآن: ${g.toLocaleString('en')}`))return;
+S.gd=g-fee;gLog(-fee,'🎟️ دخول '+gName(f));save();toast(`🎟️ دفعت 🪙 ${fee.toLocaleString('en')}`);window[f]()}
 function games(){clr();const sc=cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول 1–'+cur):'كل الجداول';
 shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><div><b>${esc(NM())}</b><small>🎯 ${sc}</small></div><span class=gsg>🪙 ${GD().toLocaleString('en')}</span><span class=gsb>🦘 ${BK()}</span></div>
-${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="${f}()"><i>${e}</i><b>${n}</b><small>${d}</small></button>`).join('')}</div>`).join('')}`)}
+${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="gEnter('${f}')"><i>${e}</i><b>${n}</b><small>${d}</small>${gFee(f)>0?`<em class=gfee>🪙 ${gFee(f).toLocaleString('en')}</em>`:''}</button>`).join('')}</div>`).join('')}`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
 const LV={admin:2,ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,idris:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
@@ -1202,7 +1213,7 @@ shell('السلسلة المفقودة 🪜',`<p class=tip>💡 كل رقم يز
 function sqA(el,v){const g=GX,ok=v==g.a*g.b;optOff(g.a*g.b);rec(g.a,g.b,ok);g.r++;if(ok){el.classList.add('ok');good();later(sqQ,600)}else{el.classList.add('no');g.e++;oops();later(sqQ,1300)}}
 // ===== لعبة «آخر ورقة» 🃏 (لعبة أوراق ألوان وأرقام) =====
 // الدخول بـ 1500 ذهبة لكل مشاركة، والفائز يستردّ رسومه ويأخذ مكافأة 1500 (لا يأخذ من ذهب الآخرين). ضد الكمبيوتر، أو مع العائلة من عدة أجوال (rooms/{code} بنوع cards)
-const FEE=1500,BONUS=1500,KC={r:'#e8453c',y:'#ffc531',g:'#18a959',b:'#2e8bff'},KN={r:'أحمر',y:'أصفر',g:'أخضر',b:'أزرق'};
+let FEE=1500,BONUS=1500;const KC={r:'#e8453c',y:'#ffc531',g:'#18a959',b:'#2e8bff'},KN={r:'أحمر',y:'أصفر',g:'أخضر',b:'أزرق'};
 let KG=null;
 function kDeck(){const d=[];for(const c of 'rygb'){d.push(c+'0');for(let k=0;k<2;k++){for(let n=1;n<=9;n++)d.push(c+n);d.push(c+'S',c+'R',c+'D')}}for(let k=0;k<4;k++)d.push('W','W4');return sh(d)}
 const kWild=c=>c[0]=='W',kVal=c=>c.slice(1);
@@ -1228,7 +1239,7 @@ else if(v=='S'){st.turn=kNext(st);msg+=' (⊘ تخطّي '+st.names[st.order[st.
 else if(v=='D'||v=='4'){const nx=st.order[kNext(st)];kDraw(st,nx,v=='D'?2:4);st.turn=kNext(st);msg+=v=='D'?` (${st.names[nx]} يسحب ورقتين)`:` (${st.names[nx]} يسحب 4 أوراق)`}
 if(kWild(c))msg+=' • اللون '+KN[st.color];st.turn=kNext(st);st.msg=msg;return true}
 // ----- الواجهة -----
-function cardsHome(){clr();cpOff&&cpOff();if(KG&&KG.uns){KG.uns();KG=null}const g=GD(),can=g>=FEE,m=S.km||'bot',nb=S.kb||2;
+function cardsHome(){clr();gFeeSet('cardsHome');cpOff&&cpOff();if(KG&&KG.uns){KG.uns();KG=null}const g=GD(),can=g>=FEE,m=S.km||'bot',nb=S.kb||2;
 const b=(v,l)=>`<button class="${m==v?'on':''}" onclick="S.km='${v}';save();cardsHome()">${l}</button>`;
 const back=m=='net'&&FB&&UID&&S.klast&&Date.now()-S.klast.ts<3*3600e3?`<button class="big kback2" onclick="kRejoin('${S.klast.code}')">🔁 العودة إلى الطاولة ${S.klast.code}</button>`:'';
 let body=m=='bot'?`<h3>عدد اللاعبين الآليين</h3><div class=seg>${[1,2,3].map(n=>`<button class="${nb==n?'on':''}" onclick="S.kb=${n};save();cardsHome()">🤖 ${n}</button>`).join('')}</div><p class=sm>إن فزت تستردّ رسومك وتكسب مكافأة 🪙 ${BONUS.toLocaleString('en')}</p><button class=big ${can?'':'disabled'} onclick=kBotStart()>🃏 العب (🪙 ${FEE})</button>`
@@ -1242,8 +1253,8 @@ async function kRejoin(code){try{const d=await roomRef(code).get(),r=d.exists?d.
 const KSYM={S:'⊘',R:'⇄',D:'+2','4':'+4'};
 function kCard(c,cls='',attr=''){const tg=/data-c/.test(attr)&&KG&&KG.nxn&&/[DS4]$/.test(c)?`<b class=kto>➜ ${KG.nxn}</b>`:'';return kCard0(c,cls,attr).replace(/<\/div>$/,tg+'</div>')}
 function kCard0(c,cls='',attr=''){const w=kWild(c),v=kVal(c),sym=w?(c=='W4'?'+4':'🌈'):(KSYM[v]||v);return `<div class="kc ${w?'kw':''} ${cls}" style="--k:${w?'#222':KC[c[0]]}" ${attr}><span class=kcs>${sym}</span><i>${sym}</i></div>`}
-function kPay(key,lbl){S.kpaid=S.kpaid||{};if(S.kpaid[key])return true;if(GD()<FEE)return false;S.gd=GD()-FEE;gLog(-FEE,lbl||'🃏 آخر ورقة — رسوم');S.kpaid[key]=1;const k=Object.keys(S.kpaid);if(k.length>30)delete S.kpaid[k[0]];save();toast(`🎟️ دفعت 🪙 ${FEE} للمشاركة`);return true}
-function kReward(key,game){kPrize(key+'_r',FEE,game+' — استرداد الرسوم');kPrize(key+'_b',BONUS,game+' — مكافأة الفوز')}
+function kPay(key,lbl){S.kpaid=S.kpaid||{};if(key in S.kpaid)return true;if(GD()<FEE)return false;if(FEE>0){S.gd=GD()-FEE;gLog(-FEE,lbl||'🃏 آخر ورقة — رسوم');toast(`🎟️ دفعت 🪙 ${FEE} للمشاركة`)}S.kpaid[key]=FEE;const k=Object.keys(S.kpaid);if(k.length>30)delete S.kpaid[k[0]];save();return true}
+function kReward(key,game){const pd=(S.kpaid||{})[key],rf=typeof pd=='number'&&pd!==1?pd:FEE;if(rf>0)kPrize(key+'_r',rf,game+' — استرداد الرسوم');if(BONUS>0)kPrize(key+'_b',BONUS,game+' — مكافأة الفوز')}
 const kRwTxt=()=>`↩️ استرداد الرسوم 🪙 ${FEE.toLocaleString('en')} + 🎁 مكافأة 🪙 ${BONUS.toLocaleString('en')}`,kFeeNote=()=>`<p class=sm style="margin:4px 0 0">🏆 الفائز يستردّ رسومه ويكسب مكافأة 🪙 ${BONUS.toLocaleString('en')} — لا أحد يأخذ ذهب غيره</p>`;
 function kPrize(key,amt,lbl){S.kwon=S.kwon||{};if(S.kwon[key])return;S.kwon[key]=1;S.gd=GD()+amt;gLog(amt,lbl||'🏆 آخر ورقة — فوز');save()}
 // ضد الكمبيوتر
@@ -1500,7 +1511,7 @@ if(pw||!wins.length){const non=L.filter(c=>tSuit(c)!=tp);return {t:'play',c:(non
 // الواجهة
 function tCard(c,cls='',attr=''){const s=tSuit(c),r=TR(tRank(c));return `<div class="tcard ${cls}" style="--t:${TSC[s]}" ${attr}><i>${r}<br>${TS[s]}</i><b>${TS[s]}</b><em>${r}</em></div>`}
 function tSort(h,tp){const o=['S','H','C','D'];if(tp){o.splice(o.indexOf(tp),1);o.unshift(tp)}return h.slice().sort((a,b)=>o.indexOf(tSuit(a))-o.indexOf(tSuit(b))||tRank(b)-tRank(a))}
-function tarneeb(){clr();if(TG&&TG.uns)TG.uns();TG=null;const g=GD(),can=g>=FEE,m=S.tm||'bot',tg=S.tgt||21,b=(v,l)=>`<button class="${m==v?'on':''}" onclick="S.tm='${v}';save();tarneeb()">${l}</button>`,lastOk=S.tlast&&Date.now()-S.tlast.ts<3*3600e3;
+function tarneeb(){clr();gFeeSet('tarneeb');if(TG&&TG.uns)TG.uns();TG=null;const g=GD(),can=g>=FEE,m=S.tm||'bot',tg=S.tgt||21,b=(v,l)=>`<button class="${m==v?'on':''}" onclick="S.tm='${v}';save();tarneeb()">${l}</button>`,lastOk=S.tlast&&Date.now()-S.tlast.ts<3*3600e3;
 const back=m=='net'&&FB&&UID&&lastOk?`<button class="big kback2" onclick="tRejoin('${S.tlast.code}')">🔁 العودة إلى الطاولة ${S.tlast.code}</button>`:'';
 const tgt=`<h3>تنتهي اللعبة عند</h3><div class=seg>${[11,21,31].map(n=>`<button class="${tg==n?'on':''}" onclick="S.tgt=${n};save();tarneeb()">${n} نقطة</button>`).join('')}</div>`;
 const body=m=='bot'?`${tgt}<p class=sm>أنت وشريكك 🤖 ضد فريق الكمبيوتر. إن فاز فريقك تستردّ رسومك وتكسب مكافأة 🪙 ${BONUS.toLocaleString('en')}</p><button class=big ${can?'':'disabled'} onclick=tBotStart()>♠️ العب (🪙 ${FEE})</button>`
@@ -1922,6 +1933,9 @@ shell('لوحة الإدارة 🛡️',`<div id=adm></div><div class=admst><spa
 <div class=card><h3 style="margin-top:0">⚙️ إعدادات البرنامج</h3>${tg('requireLogin','🔐 إلزام تسجيل الدخول',!!CFG.requireLogin,'لا يفتح البرنامج إلا بحساب')}${tg('net','📱 اللعب الجماعي',CFG.net!==false,'الغرف والطاولات بين الأجهزة')}
 <label class=cplb for=admmsg>📢 رسالة تظهر للجميع في الصفحة الرئيسية</label><textarea id=admmsg class=nm rows=2 maxlength=200 placeholder="اتركها فارغة لإخفائها">${esc(CFG.msg||'')}</textarea><button class=buy onclick="admCfg('msg',$('#admmsg').value.trim())">💾 حفظ الرسالة</button>
 <label class=cplb for=admbl>⛔ إيقاف إيميل (حتى قبل أن يسجّل)</label><div class=admrow><input id=admbl class=nm dir=ltr type=email placeholder="name@example.com"><button class=buy onclick=admBlockEmail()>إيقاف</button></div>${(CFG.blocked||[]).map(e=>`<div class=admchip><span dir=ltr>${esc(e)}</span><button onclick="admUnblockEmail('${esc(e)}')">↩️ إلغاء</button></div>`).join('')}</div>
+<div class=card><h3 style="margin-top:0">🎮 الألعاب وأسعار الدخول</h3><p class=sm style="margin-top:0">اكتب كم ذهبة يدفع اللاعب ليدخل كل لعبة (0 = مجانية).${''} في «آخر ورقة» و«الطرنيب» يستردّ الفائز رسومه ويأخذ المكافأة.</p>
+${GSEC.map(([ic,t,col,L])=>`<h4 class=admgh style="--c:${col}">${ic} ${t}</h4>`+L.map(([f,e,n])=>`<div class=admg><span>${e} ${n}</span><label>دخول <input class=admfee data-g=${f} type=number inputmode=numeric min=0 step=50 dir=ltr value="${gFee(f)}"></label>${GINT.includes(f)?`<label>🎁 مكافأة <input class=admbon data-g=${f} type=number inputmode=numeric min=0 step=50 dir=ltr value="${gBonus(f)}"></label>`:''}</div>`).join('')).join('')}
+<div class=admrow style="margin-top:8px"><button class=big onclick=admFees()>💾 حفظ الأسعار</button><button class=buy onclick="document.querySelectorAll('.admfee').forEach(i=>i.value=0)">كلها مجانية</button></div></div>
 <div class="card admlist"><h3 style="margin-top:0">👥 المستخدمون</h3><input id=admq class=nm placeholder="🔎 ابحث بالاسم أو الإيميل" value="${esc(ADM.q)}" oninput="ADM.q=this.value;clearTimeout(ADM.t);ADM.t=setTimeout(()=>{admin();const i=$('#admq');if(i){i.focus();i.setSelectionRange(99,99)}},400)">
 <div class=seg>${fb('all','الكل')+fb('act','النشِطون')+fb('blk','الموقوفون')+fb('adm','المدراء')}</div>${ADM.list===0?'<p class=sm>⏳ جارٍ التحميل…</p>':rows||'<p class=sm>لا يوجد مستخدمون</p>'}<button class=buy style="margin-top:8px" onclick="ADM.list=null;admin()">🔄 تحديث القائمة</button>
 <p class=sm>يظهر هنا كل من دخل بحساب. من يلعب دون حساب لا يظهر — فعّل «إلزام تسجيل الدخول» لترى الجميع.</p></div>${ADM.sel?admUser():''}`)}
@@ -1939,6 +1953,8 @@ try{const d=Object.assign({status:'active',role:'user',net:true,note:''},u.acl,c
 async function admGift(uid){const u=(ADM.list||[]).find(x=>x.uid==uid),a=Math.round(+($('#admamt').value||0)),n=($('#admgn').value||'').trim();if(!u)return;if(!a||Math.abs(a)>1e6)return toast('اكتب كمية صحيحة');
 if(!confirm(`${a>0?'إرسال':'خصم'} 🪙 ${Math.abs(a).toLocaleString('en')} ${a>0?'إلى':'من'} ${u.name||u.email}؟`))return;
 try{await FB.d.collection('grants').add({to:uid,amt:a,note:n,by:(UEM||'').toLowerCase(),ts:Date.now(),claimed:false});u.gd=Math.max(0,u.gd+a);toast(a>0?'🎁 أُرسل الذهب':'✅ تم الخصم');admin()}catch(e){netErr(e)}}
+async function admFees(){const fees={},bonus={};document.querySelectorAll('.admfee').forEach(i=>fees[i.dataset.g]=Math.max(0,Math.round(+i.value||0)));document.querySelectorAll('.admbon').forEach(i=>bonus[i.dataset.g]=Math.max(0,Math.round(+i.value||0)));
+try{await FB.d.collection('config').doc('app').set({fees,bonus,ts:Date.now(),by:(UEM||'').toLowerCase()},{merge:true});toast('✅ حُفظت الأسعار — تظهر للجميع فورًا')}catch(e){netErr(e)}}
 async function admCfg(k,v){try{await FB.d.collection('config').doc('app').set({[k]:v,ts:Date.now(),by:(UEM||'').toLowerCase()},{merge:true});toast('✅ تم الحفظ')}catch(e){netErr(e)}if($('#adm'))admin()}
 function admBlockEmail(){const e=($('#admbl').value||'').trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(e))return toast('اكتب إيميلًا صحيحًا');if(OWN&&e==OWN.email)return toast('لا يمكن إيقاف المالك');admCfg('blocked',firebase.firestore.FieldValue.arrayUnion(e))}
 function admUnblockEmail(e){admCfg('blocked',firebase.firestore.FieldValue.arrayRemove(e))}
