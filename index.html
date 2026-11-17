@@ -532,20 +532,22 @@ svg[class^=mv]{transform-origin:50% 85%}
 .xoc{aspect-ratio:1;border:0;border-radius:16px;background:#fff;font:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -4px 0 #0001}.xoc:disabled{cursor:default}
 .xoc i{font-style:normal;font-size:clamp(44px,15vw,66px);font-weight:900;line-height:1;animation:xpop .3s cubic-bezier(.3,1.6,.5,1)}@keyframes xpop{from{transform:scale(0)}}
 .xoc.xw{background:#fff6d0;box-shadow:0 0 0 4px #ffc531}.xoc.xsel{background:#eef3ff;box-shadow:0 0 0 4px #8a63ff}#xop{text-align:center;padding:8px 10px;margin-top:0}#xop .sm{font-size:13px}#xop .q{font-size:30px!important;margin:2px 0 6px}#xop .opts{grid-template-columns:repeat(4,1fr);gap:6px;margin:0}#xop .opt{font-size:22px;padding:8px 0;min-height:0}#xop h2{margin:4px 0}#xop .kturn{margin:4px 0}
-.idb{background:radial-gradient(circle at 30% 25%,#fbe7bf,#e9c88a);border-radius:22px;padding:6px;width:min(100%,360px,calc(100svh - 385px));min-width:230px;margin:0 auto 8px;box-sizing:border-box;box-shadow:inset 0 0 0 3px #c9a063,0 4px 0 #0001}
+.idb{background:radial-gradient(circle at 30% 25%,#fbe7bf,#e9c88a);border-radius:22px;padding:6px;width:min(100%,360px,calc(100svh - 440px));min-width:230px;margin:0 auto 8px;box-sizing:border-box;box-shadow:inset 0 0 0 3px #c9a063,0 4px 0 #0001}
 .kintro .idsv{width:150px;display:block;margin:0 auto 6px;background:#f4dcab;border-radius:16px}
 .idsv{width:100%;display:block}.idl{stroke:#8a5a2b;stroke-width:4;stroke-linecap:round}.idbig .idl{stroke-width:3}.idp{fill:#8a5a2b}.idh{fill:transparent;cursor:pointer}
 .ids{stroke:#0003;stroke-width:2}.idsx{fill:#e8453c;background:#e8453c}.idso{fill:#2e6bff;background:#2e6bff}.idhl{fill:#fff6;pointer-events:none}
 .idsel{stroke:#ffc531;stroke-width:6}.idwn{stroke:#fff3a0;stroke-width:6}.idrm{stroke:#fff;stroke-width:4;stroke-dasharray:5 4}.idnew{stroke:#fff;stroke-width:3}
 .idtg{fill:#18a959;stroke:#fff;stroke-width:3;pointer-events:none}.idgh{fill:none;stroke:#8a5a2b88;stroke-width:2;stroke-dasharray:4 4;pointer-events:none}
 .idx{fill:#fff;text-anchor:middle;font-weight:900;pointer-events:none}
-.iddot{display:inline-block;width:14px;height:14px;border-radius:50%;flex:none}.idsc span{flex-wrap:wrap;row-gap:0}.idsc span{flex-direction:row;padding:5px 6px;white-space:normal;align-items:center}.idsc span:nth-child(2){align-self:center}.idct{flex-basis:100%;display:flex;flex-wrap:wrap;justify-content:center;gap:3px;margin-top:3px}.idct em{font-style:normal;font-size:12px;background:#f2f5fb;border-radius:8px;padding:1px 6px;font-weight:700;color:#445}.idct em b{font-size:15px;color:#1b2a5c}.idct .idlost{background:#fff0ec}.idtray{flex-basis:100%;display:flex;justify-content:center;gap:2px;margin-top:3px}.idtray i{width:11px;height:11px;border-radius:50%;box-shadow:inset -2px -2px 0 #0002}
+.iddot{display:inline-block;width:14px;height:14px;border-radius:50%;flex:none}.idsc span{flex-wrap:wrap;row-gap:0}.idtr{display:flex;align-items:center;flex-wrap:wrap;gap:4px 6px;background:#fff;border-radius:14px;padding:5px 8px;margin:0 auto 6px;max-width:360px;box-shadow:0 2px 0 #0001;font-size:13px}.idtr.on{box-shadow:0 0 0 3px #ff8a1f}
+.idtn{display:flex;align-items:center;gap:4px;white-space:nowrap}.idtray{display:flex;flex-wrap:wrap;gap:3px;flex:1;min-width:60px}.idtray i{width:15px;height:15px;border-radius:50%;box-shadow:inset -2px -2px 0 #0003}.idtray i.idgone{opacity:.28}
+.idct{display:flex;gap:3px;flex-basis:100%}.idct em{font-style:normal;font-size:12px;background:#f2f5fb;border-radius:8px;padding:1px 7px;font-weight:700;color:#445}.idct em b{font-size:15px;color:#1b2a5c}.idct .idlost{background:#fff0ec}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.16.1';
+const VER='2.16.2';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1651,7 +1653,7 @@ else{const cls=(c=='X'?'idsx':'idso')+(o.sel===i?' idsel':'')+(w.includes(i)||(L
 s+=`<circle cx=${x} cy=${y} r=${R0} class="ids ${cls}" /><circle cx=${x-R0*.3} cy=${y-R0*.32} r=${R0*.28} class=idhl />`;if(o.rmv&&o.rmv.includes(i))s+=`<text x=${x} y=${y+R0*.38} class=idx style="font-size:${R0*1.1}px">✕</text>`}
 if(!o.demo)s+=`<circle cx=${x} cy=${y} r=${V.sp*.48} class=idh onclick=idTap(${i}) />`}
 return s+'</svg>'}
-function idHand(st,p){const V=IDV[st.v],h=st.hand[p],on=idCnt(st.b,p),lost=V.n-h-on,c=p=='X'?'idsx':'idso';return `<div class=idct><em>✋ بيده <b>${h}</b></em><em>🪨 على اللوح <b>${on}</b></em>${st.v=='b'?`<em class=idlost>💥 أُخذ منه <b>${lost}</b></em>`:''}</div>${h?`<div class=idtray>${`<i class="${c}"></i>`.repeat(h)}</div>`:''}`}
+function idHand(st,p,nm,me){const V=IDV[st.v],h=st.hand[p],on=idCnt(st.b,p),lost=V.n-h-on,c=p=='X'?'idsx':'idso';return `<div class="idtr${st.turn==p&&!st.win?' on':''}"><b class=idtn><i class="iddot ${c}"></i> ${me?'حصاك':'حصى '+nm}</b><span class=idtray>${`<i class="${c}"></i>`.repeat(h)}${`<i class="${c} idgone"></i>`.repeat(on)}</span><span class=idct><em>✋ بيده <b>${h}</b></em><em>🪨 على اللوح <b>${on}</b></em>${st.v=='b'?`<em class=idlost>💥 أُخذ <b>${lost}</b></em>`:''}</span></div>`}
 function idRender(){const g=IG,st=g&&g.st;if(!st)return;const r=st.win,myT=!r&&(g.mode=='local'||st.turn==g.me),nm=k=>esc(kShort(g.names[k]||'…')),p=st.turn,V=IDV[st.v];let pan,o={};
 if(myT){if(st.rm)o.rmv=idRemovable(V,st.b,IOP(p));else if(st.hand[p]==0&&g.sel>=0)o.tg=V.adj[g.sel].filter(i=>st.b[i]=='.'),o.sel=g.sel;if(g.q){o.tg=[g.q.i];if(g.q.f!=null)o.sel=g.q.f}}
 const who=g.mode=='local'?`${p=='X'?'🔴':'🔵'} ${nm(p)}: `:'';
@@ -1659,8 +1661,8 @@ if(r){pan=`<h2>${r.w=='D'?'🤝 تعادل!':(g.mode!='local'&&r.w==g.me?'🎉 �
 else if(g.q)pan=`<p class=sm style="margin:0">🧮 أجب لتتحرك — الخطأ يُضيّع دورك</p>${qHTML(g.q.a,g.q.b)}<div class=opts>${opts(g.q.a,g.q.b).map(v=>`<button class=opt onclick=idAns(this,${v})>${v}</button>`).join('')}</div>`;
 else if(!myT)pan=`<p class=kturn>⏳ دور ${nm(p)}${st.rm?' — يختار حصاة ليأخذها':''}</p>`;
 else pan=`<p class="kturn me">${who}${st.rm?'🎯 إدريس! اختر حصاة من حصى خصمك لتأخذها':st.hand[p]>0?`🎯 ضع حصاة على نقطة فارغة (معك ${st.hand[p]})`:g.sel>=0?'👆 اختر النقطة المجاورة المضيئة':'👆 اختر حصاة لتحرّكها'}</p>`;
-const box=k=>`<span class="${p==k&&!r?'on':''}"><i class="iddot ${k=='X'?'idsx':'idso'}"></i> ${nm(k)}<b>${st.sc[k]}</b>${idHand(st,k)}</span>`;
-shell('إدريس 🪨',`<div id=ix></div><div class="xosc idsc">${box('X')}<span>🤝<b>${st.sc.D}</b></span>${box('O')}</div><div class="idb ${st.v=='b'?'idbig':''}">${idSvg(st,o)}</div><div id=xop class=card>${pan}</div>`);
+const box=k=>`<span class="${p==k&&!r?'on':''}"><i class="iddot ${k=='X'?'idsx':'idso'}"></i> ${nm(k)}<b>${st.sc[k]}</b></span>`,mine=g.mode=='local'?'X':g.me,oth=IOP(mine),loc=g.mode=='local';
+shell('إدريس 🪨',`<div id=ix></div><div class="xosc idsc">${box('X')}<span>🤝<b>${st.sc.D}</b></span>${box('O')}</div>${idHand(st,oth,nm(oth),0)}<div class="idb ${st.v=='b'?'idbig':''}">${idSvg(st,o)}</div>${idHand(st,mine,nm(mine),!loc)}<div id=xop class=card>${pan}</div>`);
 if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv)}else kSfx('bad')}
 const sig=st.b+st.turn+st.rm;if(g.mode=='net'&&myT&&g.pt!==sig){kSfx('turn');vib(60)}g.pt=sig;
 if(g.mode=='bot'&&!r&&p=='O'){clearTimeout(g.bt);g.bt=setTimeout(()=>{if(IG!==g||g.st!==st)return;const m=idBest(st,g.lv);if(m)idDo(m)},st.rm?900:700)}}
