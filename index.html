@@ -548,13 +548,13 @@ svg[class^=mv]{transform-origin:50% 85%}
 .admu{display:flex;gap:10px;align-items:center;width:100%;border:0;background:#fff;border-bottom:1px solid #eef1f6;padding:9px 2px;font:inherit;text-align:right;cursor:pointer}.admav{width:40px;height:40px;flex:none;border-radius:50%;background:linear-gradient(135deg,#8a63ff,#2e8bff);color:#fff;font-weight:900;font-size:18px;display:flex;align-items:center;justify-content:center}
 .admi{display:flex;flex-direction:column;min-width:0}.admi b{font-size:15px}.admi small{font-size:12px;color:#5b6b8c;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.admi em{font-style:normal;font-size:11px;border-radius:8px;padding:1px 6px;margin-inline-start:4px}.adbad{background:#efe9ff;color:#6a45d8}.adbbl{background:#ffe3e0;color:#c62f26}.adbnt{background:#e6f0ff}
 .admsh{position:fixed;inset:0;background:#0006;z-index:60;display:flex;align-items:flex-end;justify-content:center}.admsh>.card{width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;margin:0}
-.admmsg{background:linear-gradient(135deg,#fff4d6,#ffe6c7);border-radius:14px;padding:10px 12px;margin-bottom:10px;font-weight:700;color:#7a4b00;box-shadow:0 3px 0 #0001}
+.admgold{background:#fff8e6;border-radius:16px;padding:10px;margin:10px 0}.admmsg{background:linear-gradient(135deg,#fff4d6,#ffe6c7);border-radius:14px;padding:10px 12px;margin-bottom:10px;font-weight:700;color:#7a4b00;box-shadow:0 3px 0 #0001}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.17.0';
+const VER='2.17.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1896,7 +1896,12 @@ const isOwner=()=>!!UID&&!!OWN&&OWN.uid==UID;
 const isAdmin=()=>isOwner()||!!(ACL&&ACL.role=='admin'&&ACL.status!='blocked');
 const isBlocked=()=>!!UID&&!isAdmin()&&((ACL&&ACL.status=='blocked')||(CFG.blocked||[]).includes((UEM||'').toLowerCase()));
 const canNet=()=>!isBlocked()&&(isAdmin()||(CFG.net!==false&&!(ACL&&ACL.net===false)));
-function admWatch(){if(!FB)return;const C=FB.d.collection('config');
+let GRU=null;
+function grWatch(){if(GRU){GRU();GRU=null}if(!UID)return;GRU=FB.d.collection('grants').where('to','==',UID).where('claimed','==',false).onSnapshot(q=>q.docs.forEach(d=>grClaim(d.ref)),()=>{})}
+async function grClaim(ref){if(!UID)return;try{const g=await FB.d.runTransaction(async tx=>{const d=await tx.get(ref);if(!d.exists)return null;const x=d.data();if(x.claimed||x.to!=UID)return null;tx.update(ref,{claimed:true,cat:Date.now()});return x});
+if(!g)return;const a=Math.round(+g.amt||0);if(!a)return;S.gd=Math.max(0,GD()+a);gLog(a,a>0?'🎁 هدية من الإدارة':'🛡️ خصم من الإدارة');save();
+if(a>0){kSfx('win');clap(12);cpRain()}kPop(`${a>0?'🎁':'🛡️'} <b>${a>0?'هدية لك!':'تعديل الرصيد'}</b> <small>${a>0?'+':''}🪙 ${a.toLocaleString('en')}${g.note?' — '+esc(g.note):''}</small>`,'turn',4200);if($('.chips')||$('.hhello'))home()}catch(e){console.warn(e)}}
+function admWatch(){if(!FB)return;grWatch();const C=FB.d.collection('config');
 if(!CFGU)CFGU=C.doc('app').onSnapshot(d=>{CFG=d.exists?d.data():{};admGate()},()=>{});
 if(!OWNU)OWNU=C.doc('owner').onSnapshot(d=>{OWN=d.exists?d.data():false;admGate()},()=>{OWN=null});
 if(ACLU){ACLU();ACLU=null}ACL=null;if(UID)ACLU=FB.d.collection('acl').doc(UID).onSnapshot(d=>{ACL=d.exists?d.data():null;admGate()},()=>{});admGate()}
@@ -1927,9 +1932,13 @@ return `<div class=admsh onclick="if(event.target==this){ADM.sel=null;admin()}">
 ${uOwn(u)?'<p>👑 هذا حساب مالك البرنامج — لا يمكن إيقافه.</p>':me?'<p class=sm>هذا حسابك.</p>':`${btn(`admSet('${u.uid}',{status:'${b?'active':'blocked'}'})`,b?'✅ إعادة تفعيل الحساب':'⛔ إيقاف الحساب',b?'#18a959':'#e8453c')}
 ${btn(`admSet('${u.uid}',{net:${a.net===false}})`,a.net===false?'📱 السماح باللعب الجماعي':'📵 منع اللعب الجماعي','#2e8bff')}
 ${isOwner()?btn(`admSet('${u.uid}',{role:'${ad?'user':'admin'}'})`,ad?'👤 إزالة صلاحية المدير':'🛡️ اجعله مديرًا','#8a63ff'):''}`}
+<div class=admgold><h3 style="margin:0 0 6px">🪙 إرسال ذهب لهذا الحساب</h3><div class=admrow><input id=admamt class=nm type=number inputmode=numeric dir=ltr placeholder="الكمية" value="1000"></div><div class=seg style="margin:6px 0">${[500,1000,3000,5000].map(v=>`<button onclick="$('#admamt').value=${v}">${v.toLocaleString('en')}</button>`).join('')}</div><input id=admgn class=nm maxlength=60 placeholder="رسالة مع الهدية (اختياري)"><button class=big style="background:#f0a400" onclick="admGift('${u.uid}')">🎁 أرسل الذهب</button><p class=sm style="margin:2px 0 0">يصل للاعب فور فتحه البرنامج. لخصم ذهب اكتب رقمًا سالبًا مثل -500.</p></div>
 <label class=cplb for=admnote>📝 ملاحظة (للمدراء فقط)</label><textarea id=admnote class=nm rows=2 maxlength=200>${esc(a.note||'')}</textarea><button class=buy onclick="admSet('${u.uid}',{note:$('#admnote').value.trim()})">💾 حفظ الملاحظة</button></div></div>`}
 async function admSet(uid,ch){const u=(ADM.list||[]).find(x=>x.uid==uid);if(!u)return;if(ch.status=='blocked'&&!confirm('إيقاف هذا الحساب؟ لن يستطيع اللعب حتى تعيد تفعيله.'))return;
 try{const d=Object.assign({status:'active',role:'user',net:true,note:''},u.acl,ch,{email:u.email,by:(UEM||'').toLowerCase(),ts:Date.now()});await FB.d.collection('acl').doc(uid).set(d);u.acl=d;toast('✅ تم الحفظ');admin()}catch(e){netErr(e)}}
+async function admGift(uid){const u=(ADM.list||[]).find(x=>x.uid==uid),a=Math.round(+($('#admamt').value||0)),n=($('#admgn').value||'').trim();if(!u)return;if(!a||Math.abs(a)>1e6)return toast('اكتب كمية صحيحة');
+if(!confirm(`${a>0?'إرسال':'خصم'} 🪙 ${Math.abs(a).toLocaleString('en')} ${a>0?'إلى':'من'} ${u.name||u.email}؟`))return;
+try{await FB.d.collection('grants').add({to:uid,amt:a,note:n,by:(UEM||'').toLowerCase(),ts:Date.now(),claimed:false});u.gd=Math.max(0,u.gd+a);toast(a>0?'🎁 أُرسل الذهب':'✅ تم الخصم');admin()}catch(e){netErr(e)}}
 async function admCfg(k,v){try{await FB.d.collection('config').doc('app').set({[k]:v,ts:Date.now(),by:(UEM||'').toLowerCase()},{merge:true});toast('✅ تم الحفظ')}catch(e){netErr(e)}if($('#adm'))admin()}
 function admBlockEmail(){const e=($('#admbl').value||'').trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(e))return toast('اكتب إيميلًا صحيحًا');if(OWN&&e==OWN.email)return toast('لا يمكن إيقاف المالك');admCfg('blocked',firebase.firestore.FieldValue.arrayUnion(e))}
 function admUnblockEmail(e){admCfg('blocked',firebase.firestore.FieldValue.arrayRemove(e))}
