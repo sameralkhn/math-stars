@@ -56,6 +56,13 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // الإشعارات: يرسلها المدراء للجميع أو لحساب معيّن
+    match /notes/{id} {
+      allow create: if isAdmin();
+      allow read: if resource.data.to == 'all' || (signed() && (resource.data.to == request.auth.uid || isAdmin()));
+      allow delete: if isAdmin();
+    }
+
     // الغرف والطاولات الجماعية
     match /rooms/{code} {
       allow read: if signed();
