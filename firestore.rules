@@ -1,15 +1,56 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // كل مستخدم يقرأ ويكتب تقدّمه فقط
-    match /users/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+    function signed() { return request.auth != null; }
+    function ownerDoc() { return /databases/$(database)/documents/config/owner; }
+    function appDoc() { return /databases/$(database)/documents/config/app; }
+    function aclDoc(uid) { return /databases/$(database)/documents/acl/$(uid); }
+
+    // المالك: الحساب المثبّت في config/owner (يُثبَّت مرة واحدة من داخل البرنامج)
+    function isOwner() { return signed() && exists(ownerDoc()) && get(ownerDoc()).data.uid == request.auth.uid; }
+    function myAcl() { return get(aclDoc(request.auth.uid)).data; }
+    function hasAcl() { return exists(aclDoc(request.auth.uid)); }
+    function isAdmin() { return isOwner() || (signed() && hasAcl() && myAcl().role == 'admin' && myAcl().status != 'blocked'); }
+    function emailBlocked() {
+      return exists(appDoc()) && request.auth.token.email != null
+        && request.auth.token.email.lower() in get(appDoc()).data.get('blocked', []);
     }
-    // غرف «تجميع الذهب» الجماعية: أي مستخدم مسجّل يقرأ وينضم، ولا يُنشئ الغرفة إلا مضيفها
+    function notBlocked() { return signed() && (isAdmin() || ((!hasAcl() || myAcl().status != 'blocked') && !emailBlocked())); }
+    function netAllowed() {
+      return notBlocked() && (isAdmin() || ((!exists(appDoc()) || get(appDoc()).data.get('net', true) != false)
+        && (!hasAcl() || myAcl().get('net', true) != false)));
+    }
+
+    // إعدادات البرنامج: يقرؤها الجميع ويكتبها المدراء
+    match /config/owner {
+      allow read: if true;
+      allow create: if signed() && request.resource.data.uid == request.auth.uid
+        && request.resource.data.email == request.auth.token.email.lower();
+    }
+    match /config/app {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // صلاحيات كل مستخدم: يقرؤها صاحبها والمدراء، ويكتبها المدراء (ورتبة «مدير» يمنحها المالك فقط)
+    match /acl/{uid} {
+      allow read: if signed() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin() && uid != get(ownerDoc()).data.uid
+        && (isOwner() || (request.resource.data.role != 'admin'
+            && (!exists(aclDoc(uid)) || get(aclDoc(uid)).data.role != 'admin')));
+    }
+
+    // تقدّم كل مستخدم: يكتبه صاحبه ما لم يكن موقوفًا، ويقرؤه صاحبه والمدراء
+    match /users/{uid} {
+      allow read: if signed() && (request.auth.uid == uid || isAdmin());
+      allow write: if signed() && request.auth.uid == uid && notBlocked();
+    }
+
+    // الغرف والطاولات الجماعية
     match /rooms/{code} {
-      allow read: if request.auth != null;
-      allow create: if request.auth != null && request.resource.data.host == request.auth.uid;
-      allow update: if request.auth != null;
+      allow read: if signed();
+      allow create: if netAllowed() && request.resource.data.host == request.auth.uid;
+      allow update: if netAllowed();
     }
   }
 }
