@@ -532,12 +532,20 @@ svg[class^=mv]{transform-origin:50% 85%}
 .xoc{aspect-ratio:1;border:0;border-radius:16px;background:#fff;font:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -4px 0 #0001}.xoc:disabled{cursor:default}
 .xoc i{font-style:normal;font-size:clamp(44px,15vw,66px);font-weight:900;line-height:1;animation:xpop .3s cubic-bezier(.3,1.6,.5,1)}@keyframes xpop{from{transform:scale(0)}}
 .xoc.xw{background:#fff6d0;box-shadow:0 0 0 4px #ffc531}.xoc.xsel{background:#eef3ff;box-shadow:0 0 0 4px #8a63ff}#xop{text-align:center;padding:8px 10px;margin-top:0}#xop .sm{font-size:13px}#xop .q{font-size:30px!important;margin:2px 0 6px}#xop .opts{grid-template-columns:repeat(4,1fr);gap:6px;margin:0}#xop .opt{font-size:22px;padding:8px 0;min-height:0}#xop h2{margin:4px 0}#xop .kturn{margin:4px 0}
+.idb{background:radial-gradient(circle at 30% 25%,#fbe7bf,#e9c88a);border-radius:22px;padding:6px;width:min(100%,360px,calc(100svh - 330px));min-width:230px;margin:0 auto 8px;box-sizing:border-box;box-shadow:inset 0 0 0 3px #c9a063,0 4px 0 #0001}
+.kintro .idsv{width:150px;display:block;margin:0 auto 6px;background:#f4dcab;border-radius:16px}
+.idsv{width:100%;display:block}.idl{stroke:#8a5a2b;stroke-width:4;stroke-linecap:round}.idbig .idl{stroke-width:3}.idp{fill:#8a5a2b}.idh{fill:transparent;cursor:pointer}
+.ids{stroke:#0003;stroke-width:2}.idsx{fill:#e8453c;background:#e8453c}.idso{fill:#2e6bff;background:#2e6bff}.idhl{fill:#fff6;pointer-events:none}
+.idsel{stroke:#ffc531;stroke-width:6}.idwn{stroke:#fff3a0;stroke-width:6}.idrm{stroke:#fff;stroke-width:4;stroke-dasharray:5 4}.idnew{stroke:#fff;stroke-width:3}
+.idtg{fill:#18a959;stroke:#fff;stroke-width:3;pointer-events:none}.idgh{fill:none;stroke:#8a5a2b88;stroke-width:2;stroke-dasharray:4 4;pointer-events:none}
+.idx{fill:#fff;text-anchor:middle;font-weight:900;pointer-events:none}
+.iddot{display:inline-block;width:14px;height:14px;border-radius:50%;flex:none}.idsc span{flex-wrap:wrap;row-gap:0}.idhd{flex-basis:100%;text-align:center;font-size:9px;letter-spacing:-2px;line-height:1.1}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.15.2';
+const VER='2.16.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -601,7 +609,7 @@ const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+
 const key=(a,b)=>a+'x'+b;
 // الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
 // سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
-let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم',xo:'❌ إكس أو'};
+let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم',xo:'❌ إكس أو',idris:'🪨 إدريس'};
 function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
 if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150}
 const gSince=ms=>(S.gl||[]).filter(x=>x.ts>=ms&&x.d>0).reduce((a,x)=>a+x.d,0);
@@ -1122,7 +1130,7 @@ function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){cons
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
 // صفحة الألعاب: أقسام منظّمة، وبطاقات بنفس الحجم والتصميم، ولكل قسم لون واحد
-const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية • 🪙 1500'],['tarneeb','♠️','الطرنيب','4 لاعبين • 🪙 1500'],['xo','❌','إكس أو','مع صديق أو الكمبيوتر']]],
+const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية • 🪙 1500'],['tarneeb','♠️','الطرنيب','4 لاعبين • 🪙 1500'],['xo','❌','إكس أو','مع صديق أو الكمبيوتر'],['idris','🪨','إدريس','لعبة الحصى الشعبية']]],
 ['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
 ['⚡','سرعة','#2e8bff',[['balloons','🎈','فرقعة البالونات','اضرب البالونة الصحيحة'],['meteor','☄️','حارس الأرض','أسقط النيازك'],['tfg','✅','صح أم خطأ','60 ثانية'],['frog','🐸','قفزة الضفدع','إلى الجزيرة']]],
 ['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول']]]];
@@ -1131,7 +1139,7 @@ shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><di
 ${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="${f}()"><i>${e}</i><b>${n}</b><small>${d}</small></button>`).join('')}</div>`).join('')}`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,idris:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -1585,6 +1593,98 @@ function xoRoom(code){if(XO&&XO.uns)XO.uns();const g=XO={mode:'net',code,math:tr
 g.uns=roomRef(code).onSnapshot(d=>{if(XO!==g)return;if(!$('#xx')){g.uns&&g.uns();XO=null;return}if(!d.exists)return;const r=d.data();if(r.state=='wait')return;g.me=r.X==UID?'X':'O';g.math=r.math!==false;
 const nb=g.st&&g.st.b!=r.b;if(nb&&r.b!=XE)kSfx('card');if(r.b==XE)g.done=0;g.st={b:r.b,turn:r.turn,start:r.start,sc:r.sc,names:{X:r.names[r.X],O:r.names[r.O]}};if(!g.q)xoRender()},netErr)}
 function xoTx(fn){const ref=roomRef(XO.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();tx.set(ref,s)}).catch(e=>{if(e!=='no')netErr(e)})}
+// ===== إدريس (لعبة الحصى الشعبية) =====
+// الصغير: 9 نقاط (مربع بمحاوره)، 3 حصيات لكل لاعب — من يصفّ ثلاثًا يفوز.
+// الكبير: 3 مربعات (24 نقطة)، 9 حصيات — كل «إدريس» يأخذ حصاة من الخصم، ومن يبقى معه حصاتان أو يُحاصَر يخسر.
+const IDV=(()=>{const mk=(pts,mills,n,lim,sp,pad)=>{const adj=pts.map(()=>[]);for(const m of mills)for(let k=0;k<2;k++){const a=m[k],b=m[k+1];if(!adj[a].includes(b))adj[a].push(b);if(!adj[b].includes(a))adj[b].push(a)}return {pts,mills,adj,n,lim,sp,pad}};
+const sp=[];for(let r=0;r<3;r++)for(let c=0;c<3;c++)sp.push([c,r]);
+const bp=[[0,0],[3,0],[6,0],[1,1],[3,1],[5,1],[2,2],[3,2],[4,2],[0,3],[1,3],[2,3],[4,3],[5,3],[6,3],[2,4],[3,4],[4,4],[1,5],[3,5],[5,5],[0,6],[3,6],[6,6]];
+return {s:mk(sp,[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8]],3,40,110,40),
+b:mk(bp,[[0,1,2],[3,4,5],[6,7,8],[9,10,11],[12,13,14],[15,16,17],[18,19,20],[21,22,23],[0,9,21],[3,10,18],[6,11,15],[1,4,7],[16,19,22],[8,12,17],[5,13,20],[2,14,23]],9,80,43,21)}})();
+let IG=null;const IOP=p=>p=='X'?'O':'X';
+function idNew(v,start,sc){const V=IDV[v];return {v,b:'.'.repeat(V.pts.length),turn:start,start,hand:{X:V.n,O:V.n},rm:0,nm:0,sc:sc||{X:0,O:0,D:0},last:null,win:null}}
+function idMill(V,b,i,p){return V.mills.find(m=>m.includes(i)&&m.every(k=>b[k]==p))}
+function idRemovable(V,b,o){const all=[];for(let i=0;i<b.length;i++)if(b[i]==o)all.push(i);const free=all.filter(i=>!idMill(V,b,i,o));return free.length?free:all}
+function idMoves(st){if(st.win)return [];const V=IDV[st.v],p=st.turn,b=st.b,mv=[];
+if(st.rm){for(const i of idRemovable(V,b,IOP(p)))mv.push({t:'r',i});return mv}
+if(st.hand[p]>0){for(let i=0;i<b.length;i++)if(b[i]=='.')mv.push({t:'p',i});return mv}
+for(let f=0;f<b.length;f++)if(b[f]==p)for(const i of V.adj[f])if(b[i]=='.')mv.push({t:'m',f,i});return mv}
+const idCnt=(b,p)=>{let n=0;for(const c of b)if(c==p)n++;return n};
+function idApply(s,mv){const V=IDV[s.v],st={...s,hand:{...s.hand},sc:{...s.sc}},p=st.turn,o=IOP(p);let b=[...st.b];
+if(mv.t=='r'){b[mv.i]='.';st.b=b.join('');st.rm=0;st.nm=0;st.last={r:mv.i,p};
+if(idCnt(st.b,o)+st.hand[o]<3){st.win={w:p,l:[]};st.sc[p]++;return st}st.turn=o}
+else if(mv.t=='pass'){st.turn=o;st.last=null}
+else{if(mv.t=='p'){b[mv.i]=p;st.hand[p]--}else{b[mv.f]='.';b[mv.i]=p}st.b=b.join('');st.last=mv.t=='p'?{i:mv.i,p}:{f:mv.f,i:mv.i,p};
+const m=idMill(V,st.b,mv.i,p);
+if(m){if(st.v=='s'){st.win={w:p,l:m};st.sc[p]++;return st}st.rm=1;st.last.m=m;return st}
+if(mv.t=='m')st.nm++;if(st.nm>=V.lim){st.win={w:'D',l:[]};st.sc.D++;return st}st.turn=o}
+if(!idMoves(st).length){if(st.hand[st.turn]>0)st.turn=IOP(st.turn);else{st.win={w:IOP(st.turn),l:[],stuck:1};st.sc[IOP(st.turn)]++}}
+return st}
+function idEval(st,me){if(st.win)return st.win.w==me?1e4:st.win.w=='D'?0:-1e4;const V=IDV[st.v],op=IOP(me),b=st.b;
+let e=(idCnt(b,me)+st.hand[me]-idCnt(b,op)-st.hand[op])*(st.v=='b'?60:0);
+for(const m of V.mills){let a=0,c=0,d=0;for(const k of m){if(b[k]==me)a++;else if(b[k]==op)c++;else d++}if(d==1){if(a==2)e+=8;if(c==2)e-=8}}
+const mob=p=>{let n=0;for(let f=0;f<b.length;f++)if(b[f]==p)for(const i of V.adj[f])if(b[i]=='.')n++;return n};e+=(mob(me)-mob(op))*2;
+if(st.rm)e+=st.turn==me?40:-40;return e}
+function idBest(st,lv){const me=st.turn,mv=sh(idMoves(st));if(!mv.length)return null;
+if(Math.random()<[0,.45,.12,0][lv])return mv[R(mv.length)];
+const D=st.v=='s'?[0,2,4,7][lv]:[0,1,2,4][lv];let nodes=0;
+const mm=(s,d,a,bt)=>{nodes++;if(s.win||d==0||nodes>60000)return idEval(s,me)+(s.win&&s.win.w==me?d:0)-(s.win&&s.win.w==IOP(me)?d:0);const ms=idMoves(s);if(!ms.length)return idEval(s,me);
+if(s.turn==me){let v=-1e9;for(const m of ms){v=Math.max(v,mm(idApply(s,m),d-1,a,bt));a=Math.max(a,v);if(a>=bt)break}return v}
+let v=1e9;for(const m of ms){v=Math.min(v,mm(idApply(s,m),d-1,a,bt));bt=Math.min(bt,v);if(a>=bt)break}return v};
+let bm=mv[0],bv=-1e9;for(const m of mv){const v=mm(idApply(st,m),D-1,bv,1e9);if(v>bv){bv=v;bm=m}}return bm}
+function idris(){clr();if(IG&&IG.uns)IG.uns();IG=null;const m=S.im||'bot',lv=S.il||2,v=S.iv||'s',mt=S.iq!==0,b=(js,l,on)=>`<button class="${on?'on':''}" onclick="${js};save();idris()">${l}</button>`;
+let body='';if(m=='bot')body=`<h3>مستوى الكمبيوتر</h3><div class=seg>${b('S.il=1','🙂 سهل',lv==1)+b('S.il=2','😬 متوسط',lv==2)+b('S.il=3','😈 صعب',lv==3)}</div><button class=big onclick=idStart()>🪨 ابدأ</button>`;
+else if(m=='local')body=`<label class=cplb>🔴 اللاعب الأول</label><input id=in1 class=nm maxlength=20 value="${esc(NM())}"><label class=cplb>🔵 اللاعب الثاني</label><input id=in2 class=nm maxlength=20 placeholder="اكتب الاسم"><button class=big onclick=idStart()>🪨 ابدأ</button>`;
+else body=!FB?`<p>☁️ تحتاج فتح اللعبة من رابطها على الإنترنت.</p>`:!UID?`<p>👤 سجّل الدخول أولًا.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`:`<label class=cplb for=inn>✏️ اسمك</label><input id=inn class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك"><button class=big onclick=idCreate()>🏠 أنشئ غرفة</button><h3>أو انضم</h3><input id=icode class=nm inputmode=numeric maxlength=3 placeholder="رقم الغرفة (مثل 50)" dir=ltr><button class=big style="background:#18a999" onclick=idJoin()>🔑 انضمام</button>`;
+const rules=v=='s'?'لكل لاعب 3 حصيات. ضعوها بالتناوب على النقاط، ثم حرّكوا حصاة واحدة في كل دور إلى نقطة فارغة مجاورة على الخط. أول من يصفّ حصياته الثلاث على خط واحد يفوز!':'لكل لاعب 9 حصيات على ثلاثة مربعات. كلما صففت ثلاثًا على خط واحد فهذا «إدريس»، فتأخذ حصاة من الخصم. بعد وضع الحصى حرّك حصاة إلى نقطة مجاورة. من بقيت معه حصاتان أو حُوصر فلا يستطيع الحركة يخسر.';
+shell('إدريس 🪨',`<div id=ix></div><div class="card kintro">${idSvg(idNew(v,'X'),{demo:1})}<p class=sm>${rules}</p>
+<div class=seg>${b("S.iv='s'",'🟫 الصغير • 3 حصيات',v=='s')+b("S.iv='b'",'🟧 الكبير • 9 حصيات',v=='b')}</div>
+<div class=seg>${b("S.im='bot'",'🤖 الكمبيوتر',m=='bot')+b("S.im='local'",'👥 جهاز واحد',m=='local')+b("S.im='net'",'📱 جهازان',m=='net')}</div><div class=seg>${b('S.iq='+(mt?0:1),'🧮 أجب عن مسألة قبل كل حركة '+(mt?'✓':'✗'),mt)}</div>${body}</div>`)}
+function idStart(){const m=S.im||'bot',n2=m=='bot'?'🤖 الكمبيوتر':(($('#in2')||{}).value||'').trim()||'اللاعب الثاني',n1=m=='bot'?NM():(($('#in1')||{}).value||'').trim()||'اللاعب الأول';
+IG={mode:m,me:'X',lv:S.il||2,math:S.iq!==0,sel:-1,names:{X:n1,O:n2},st:idNew(S.iv||'s','X')};idRender()}
+function idSvg(st,o){o=o||{};const V=IDV[st.v],P=i=>[V.pad+V.pts[i][0]*V.sp,V.pad+V.pts[i][1]*V.sp],W=V.pad*2+V.sp*(st.v=='s'?2:6),R0=st.v=='s'?27:15;
+const tg=o.tg||[],w=st.win&&st.win.l||[],L=st.last||{};let s=`<svg class=idsv viewBox="0 0 ${W} ${W}">`;
+for(const m of V.mills){const a=P(m[0]),c=P(m[2]);s+=`<line x1=${a[0]} y1=${a[1]} x2=${c[0]} y2=${c[1]} class=idl />`}
+for(let i=0;i<V.pts.length;i++){const [x,y]=P(i),c=st.b[i];
+if(c=='.'){s+=`<circle cx=${x} cy=${y} r=${st.v=='s'?9:6} class=idp />`;if(tg.includes(i))s+=`<circle cx=${x} cy=${y} r=${R0*.55} class=idtg />`;if(L.r===i||L.f===i)s+=`<circle cx=${x} cy=${y} r=${R0*.7} class=idgh />`}
+else{const cls=(c=='X'?'idsx':'idso')+(o.sel===i?' idsel':'')+(w.includes(i)||(L.m&&L.m.includes(i))?' idwn':'')+(o.rmv&&o.rmv.includes(i)?' idrm':'')+(L.i===i?' idnew':'');
+s+=`<circle cx=${x} cy=${y} r=${R0} class="ids ${cls}" /><circle cx=${x-R0*.3} cy=${y-R0*.32} r=${R0*.28} class=idhl />`;if(o.rmv&&o.rmv.includes(i))s+=`<text x=${x} y=${y+R0*.38} class=idx style="font-size:${R0*1.1}px">✕</text>`}
+if(!o.demo)s+=`<circle cx=${x} cy=${y} r=${V.sp*.48} class=idh onclick=idTap(${i}) />`}
+return s+'</svg>'}
+function idHand(n,p){return n?`<small class=idhd>${(p=='X'?'🔴':'🔵').repeat(Math.min(n,9))}</small>`:''}
+function idRender(){const g=IG,st=g&&g.st;if(!st)return;const r=st.win,myT=!r&&(g.mode=='local'||st.turn==g.me),nm=k=>esc(kShort(g.names[k]||'…')),p=st.turn,V=IDV[st.v];let pan,o={};
+if(myT){if(st.rm)o.rmv=idRemovable(V,st.b,IOP(p));else if(st.hand[p]==0&&g.sel>=0)o.tg=V.adj[g.sel].filter(i=>st.b[i]=='.'),o.sel=g.sel;if(g.q){o.tg=[g.q.i];if(g.q.f!=null)o.sel=g.q.f}}
+const who=g.mode=='local'?`${p=='X'?'🔴':'🔵'} ${nm(p)}: `:'';
+if(r){pan=`<h2>${r.w=='D'?'🤝 تعادل!':(g.mode!='local'&&r.w==g.me?'🎉 فزت!':'🏆 فاز '+nm(r.w)+'!')}</h2>${r.stuck?`<p class=sm style="margin:0">حُوصر ${nm(IOP(r.w))} ولم يستطع الحركة</p>`:''}<button class=big onclick=idNext()>🔁 جولة جديدة</button>`}
+else if(g.q)pan=`<p class=sm style="margin:0">🧮 أجب لتتحرك — الخطأ يُضيّع دورك</p>${qHTML(g.q.a,g.q.b)}<div class=opts>${opts(g.q.a,g.q.b).map(v=>`<button class=opt onclick=idAns(this,${v})>${v}</button>`).join('')}</div>`;
+else if(!myT)pan=`<p class=kturn>⏳ دور ${nm(p)}${st.rm?' — يختار حصاة ليأخذها':''}</p>`;
+else pan=`<p class="kturn me">${who}${st.rm?'🎯 إدريس! اختر حصاة من حصى خصمك لتأخذها':st.hand[p]>0?`🎯 ضع حصاة على نقطة فارغة (معك ${st.hand[p]})`:g.sel>=0?'👆 اختر النقطة المجاورة المضيئة':'👆 اختر حصاة لتحرّكها'}</p>`;
+const box=k=>`<span class="${p==k&&!r?'on':''}"><i class="iddot ${k=='X'?'idsx':'idso'}"></i> ${nm(k)}<b>${st.sc[k]}</b>${idHand(st.hand[k],k)}</span>`;
+shell('إدريس 🪨',`<div id=ix></div><div class="xosc idsc">${box('X')}<span>🤝<b>${st.sc.D}</b></span>${box('O')}</div><div class="idb ${st.v=='b'?'idbig':''}">${idSvg(st,o)}</div><div id=xop class=card>${pan}</div>`);
+if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv)}else kSfx('bad')}
+const sig=st.b+st.turn+st.rm;if(g.mode=='net'&&myT&&g.pt!==sig){kSfx('turn');vib(60)}g.pt=sig;
+if(g.mode=='bot'&&!r&&p=='O'){clearTimeout(g.bt);g.bt=setTimeout(()=>{if(IG!==g||g.st!==st)return;const m=idBest(st,g.lv);if(m)idDo(m)},st.rm?900:700)}}
+function idTap(i){const g=IG,st=g&&g.st;if(!st||st.win||g.q)return;if(g.mode!='local'&&st.turn!=g.me)return;const V=IDV[st.v],p=st.turn,c=st.b[i];
+if(st.rm){if(idRemovable(V,st.b,IOP(p)).includes(i))idDo({t:'r',i});else toast(c==IOP(p)?'هذه الحصاة في «إدريس» محميّة — اختر غيرها':'اختر حصاة من حصى خصمك');return}
+if(st.hand[p]>0){if(c!='.')return;return idAsk({t:'p',i})}
+if(c==p){if(!V.adj[i].some(k=>st.b[k]=='.'))return toast('هذه الحصاة محاصرة — اختر غيرها');g.sel=g.sel==i?-1:i;kSfx('card');return idRender()}
+if(c=='.'&&g.sel>=0){if(!V.adj[g.sel].includes(i))return toast('تتحرك الحصاة إلى نقطة مجاورة على الخط فقط');return idAsk({t:'m',f:g.sel,i})}}
+function idAsk(mv){const g=IG;if(g.math){const f=pick();g.q={...mv,a:f[0],b:f[1]};return idRender()}idDo(mv)}
+function idAns(el,v){const g=IG,q=g.q;if(!q)return;const ok=v==q.a*q.b;rec(q.a,q.b,ok);document.querySelectorAll('#xop .opt').forEach(o=>o.disabled=true);el.classList.add(ok?'ok':'no');
+later(()=>{g.q=null;g.sel=-1;if(ok)idDo({t:q.t,f:q.f,i:q.i});else{toast(`❌ ${q.a} × ${q.b} = ${q.a*q.b} — ضاع دورك`);idDo({t:'pass'})}},ok?250:900)}
+function idDo(mv){const g=IG;g.sel=-1;if(mv.f===undefined)delete mv.f;
+if(g.mode=='net')return idTx(r=>{const s=r.g;if(s.turn!=g.me||s.win)return false;if(mv.t!='pass'&&!idMoves(s).some(m=>m.t==mv.t&&m.i==mv.i&&m.f==mv.f))return false;r.g=idApply(s,mv);return true});
+const st=g.st;if(mv.t!='pass'&&!idMoves(st).some(m=>m.t==mv.t&&m.i==mv.i&&m.f==mv.f))return;g.st=idApply(st,mv);idSfx(st,g.st);idRender()}
+function idSfx(a,b){if(!a||!b||a.b==b.b)return;if(b.rm&&!a.rm){kSfx('one');vib([60,40,60]);kPop('🪨 <b>إدريس!</b>','turn',1300)}else if(a.rm&&!b.rm)kSfx('draw');else kSfx('card')}
+function idNext(){const g=IG;g.done=0;g.sel=-1;if(g.mode=='net')return idTx(r=>{if(!r.g.win)return false;r.g=idNew(r.g.v,IOP(r.g.start),r.g.sc);return true});const st=g.st;g.st=idNew(st.v,IOP(st.start),st.sc);idRender()}
+async function idCreate(){const n=($('#inn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{const code=await tFreeCode();await roomRef(code).set({kind:'idris',host:UID,state:'wait',ts:Date.now(),names:{[UID]:n},X:UID,O:null,math:S.iq!==0,g:idNew(S.iv||'s','X')});idRoom(code)}catch(e){netErr(e)}}
+async function idJoin(){const code=($('#icode').value||'').replace(/\D/g,''),n=($('#inn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الغرفة');S.cpme=n;save();
+try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='idris')return toast('لا توجد غرفة إدريس بهذا الرقم');const r=d.data();if(r.X==UID||r.O==UID)return idRoom(code);if(r.O)return toast('الغرفة ممتلئة');
+await roomRef(code).update({['names.'+UID]:n,O:UID,state:'play',ts:Date.now()});idRoom(code)}catch(e){netErr(e)}}
+function idRoom(code){if(IG&&IG.uns)IG.uns();const g=IG={mode:'net',code,math:true,sel:-1,st:null};shell('إدريس 🪨',`<div id=ix></div><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به صديقك:</p><div class=cpcode dir=ltr>${code}</div><p>⏳ بانتظار اللاعب الثاني…</p></div>`);
+g.uns=roomRef(code).onSnapshot(d=>{if(IG!==g)return;if(!$('#ix')){g.uns&&g.uns();IG=null;return}if(!d.exists)return;const r=d.data();if(r.state=='wait')return;g.me=r.X==UID?'X':'O';g.math=r.math!==false;g.names={X:r.names[r.X],O:r.names[r.O]};
+if(g.st&&g.st.b!=r.g.b)idSfx(g.st,r.g);if(!r.g.win&&g.st&&g.st.win)g.done=0;g.st=r.g;if(!g.q)idRender()},netErr)}
+function idTx(fn){const ref=roomRef(IG.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();tx.set(ref,s)}).catch(e=>{if(e!=='no')netErr(e)})}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
