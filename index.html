@@ -504,12 +504,40 @@ svg[class^=mv]{transform-origin:50% 85%}
 .ht{grid-column:1/-1;border:0;font:inherit;cursor:pointer;background:#fff;border-radius:18px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 0 color-mix(in srgb,var(--c) 45%,#0000),0 6px 14px #1b2a5c12;border-right:6px solid var(--c);text-align:right}
 .ht i{font-style:normal;font-size:30px;width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--c) 14%,#fff);flex:0 0 auto}
 .ht div{flex:1;display:flex;flex-direction:column}.ht b{font-size:18px;color:var(--ink)}.ht small{font-size:12px;color:#7a869a}.ht em{font-style:normal;font-size:22px;color:var(--c);font-weight:900}
+/* الطرنيب */
+.tsb{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;margin-bottom:8px}.tsbx{background:#fff;border-radius:14px;padding:4px 6px;text-align:center;display:flex;flex-direction:column;box-shadow:0 3px 0 #0001}
+.tsbx.us{box-shadow:0 0 0 3px #2e8bff}.tsbx.them{box-shadow:0 0 0 3px #ff8a1f}.tsbx small{font-size:11px;font-weight:800;color:#5b6b8c}.tsbx b{font-size:26px;line-height:1.1}.tsbx span{font-size:11px;color:#7a869a}
+.tsbm{display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:14px}.tsbm small{font-size:11px;color:#e8579a;white-space:nowrap}
+.ttab{position:relative;height:290px;border-radius:22px;background:radial-gradient(circle at 50% 45%,#ffffff26,transparent 55%),linear-gradient(135deg,#ff6b5b,#ff8a1f 45%,#e8579a);box-shadow:inset 0 0 0 4px #ffffff55,0 8px 20px #e8579a44;margin-bottom:8px}
+.tseat{position:absolute;background:#fff;border-radius:12px;padding:3px 8px;text-align:center;display:flex;flex-direction:column;line-height:1.2;box-shadow:0 3px 0 #0002;min-width:62px;z-index:2}
+.tseat b{font-size:13px}.tseat span{font-size:10px;color:#2e8bff;font-weight:800}.tseat small{font-size:11px;color:#5b6b8c;font-weight:700}.tseat.tus{box-shadow:0 3px 0 #0002,0 0 0 2px #2e8bff}
+.tseat.on{background:linear-gradient(135deg,#ffc531,#ff8a1f);color:#fff;box-shadow:0 0 0 3px #fff,0 0 0 6px #ff8a1f}.tseat.on small,.tseat.on span{color:#fff}
+.tp0{bottom:8px;left:50%;transform:translateX(-50%)}.tp2{top:8px;left:50%;transform:translateX(-50%)}.tp1{right:6px;top:50%;transform:translateY(-50%)}.tp3{left:6px;top:50%;transform:translateY(-50%)}
+.tmid{position:absolute;left:50%;top:50%;width:0;height:0}
+.tcard{position:relative;width:54px;height:78px;border-radius:9px;background:#fff;border:2px solid #e3e7ef;box-shadow:0 3px 6px #0003;color:var(--t);display:flex;align-items:center;justify-content:center;font-weight:900;direction:ltr;flex:0 0 auto;cursor:pointer;user-select:none}
+.tcard i{position:absolute;top:2px;left:4px;font-style:normal;font-size:12px;line-height:1;text-align:center}.tcard b{font-size:30px;line-height:1}.tcard em{position:absolute;bottom:2px;right:4px;font-style:normal;font-size:12px;transform:rotate(180deg)}
+.tmid .tcard{position:absolute;margin:-39px 0 0 -27px;cursor:default;animation:tin .25s}@keyframes tin{from{scale:1.5;opacity:0}}
+.tc0{transform:translateY(44px)}.tc2{transform:translateY(-44px)}.tc1{transform:translateX(46px)}.tc3{transform:translateX(-46px)}.tcard.twin{box-shadow:0 0 0 4px #ffc531,0 0 18px #ffc531}
+.ttrump{position:absolute;top:10px;right:10px;width:54px;height:54px;border-radius:50%;background:#fff;border:4px solid #ffc531;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:28px;line-height:1;font-weight:900;z-index:2}.ttrump small{font-size:9px;color:#b07800}
+.thand{display:flex;flex-wrap:wrap;justify-content:center;gap:5px;direction:ltr;padding:12px 0 4px}.thand .tcard{width:calc((100% - 30px)/7);max-width:58px;height:auto;aspect-ratio:54/78}.thand .tcard b{font-size:clamp(20px,6vw,30px)}
+.thand .tcard.tok{transform:translateY(-8px);box-shadow:0 0 0 3px #ff8a1f,0 6px 10px #ff6b5b55}.thand .tcard.ttp{background:linear-gradient(#fff,#fff3c4)}
+.tpan{background:#fff;border-radius:16px;padding:10px;text-align:center;box-shadow:0 3px 0 #0001;margin:4px 0}.tpan p{margin:6px 0}
+.tbids{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}.tbids button{border:0;border-radius:12px;width:46px;height:46px;font:inherit;font-weight:900;font-size:20px;background:linear-gradient(135deg,#ffc531,#ff8a1f);color:#fff;cursor:pointer;box-shadow:0 3px 0 #0002}.tbids .tpass{width:auto;padding:0 16px;background:#9aa3b5}
+.tsuits{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px}.tsuits button{border:0;border-radius:14px;background:#f4f6fb;font:inherit;font-size:38px;font-weight:900;padding:6px 0;display:flex;flex-direction:column;align-items:center;cursor:pointer;box-shadow:0 3px 0 #0002}.tsuits small{font-size:12px;color:#5b6b8c}
+.kfan .tcard{margin:0 -6px;cursor:default}.kturn small{font-size:13px;color:#5b6b8c}
+/* إكس أو */
+.xohero{font-size:46px;display:flex;justify-content:center;gap:8px}.xohero i,.xosc i{font-style:normal;font-weight:900}.xx{color:#e8453c}.xoo{color:#2e8bff}
+.xosc{display:flex;gap:6px;margin-bottom:10px}.xosc span{flex:1;background:#fff;border-radius:14px;padding:6px;text-align:center;font-weight:800;box-shadow:0 3px 0 #0001;display:flex;flex-direction:column;align-items:center}.xosc span:nth-child(2){flex:.5}.xosc span.on{box-shadow:0 0 0 3px #ff8a1f}.xosc b{font-size:22px}
+.xob{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;background:linear-gradient(135deg,#8a63ff,#e8579a);padding:10px;border-radius:22px;max-width:340px;margin:0 auto 10px}
+.xoc{aspect-ratio:1;border:0;border-radius:16px;background:#fff;font:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -4px 0 #0001}.xoc:disabled{cursor:default}
+.xoc i{font-style:normal;font-size:clamp(44px,15vw,66px);font-weight:900;line-height:1;animation:xpop .3s cubic-bezier(.3,1.6,.5,1)}@keyframes xpop{from{transform:scale(0)}}
+.xoc.xw{background:#fff6d0;box-shadow:0 0 0 4px #ffc531}.xoc.xsel{background:#eef3ff;box-shadow:0 0 0 4px #8a63ff}#xop{text-align:center}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.14.0';
+const VER='2.15.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -573,7 +601,7 @@ const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+
 const key=(a,b)=>a+'x'+b;
 // الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
 // سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
-let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم'};
+let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم',xo:'❌ إكس أو'};
 function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
 if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150}
 const gSince=ms=>(S.gl||[]).filter(x=>x.ts>=ms&&x.d>0).reduce((a,x)=>a+x.d,0);
@@ -1094,7 +1122,7 @@ function fcG(i){const e=$('#g'+i);if(!e)return;if(e.classList.toggle('on')){cons
 function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.classList.toggle('on',!!v))}
 // ===== صفحة الألعاب =====
 // صفحة الألعاب: أقسام منظّمة، وبطاقات بنفس الحجم والتصميم، ولكل قسم لون واحد
-const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية • 🪙 1500']]],
+const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية • 🪙 1500'],['tarneeb','♠️','الطرنيب','4 لاعبين • 🪙 1500'],['xo','❌','إكس أو','مع صديق أو الكمبيوتر']]],
 ['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
 ['⚡','سرعة','#2e8bff',[['balloons','🎈','فرقعة البالونات','اضرب البالونة الصحيحة'],['meteor','☄️','حارس الأرض','أسقط النيازك'],['tfg','✅','صح أم خطأ','60 ثانية'],['frog','🐸','قفزة الضفدع','إلى الجزيرة']]],
 ['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول']]]];
@@ -1103,7 +1131,7 @@ shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><di
 ${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="${f}()"><i>${e}</i><b>${n}</b><small>${d}</small></button>`).join('')}</div>`).join('')}`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -1197,8 +1225,8 @@ async function kRejoin(code){try{const d=await roomRef(code).get(),r=d.exists?d.
 const KSYM={S:'⊘',R:'⇄',D:'+2','4':'+4'};
 function kCard(c,cls='',attr=''){const tg=/data-c/.test(attr)&&KG&&KG.nxn&&/[DS4]$/.test(c)?`<b class=kto>➜ ${KG.nxn}</b>`:'';return kCard0(c,cls,attr).replace(/<\/div>$/,tg+'</div>')}
 function kCard0(c,cls='',attr=''){const w=kWild(c),v=kVal(c),sym=w?(c=='W4'?'+4':'🌈'):(KSYM[v]||v);return `<div class="kc ${w?'kw':''} ${cls}" style="--k:${w?'#222':KC[c[0]]}" ${attr}><span class=kcs>${sym}</span><i>${sym}</i></div>`}
-function kPay(key){S.kpaid=S.kpaid||{};if(S.kpaid[key])return true;if(GD()<FEE)return false;S.gd=GD()-FEE;gLog(-FEE,'🃏 آخر ورقة — رسوم');S.kpaid[key]=1;const k=Object.keys(S.kpaid);if(k.length>30)delete S.kpaid[k[0]];save();toast(`🎟️ دفعت 🪙 ${FEE} للمشاركة`);return true}
-function kPrize(key,amt){S.kwon=S.kwon||{};if(S.kwon[key])return;S.kwon[key]=1;S.gd=GD()+amt;gLog(amt,'🏆 آخر ورقة — فوز');save()}
+function kPay(key,lbl){S.kpaid=S.kpaid||{};if(S.kpaid[key])return true;if(GD()<FEE)return false;S.gd=GD()-FEE;gLog(-FEE,lbl||'🃏 آخر ورقة — رسوم');S.kpaid[key]=1;const k=Object.keys(S.kpaid);if(k.length>30)delete S.kpaid[k[0]];save();toast(`🎟️ دفعت 🪙 ${FEE} للمشاركة`);return true}
+function kPrize(key,amt,lbl){S.kwon=S.kwon||{};if(S.kwon[key])return;S.kwon[key]=1;S.gd=GD()+amt;gLog(amt,lbl||'🏆 آخر ورقة — فوز');save()}
 // ضد الكمبيوتر
 const BOTN=['🤖 روبي','🦊 ثعلوب','🐼 باندو'];
 function kBotStart(){const nb=S.kb||2;const key='bot'+Date.now();if(!kPay(key))return toast('رصيدك لا يكفي');const ids=['me',...Array.from({length:nb},(_,i)=>'b'+i)],names={me:NM()};ids.slice(1).forEach((u,i)=>names[u]=BOTN[i]);
@@ -1412,6 +1440,149 @@ g.g[r][c]=null;el.style.setProperty('--fx',dx*900+'%');el.style.setProperty('--f
 later(()=>{el.outerHTML='<i class=awe></i>';const left=g.g.flat().filter(Boolean).length;const L=$('.awtop b');L&&(L.textContent=left);if(!left)awEnd()},380)}
 function awEnd(){const g=AW;g.ph='end';const n=g.e<=1?3:g.e<=4?2:1;award(n);good();clap(18);kSfx('win');say('أحسنت يا بطل');for(let i=0;i<5;i++)later(()=>burst(R(innerWidth),R(300)+80),i*250);
 $('#awp').innerHTML=`<div class=res>🏹🎉</div><div class=res>${'⭐'.repeat(n)}</div><h2>أخرجت كل الأسهم!</h2><p>${g.total} سهمًا • اصطدامات: ${g.e}</p>${U}<div class=seg>${[1,2,3].map(l=>`<button class="${g.lv==l?'on':''}" onclick="S.awl=${l};save();arrows()">${['🙂 5×5','😬 6×6','😱 7×7'][l-1]}</button>`).join('')}</div><button class=big onclick=arrows()>🔁 لوحة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
+// ===== ♠️ شدّ الطرنيب: 4 لاعبين في فريقين، مزايدة 7–13، الطرنيب يختاره المشتري =====
+// ضد الكمبيوتر (أنت + شريك آلي) أو مع العائلة على طاولة برقم (rooms/{code} بنوع tarneeb)، والكمبيوتر يكمل الأماكن الفارغة
+const TS={S:'♠',H:'♥',D:'♦',C:'♣'},TSN={S:'بستوني',H:'كبّة',D:'ديناري',C:'سباتي'},TSC={S:'#1b2a5c',H:'#e8453c',D:'#e8453c',C:'#1b2a5c'},TR=r=>({11:'J',12:'Q',13:'K',14:'A'}[r]||String(r));
+const tSuit=c=>c[0],tRank=c=>+c.slice(1);let TG=null;
+function tDeck(){const d=[];for(const s of 'SHDC')for(let r=2;r<=14;r++)d.push(s+r);return sh(d)}
+function tLog(st,m,c){st.log=st.log||[];st.log.push({m,c:c||'',t:Date.now()});if(st.log.length>60)st.log.splice(0,st.log.length-60)}
+function tDeal(st){const d=tDeck();st.order.forEach((u,i)=>st.hands[u]=d.slice(i*13,i*13+13));Object.assign(st,{phase:'bid',bids:{},bid:null,trump:null,trick:[],won:[0,0],lt:null,res:null,turn:(st.dealer+1)%4})}
+function tNew(ids,names,bots,target){const st={order:ids,names,bots,hands:{},dealer:R(4),score:[0,0],target,log:[],msg:'',round:1,winner:null,ts:Date.now()};tDeal(st);return st}
+function tLegal(st,h){if(!st.trick.length)return h;const l=tSuit(st.trick[0].c),f=h.filter(c=>tSuit(c)==l);return f.length?f:h}
+function tWin(tr,tp){let b=tr[0];for(const x of tr.slice(1)){const s=tSuit(x.c),bs=tSuit(b.c);if(s==tp&&bs!=tp||s==bs&&tRank(x.c)>tRank(b.c))b=x}return b.s}
+function tRoundEnd(st){const bt=st.bid.s%2,v=st.bid.v,got=st.won[bt],made=got>=v,add=[0,0];if(made)add[bt]=got;else{add[bt]=-v;add[1-bt]=st.won[1-bt]}
+st.score[0]+=add[0];st.score[1]+=add[1];st.res={bt,v,got,made,add};tLog(st,`انتهت الجولة ${st.round}: ${made?'✅':'❌'} ${st.names[st.order[st.bid.s]]} اشترى ${v} وأخذ فريقه ${got}`);
+if(Math.max(...st.score)>=st.target){st.winner=st.score[0]>=st.target&&st.score[1]>=st.target?bt:(st.score[0]>=st.target?0:1);st.phase='end';st.msg='انتهت اللعبة'}else st.phase='roundEnd'}
+function tMove(st,u,mv){if(st.winner!=null)return false;
+if(mv.t=='next'){if(st.phase!='roundEnd')return false;st.round=(st.round||1)+1;st.dealer=(st.dealer+1)%4;tDeal(st);st.msg='جولة جديدة';tLog(st,'🔄 الجولة '+st.round);return true}
+const s=st.order.indexOf(u);if(s!==st.turn)return false;const nm=st.names[u];
+if(st.phase=='bid'){if(mv.t!='bid')return false;const cur=st.bid?st.bid.v:6,passes=Object.values(st.bids).filter(x=>x===0).length;
+ if(mv.v){if(mv.v<=cur||mv.v>13)return false;st.bid={s,v:mv.v};st.bids[s]=mv.v;st.msg=nm+' اشترى '+mv.v}else{if(!st.bid&&passes>=3)return false;st.bids[s]=0;st.msg=nm+' باس'}tLog(st,st.msg);
+ const act=[0,1,2,3].filter(i=>st.bids[i]!==0);
+ if(st.bid&&(st.bid.v==13||act.length==1&&act[0]==st.bid.s)){st.phase='trump';st.turn=st.bid.s;st.msg=st.names[st.order[st.bid.s]]+' يختار الطرنيب';return true}
+ let t=st.turn;do{t=(t+1)%4}while(st.bids[t]===0);st.turn=t;return true}
+if(st.phase=='trump'){if(mv.t!='trump'||!TS[mv.s])return false;st.trump=mv.s;st.phase='play';st.turn=st.bid.s;st.msg=`${nm} اختار الطرنيب ${TS[mv.s]} ${TSN[mv.s]}`;tLog(st,st.msg);return true}
+if(st.phase!='play'||mv.t!='play')return false;const h=st.hands[u],i=h.indexOf(mv.c);if(i<0||!tLegal(st,h).includes(mv.c))return false;
+h.splice(i,1);st.trick.push({s,c:mv.c});if(st.trick.length<4){st.turn=(s+1)%4;st.msg=nm+' لعب';return true}
+const w=tWin(st.trick,st.trump),wc=st.trick.find(x=>x.s==w).c;st.won[w%2]++;st.lt={cards:st.trick,w,n:st.round*20+st.won[0]+st.won[1]};st.trick=[];st.turn=w;
+st.msg=st.names[st.order[w]]+' أخذ الأكلة';tLog(st,`${st.msg} بـ ${TR(tRank(wc))}${TS[tSuit(wc)]}`,'trick');if(st.won[0]+st.won[1]==13)tRoundEnd(st);return true}
+// الكمبيوتر
+function tEval(h){let e=0,best='S',bs=-1;const by={S:[],H:[],D:[],C:[]};h.forEach(c=>by[tSuit(c)].push(tRank(c)));
+for(const s in by){const r=by[s];e+=r.filter(x=>x==14).length+r.filter(x=>x==13).length*.7+r.filter(x=>x==12).length*.3;const sc=r.length*2+r.reduce((a,x)=>a+(x>10?x-10:0),0);if(sc>bs){bs=sc;best=s}}
+return {e:e+Math.max(0,by[best].length-3)*.8,best}}
+function tBotMv(st,u){const s=st.order.indexOf(u),h=st.hands[u];
+if(st.phase=='bid'){const cur=st.bid?st.bid.v:6,passes=Object.values(st.bids).filter(x=>x===0).length;if(!st.bid&&passes>=3)return {t:'bid',v:7};if(st.bid&&st.bid.s%2==s%2)return {t:'bid',v:0};const est=Math.min(10,Math.floor(tEval(h).e+3.2));return {t:'bid',v:est>cur?cur+1:0}}
+if(st.phase=='trump')return {t:'trump',s:tEval(h).best};
+const L=tLegal(st,h),tp=st.trump,by=(a,b)=>tRank(a)-tRank(b);
+if(!st.trick.length){const ns=L.filter(c=>tSuit(c)!=tp),ac=ns.filter(c=>tRank(c)==14);if(ac.length)return {t:'play',c:ac[0]};const pool=ns.length?ns:L,cnt={};pool.forEach(c=>cnt[tSuit(c)]=(cnt[tSuit(c)]||0)+1);
+ const ls=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];return {t:'play',c:pool.filter(c=>tSuit(c)==ls).sort(by)[0]}}
+const pw=tWin(st.trick,tp)%2==s%2,wins=L.filter(c=>tWin([...st.trick,{s,c}],tp)==s).sort((a,b)=>(tSuit(a)==tp)-(tSuit(b)==tp)||by(a,b));
+if(pw||!wins.length){const non=L.filter(c=>tSuit(c)!=tp);return {t:'play',c:(non.length?non:L).slice().sort(by)[0]}}return {t:'play',c:wins[0]}}
+// الواجهة
+function tCard(c,cls='',attr=''){const s=tSuit(c),r=TR(tRank(c));return `<div class="tcard ${cls}" style="--t:${TSC[s]}" ${attr}><i>${r}<br>${TS[s]}</i><b>${TS[s]}</b><em>${r}</em></div>`}
+function tSort(h,tp){const o=['S','H','C','D'];if(tp){o.splice(o.indexOf(tp),1);o.unshift(tp)}return h.slice().sort((a,b)=>o.indexOf(tSuit(a))-o.indexOf(tSuit(b))||tRank(b)-tRank(a))}
+function tarneeb(){clr();if(TG&&TG.uns)TG.uns();TG=null;const g=GD(),can=g>=FEE,m=S.tm||'bot',tg=S.tgt||21,b=(v,l)=>`<button class="${m==v?'on':''}" onclick="S.tm='${v}';save();tarneeb()">${l}</button>`,lastOk=S.tlast&&Date.now()-S.tlast.ts<3*3600e3;
+const back=m=='net'&&FB&&UID&&lastOk?`<button class="big kback2" onclick="tRejoin('${S.tlast.code}')">🔁 العودة إلى الطاولة ${S.tlast.code}</button>`:'';
+const tgt=`<h3>تنتهي اللعبة عند</h3><div class=seg>${[11,21,31].map(n=>`<button class="${tg==n?'on':''}" onclick="S.tgt=${n};save();tarneeb()">${n} نقطة</button>`).join('')}</div>`;
+const body=m=='bot'?`${tgt}<p class=sm>أنت وشريكك 🤖 ضد فريق الكمبيوتر. إن فاز فريقك تأخذ 🪙 ${(FEE*2).toLocaleString('en')}</p><button class=big ${can?'':'disabled'} onclick=tBotStart()>♠️ العب (🪙 ${FEE})</button>`
+:!FB?`<p>☁️ تحتاج اللعبة الجماعية فتح اللعبة من رابطها على الإنترنت.</p>`:!UID?`<p>👤 سجّل الدخول أولًا، وكذلك كل من سيشارك.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`
+:`<label class=cplb for=tn>✏️ اسمك في اللعبة</label><input id=tn class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك">${tgt}<button class=big ${can?'':'disabled'} onclick=tCreate()>🏠 أنشئ طاولة (🪙 ${FEE})</button><h3>أو انضم إلى طاولة</h3><input id=tcode class=nm inputmode=numeric maxlength=3 placeholder="رقم الطاولة (مثل 50)" dir=ltr value="${lastOk?S.tlast.code:''}"><button class=big style="background:#18a999" onclick=tJoin()>🔑 انضمام / عودة إلى الطاولة</button><p class=sm>من 2 إلى 4 لاعبين، والكمبيوتر يكمل الأماكن الفارغة. أول اثنين ينضمّان فريق واحد.</p>`;
+shell('الطرنيب ♠️',`<div id=tx></div><div class="card kintro"><div class=kfan>${['S14','H13','D12','C11','H10'].map((c,i)=>tCard(c,'',`style="transform:rotate(${(i-2)*12}deg) translateY(${Math.abs(i-2)*6}px)"`)).join('')}</div>
+<p class=sm>4 لاعبين في فريقين، وشريكك يجلس مقابلك. زايِد على عدد الأكلات (7–13)، ومن يشتري يختار <b>الطرنيب</b> (النوع الأقوى). العب من نفس النوع إن كان معك، وإلا اقطع بالطرنيب. يجب أن يأخذ فريق المشتري ما اشتراه!</p>
+<div class=kfee>🎟️ رسوم المشاركة: <b>🪙 ${FEE}</b> • رصيدك: <b class="${can?'':'kno'}">🪙 ${g.toLocaleString('en')}</b></div>${can?'':`<p class=kno>تحتاج 🪙 ${(FEE-g).toLocaleString('en')} إضافية — اجمعها من الألعاب 💪</p>`}
+<div class=seg>${b('bot','🤖 ضد الكمبيوتر')+b('net','📱 مع العائلة')}</div>${back}${body}</div>`)}
+function tBotStart(){const key='tb'+Date.now();if(!kPay(key,'♠️ الطرنيب — رسوم'))return toast('رصيدك لا يكفي');const ids=['me','b0','b1','b2'],names={me:NM(),b0:BOTN[0],b1:BOTN[1],b2:BOTN[2]};
+TG={mode:'bot',key,me:'me',st:tNew(ids,names,{b0:1,b1:1,b2:1},S.tgt||21)};tRender()}
+function tRender(){const g=TG,st=g&&g.st;if(!st)return;if(st.winner!=null)return tEnd();const me=g.me,ms=st.order.indexOf(me),tm=ms%2,my=st.hands[me]||[],act=['bid','trump','play'].includes(st.phase),myT=act&&st.turn===ms,pos=k=>(ms+k)%4;
+const seat=k=>{const si=pos(k),u=st.order[si],bd=st.bids[si];return `<div class="tseat tp${k}${act&&st.turn==si?' on':''}${si%2==tm?' tus':''}" id="ts_${si}"><b>${k==0?'أنت':esc(kShort(st.names[u]))}${st.bots[u]&&k?' 🤖':''}</b>${k==2?'<span>🤝 شريكك</span>':''}<small>🂠 ${st.hands[u].length}${st.bid&&st.bid.s==si?' • 🏷️'+st.bid.v:st.phase=='bid'&&bd!=null?' • '+(bd||'باس'):''}</small></div>`};
+const tk=st.trick.length?st.trick:((g.ltUntil||0)>Date.now()&&st.lt?st.lt.cards:[]);
+const mid=tk.map(x=>tCard(x.c,'tc'+((x.s-ms+4)%4)+(!st.trick.length&&st.lt&&x.s==st.lt.w?' twin':''))).join('');
+const bn=st.bid?esc(kShort(st.names[st.order[st.bid.s]])):'';
+const top=`<div class=tsb><div class="tsbx us"><small>🤝 فريقنا</small><b>${st.score[tm]}</b><span>أكلات ${st.won[tm]}</span></div><div class=tsbm><span>🎯 ${st.target}</span><small>${st.bid?'🏷️ '+bn+' '+st.bid.v:'المزايدة'}</small><small>الجولة ${st.round}</small></div><div class="tsbx them"><small>فريقهم</small><b>${st.score[1-tm]}</b><span>أكلات ${st.won[1-tm]}</span></div></div>`;
+let pan='';const cur=st.bid?st.bid.v:6,forced=!st.bid&&Object.values(st.bids).filter(x=>x===0).length>=3;
+if(st.phase=='bid'&&myT)pan=`<div class=tpan><b>🏷️ ${forced?'الكل باس — اشترِ 7 على الأقل':'كم أكلة تأخذ مع شريكك؟'}</b><div class=tbids>${Array.from({length:13-cur},(_,i)=>cur+1+i).map(v=>`<button onclick="tDo({t:'bid',v:${v}})">${v}</button>`).join('')}${forced?'':`<button class=tpass onclick="tDo({t:'bid',v:0})">باس</button>`}</div></div>`;
+else if(st.phase=='trump'&&myT)pan=`<div class=tpan><b>👑 اشتريت ${st.bid.v} — اختر الطرنيب</b><div class=tsuits>${'SHDC'.split('').map(x=>`<button style="color:${TSC[x]}" onclick="tDo({t:'trump',s:'${x}'})">${TS[x]}<small>${TSN[x]}</small></button>`).join('')}</div></div>`;
+else if(st.phase=='roundEnd'){const r=st.res,ours=r.bt==tm,f=n=>(n>=0?'+':'')+n;pan=`<div class="tpan tres"><b>${r.made?'✅':'❌'} ${ours?'فريقنا':'فريقهم'} اشترى ${r.v} وأخذ ${r.got}</b><p>فريقنا ${f(r.add[tm])} • فريقهم ${f(r.add[1-tm])}</p><button class=big onclick="tDo({t:'next'})">▶️ الجولة التالية</button></div>`}
+else pan=`<p class="kturn${myT?' me':''}">${myT?'🎯 دورك!'+(st.trick.length?` <small>العب ${TS[tSuit(st.trick[0].c)]} إن كان معك</small>`:''):'⏳ '+(st.phase=='bid'?'يزايد ':st.phase=='trump'?'يختار الطرنيب ':'دور ')+esc(kShort(st.names[st.order[st.turn]]))}</p>`;
+const L=myT&&st.phase=='play'?tLegal(st,my):[],cu=st.order[st.turn],stale=g.mode=='net'&&act&&!myT&&Date.now()-(st.ts||0)>(st.bots[cu]?8000:40000);
+shell('الطرنيب ♠️',`<div id=tx></div>${top}<div class=ttab>${st.trump?`<span class=ttrump style="color:${TSC[st.trump]}">${TS[st.trump]}<small>طرنيب</small></span>`:''}${[2,1,3,0].map(seat).join('')}<div class=tmid>${mid}</div><button class=klogb onclick=tLogPop() aria-label="سجل الأحداث">📜<small>السجل</small></button></div>
+${pan}<div class=thand>${tSort(my,st.trump).map(c=>tCard(c,(L.includes(c)?'tok':'')+(st.trump&&tSuit(c)==st.trump?' ttp':''),`onclick="tPlay('${c}')"`)).join('')}</div>${stale?`<div class=kbtns><button class="buy tauto" onclick=tAuto()>🤖 العب بدلًا عن ${esc(kShort(st.names[cu]))}</button></div>`:''}`);
+tAlerts();if(st.winner==null&&act)backGuard(tLeaveAsk);tBotTick()}
+function tPlay(c){const g=TG,st=g&&g.st;if(!st)return;const ms=st.order.indexOf(g.me);if(st.phase!='play'||st.turn!==ms||Date.now()<(g.ltUntil||0))return;
+if(!tLegal(st,st.hands[g.me]).includes(c)){oops();const l=tSuit(st.trick[0].c);return toast(`يجب أن تلعب ${TS[l]} ${TSN[l]} لأنه معك`)}tDo({t:'play',c})}
+function tDo(mv){const g=TG;if(!g||!g.st)return;if(g.mode=='net')return tTx(s=>tMove(s,UID,mv));if(!tMove(g.st,g.me,mv))return oops();tRender()}
+function tBotTick(){const g=TG;if(!g||!g.st)return;const st=g.st;if(st.winner!=null||!['bid','trump','play'].includes(st.phase))return;if(g.mode=='net'&&!g.host)return;const u=st.order[st.turn];if(!st.bots[u])return;clearTimeout(g.botT);
+g.botT=setTimeout(()=>{if(TG!==g)return;if(g.mode=='net')return tTx(s=>s.order[s.turn]===u&&tMove(s,u,tBotMv(s,u)));const s=g.st;if(s.order[s.turn]!==u)return;tMove(s,u,tBotMv(s,u));tRender()},Math.max(0,(g.ltUntil||0)-Date.now())+700+R(500))}
+function tAuto(){tTx(s=>{const u=s.order[s.turn];return tMove(s,u,tBotMv(s,u))})}
+function tAlerts(){const g=TG,st=g.st,ms=st.order.indexOf(g.me),ln=st.lt?st.lt.n:-1,P=g.prev,cur={turn:st.turn,phase:st.phase,ln,tl:st.trick.length};g.prev=cur;if(!P)return;
+if(ln!==P.ln&&ln>=0){g.ltUntil=Date.now()+1500;later(()=>{if(TG===g)tRender()},1550);const us=st.lt.w%2==ms%2;kSfx(us?'one':'draw');kPop(us?'✅ <b>أكلة لفريقنا!</b>':'❌ <b>أكلة لفريقهم</b>',us?'warn':'soft',1200)}
+else if(cur.tl>P.tl)kSfx('card');
+if(cur.phase=='play'&&P.phase=='trump'){kPop(`👑 <b>${esc(kShort(st.names[st.order[st.bid.s]]))}</b> اشترى <b>${st.bid.v}</b> • الطرنيب <b style="color:${TSC[st.trump]}">${TS[st.trump]} ${TSN[st.trump]}</b>`,'give',2400);kSfx('wild')}
+if(cur.phase=='roundEnd'&&P.phase!='roundEnd')kSfx(st.res.made==(st.res.bt==ms%2)?'win':'bad');
+if(st.turn===ms&&(P.turn!==ms||P.phase!==cur.phase)&&['bid','trump','play'].includes(st.phase))later(()=>{if(TG!==g||g.st.turn!==ms)return;kSfx('turn');vib([60,40,60]);kPop('🎯 <b>دورك!</b>','turn',1400)},ln!==P.ln?1500:200)}
+function tLeaveAsk(){if(confirm('هل تريد مغادرة اللعبة؟ لن تُعاد رسوم المشاركة.')){if(TG&&TG.uns)TG.uns();TG=null;history.back()}else backGuard(tLeaveAsk)}
+function tLogPop(){const st=TG&&TG.st;if(!st)return;$('.ksheetw')&&$('.ksheetw').remove();const d=document.createElement('div');d.className='ksheetw';d.onclick=e=>{if(e.target===d)kSheetClose(d)};const L=(st.log||[]).slice().reverse();
+d.innerHTML=`<div class=ksheet><div class=kgrab></div><div class=kshh><b>📜 سجل الأحداث</b><button class=kpx onclick="kSheetClose(this.closest('.ksheetw'))" aria-label="إغلاق">✖</button></div><div class=kshl>${L.length?L.map((x,i)=>`<div class="klr${i==0?' new':''}"><span class=klic>${x.c=='trick'?'🃏':'•'}</span><span>${esc(kSm(x.m,st))}</span><small>${new Date(x.t).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})}</small></div>`).join(''):'<p>لا أحداث بعد</p>'}</div></div>`;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'))}
+function tEnd(){const g=TG,st=g.st,ms=st.order.indexOf(g.me),win=st.winner==ms%2;if(g.ended2)return;g.ended2=1;backRelease();if(win){kPrize(g.key,FEE*2,'♠️ الطرنيب — فوز');good()}kSfx('win');clap(win?25:12);cpRain();vib(win?[100,60,300]:[200]);
+const team=t=>st.order.filter((_,i)=>i%2==t).map(u=>esc(kShort(st.names[u]))).join(' و ');
+shell('الطرنيب ♠️',`<div id=tx></div><div class="card kend"><div class=cpflow>🌹🎈🌷🎈🌹</div><div class=res>🏆</div><p class=kendt>${win?'مبروك! فاز فريقكم 🎉':'انتهت اللعبة'}</p><h2>الفائز: <span class=kwn>${team(st.winner)}</span></h2><p class=kprize>${st.score[st.winner]} مقابل ${st.score[1-st.winner]}</p><p>${win?'ربحت 🪙 '+(FEE*2).toLocaleString('en'):'حظًا أوفر في المرة القادمة 💪'}</p><p class=sm>رصيدك 🪙 ${GD().toLocaleString('en')}</p><button class=big onclick=tarneeb()>♠️ لعبة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button></div>`)}
+// مع العائلة
+async function tFreeCode(){for(const c of [...sh([10,20,30,40,50,60,70,80,90]),...sh([11,22,33,44,55,66,77,88,99])]){const d=await roomRef(String(c)).get(),r=d.exists?d.data():null;if(!r||Date.now()-(r.ts||0)>3*3600e3||(r.state=='end'&&Date.now()-(r.ts||0)>600e3))return String(c)}return String(100+R(900))}
+async function tCreate(){const n=($('#tn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{const code=await tFreeCode();await roomRef(code).set({kind:'tarneeb',host:UID,state:'wait',ts:Date.now(),names:{[UID]:n},jn:[UID],target:S.tgt||21});tRoom(code)}catch(e){netErr(e)}}
+async function tJoin(){const code=($('#tcode').value||'').replace(/\D/g,''),n=($('#tn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الطاولة');S.cpme=n;save();
+try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='tarneeb')return toast('لا توجد طاولة طرنيب بهذا الرقم');const r=d.data();if((r.names||{})[UID])return tRoom(code);if(r.state!='wait')return toast('اللعبة بدأت بالفعل');if((r.jn||[]).length>=4)return toast('الطاولة ممتلئة (4 لاعبين)');if(GD()<FEE)return toast(`تحتاج 🪙 ${FEE} للمشاركة`);
+await roomRef(code).update({['names.'+UID]:n,jn:firebase.firestore.FieldValue.arrayUnion(UID)});tRoom(code)}catch(e){netErr(e)}}
+async function tRejoin(code){try{const d=await roomRef(code).get(),r=d.exists?d.data():null;if(!r||r.kind!='tarneeb'||!(r.names||{})[UID]){S.tlast=null;save();toast('انتهت هذه الطاولة');return tarneeb()}tRoom(code)}catch(e){netErr(e)}}
+function tRoom(code){S.tlast={code,ts:Date.now()};save();if(TG&&TG.uns)TG.uns();const g=TG={mode:'net',code,me:UID,st:null};tLobby();
+g.uns=roomRef(code).onSnapshot(d=>{if(TG!==g)return;if(!$('#tx')){g.uns&&g.uns();TG=null;return}if(!d.exists)return;const r=d.data();g.room=r;g.host=r.host==UID;
+if(r.state=='wait')return tLobby();if(!(r.order||[]).includes(UID))return shell('الطرنيب ♠️','<div id=tx></div><div class=card><p>بدأت اللعبة بدونك.</p></div>');
+const key='t'+code+'_'+r.started;if(!g.paid){g.paid=1;kPay(key,'♠️ الطرنيب — رسوم')}g.key=key;g.st=r;tRender()},netErr)}
+function tLobby(){const r=TG.room||{},ns=r.names||{},jn=(r.jn||[]).filter(u=>ns[u]),host=r.host==UID;
+shell('طاولة الطرنيب ♠️',`<div id=tx></div><div class="card cpt"><p class=sm>رقم الطاولة:</p><div class=cpcode dir=ltr>${TG.code}</div><p class=sm>يفتح كل لاعب «الطرنيب ← 📱 مع العائلة» ويكتب هذا الرقم. رسوم كل لاعب 🪙 ${FEE}.</p>
+<h3>اللاعبون (${jn.length}/4)</h3><div class=cppl>${jn.map((u,i)=>`<span>${i<2?'🔵':'🟠'} ${esc(ns[u])}${u==r.host?' 👑':''}</span>`).join('')||'…'}</div><p class=sm>🔵 فريق و🟠 فريق — الأماكن الفارغة يكملها الكمبيوتر 🤖 • حتى ${r.target||21} نقطة</p>
+${host?`<button class=big onclick=tStart()>♠️ ابدأ اللعبة</button>`:'<p>⏳ بانتظار صاحب الطاولة ليبدأ…</p>'}</div>`)}
+function tStart(){const r=TG.room,ns=Object.assign({},r.names),jn=(r.jn||[]).filter(u=>ns[u]),ids=[0,0,0,0],bots={};[0,2,1,3].forEach((s,i)=>{if(jn[i])ids[s]=jn[i];else{const b='bot'+s;ids[s]=b;ns[b]=BOTN[s%3];bots[b]=1}});
+roomRef(TG.code).set(Object.assign({kind:'tarneeb',host:r.host,jn:r.jn,started:Date.now(),state:'play'},tNew(ids,ns,bots,r.target||21))).catch(netErr)}
+function tTx(fn){const ref=roomRef(TG.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();if(s.winner!=null)s.state='end';tx.set(ref,s)}).catch(e=>{if(e!=='no')netErr(e);else oops()})}
+setInterval(()=>{const g=TG;if(g&&g.mode=='net'&&g.st&&g.st.winner==null&&$('.thand')&&!$('.tauto')&&!$('.ksheetw')&&Date.now()-(g.st.ts||0)>8000)tRender()},5000);
+// ===== ❌⭕ إكس أو: ضد الكمبيوتر، أو على جهاز واحد، أو من جهازين (rooms/{code} بنوع xo). خيار «أجب قبل كل حركة» =====
+let XO=null;const XL=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]],XE='.........';
+function xoWin(b){for(const l of XL)if(b[l[0]]!='.'&&b[l[0]]==b[l[1]]&&b[l[1]]==b[l[2]])return {w:b[l[0]],l};return b.includes('.')?null:{w:'D',l:[]}}
+function xoBest(b,me,lv){const free=[...b].map((c,i)=>c=='.'?i:-1).filter(i=>i>=0),op=me=='X'?'O':'X';if(Math.random()<[0,.55,.2,0][lv])return free[R(free.length)];
+const mm=(bb,p,d)=>{const r=xoWin(bb);if(r)return r.w==me?10-d:r.w==op?d-10:0;let best=p==me?-99:99;for(let i=0;i<9;i++)if(bb[i]=='.'){const v=mm(bb.slice(0,i)+p+bb.slice(i+1),p==me?op:me,d+1);best=p==me?Math.max(best,v):Math.min(best,v)}return best};
+let bi=free[0],bv=-99;for(const i of sh(free)){const v=mm(b.slice(0,i)+me+b.slice(i+1),op,1);if(v>bv){bv=v;bi=i}}return bi}
+function xo(){clr();if(XO&&XO.uns)XO.uns();XO=null;const m=S.xm||'bot',lv=S.xl||2,mt=S.xq!==0,b=(js,l,on)=>`<button class="${on?'on':''}" onclick="${js};save();xo()">${l}</button>`;
+let body='';if(m=='bot')body=`<h3>مستوى الكمبيوتر</h3><div class=seg>${b('S.xl=1','🙂 سهل',lv==1)+b('S.xl=2','😬 متوسط',lv==2)+b('S.xl=3','😈 صعب',lv==3)}</div><button class=big onclick=xoStart()>❌⭕ ابدأ</button>`;
+else if(m=='local')body=`<label class=cplb>❌ اللاعب الأول</label><input id=xn1 class=nm maxlength=20 value="${esc(NM())}"><label class=cplb>⭕ اللاعب الثاني</label><input id=xn2 class=nm maxlength=20 placeholder="اكتب الاسم"><button class=big onclick=xoStart()>❌⭕ ابدأ</button>`;
+else body=!FB?`<p>☁️ تحتاج فتح اللعبة من رابطها على الإنترنت.</p>`:!UID?`<p>👤 سجّل الدخول أولًا.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`:`<label class=cplb for=xn>✏️ اسمك</label><input id=xn class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك"><button class=big onclick=xoCreate()>🏠 أنشئ غرفة</button><h3>أو انضم</h3><input id=xcode class=nm inputmode=numeric maxlength=3 placeholder="رقم الغرفة (مثل 50)" dir=ltr><button class=big style="background:#18a999" onclick=xoJoin()>🔑 انضمام</button>`;
+shell('إكس أو ❌⭕',`<div id=xx></div><div class="card kintro"><div class=xohero><i class=xx>✕</i><i class=xoo>◯</i><i class=xx>✕</i></div><p class=sm>ضع ثلاث علامات في خط واحد — أفقي أو عمودي أو مائل — لتفوز!</p>
+<div class=seg>${b("S.xm='bot'",'🤖 الكمبيوتر',m=='bot')+b("S.xm='local'",'👥 جهاز واحد',m=='local')+b("S.xm='net'",'📱 جهازان',m=='net')}</div><div class=seg>${b('S.xq='+(mt?0:1),'🧮 أجب عن مسألة قبل كل حركة '+(mt?'✓':'✗'),mt)}</div>${body}</div>`)}
+function xoStart(){const m=S.xm||'bot',n2=m=='bot'?'🤖 الكمبيوتر':(($('#xn2')||{}).value||'').trim()||'اللاعب الثاني',n1=m=='bot'?NM():(($('#xn1')||{}).value||'').trim()||'اللاعب الأول';
+XO={mode:m,me:'X',lv:S.xl||2,math:S.xq!==0,st:{b:XE,turn:'X',start:'X',sc:{X:0,O:0,D:0},names:{X:n1,O:n2}}};xoRender()}
+function xoRender(){const g=XO,st=g&&g.st;if(!st)return;const r=xoWin(st.b),myT=!r&&(g.mode=='local'||st.turn==g.me),nm=k=>esc(kShort(st.names[k]||'…'));let pan;
+if(r){const wn=r.w=='D'?'':st.names[r.w];pan=`<h2>${r.w=='D'?'🤝 تعادل!':(g.mode!='local'&&r.w==g.me?'🎉 فزت!':'🏆 فاز '+esc(wn)+'!')}</h2><button class=big onclick=xoNext()>🔁 جولة جديدة</button>`}
+else if(g.q)pan=`<p class=sm style="margin:0">🧮 أجب لتضع علامتك — الخطأ يُضيّع دورك</p>${qHTML(g.q.a,g.q.b)}<div class=opts>${opts(g.q.a,g.q.b).map(v=>`<button class=opt onclick=xoAns(this,${v})>${v}</button>`).join('')}</div>`;
+else pan=`<p class="kturn${myT?' me':''}">${myT?(g.mode=='local'?`دور ${st.turn=='X'?'❌':'⭕'} ${nm(st.turn)}`:'🎯 دورك! اختر مربعًا'):'⏳ دور '+nm(st.turn)}</p>`;
+shell('إكس أو ❌⭕',`<div id=xx></div><div class=xosc><span class="${st.turn=='X'&&!r?'on':''}"><i class=xx>✕</i> ${nm('X')}<b>${st.sc.X}</b></span><span>🤝<b>${st.sc.D}</b></span><span class="${st.turn=='O'&&!r?'on':''}"><i class=xoo>◯</i> ${nm('O')}<b>${st.sc.O}</b></span></div>
+<div class=xob>${[...st.b].map((c,i)=>`<button class="xoc${r&&r.l.includes(i)?' xw':''}${g.q&&g.q.i==i?' xsel':''}" ${c=='.'&&myT&&!g.q?'':'disabled'} onclick=xoTap(${i})>${c=='X'?'<i class=xx>✕</i>':c=='O'?'<i class=xoo>◯</i>':''}</button>`).join('')}</div><div id=xop class=card>${pan}</div>`);
+if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv)}else kSfx('bad')}
+if(g.mode=='net'&&myT&&g.pt!==st.turn+st.b){kSfx('turn');vib(60)}g.pt=st.turn+st.b;
+if(g.mode=='bot'&&!r&&st.turn=='O'){clearTimeout(g.bt);g.bt=setTimeout(()=>{if(XO!==g||st.turn!='O')return;xoPut(xoBest(st.b,'O',g.lv))},650)}}
+function xoTap(i){const g=XO,st=g.st;if(st.b[i]!='.'||g.q)return;if(g.math){const f=pick();g.q={i,a:f[0],b:f[1]};return xoRender()}xoPut(i)}
+function xoAns(el,v){const g=XO,q=g.q;if(!q)return;const ok=v==q.a*q.b;rec(q.a,q.b,ok);document.querySelectorAll('#xop .opt').forEach(o=>o.disabled=true);el.classList.add(ok?'ok':'no');
+later(()=>{g.q=null;if(ok)xoPut(q.i);else{toast(`❌ ${q.a} × ${q.b} = ${q.a*q.b} — ضاع دورك`);xoPass()}},ok?250:900)}
+function xoPut(i){const g=XO;if(g.mode=='net')return xoTx(r=>{if(r.turn!=g.me||r.b[i]!='.'||xoWin(r.b))return false;r.b=r.b.slice(0,i)+g.me+r.b.slice(i+1);const w=xoWin(r.b);if(w)r.sc[w.w]++;else r.turn=g.me=='X'?'O':'X';return true});
+const st=g.st;if(st.b[i]!='.'||xoWin(st.b))return;st.b=st.b.slice(0,i)+st.turn+st.b.slice(i+1);kSfx('card');const w=xoWin(st.b);if(w)st.sc[w.w]++;else st.turn=st.turn=='X'?'O':'X';xoRender()}
+function xoPass(){const g=XO;if(g.mode=='net')return xoTx(r=>{if(r.turn!=g.me)return false;r.turn=g.me=='X'?'O':'X';return true});g.st.turn=g.st.turn=='X'?'O':'X';xoRender()}
+function xoNext(){const g=XO;g.done=0;if(g.mode=='net')return xoTx(r=>{if(!xoWin(r.b))return false;r.start=r.start=='X'?'O':'X';r.b=XE;r.turn=r.start;return true});const st=g.st;st.start=st.start=='X'?'O':'X';st.b=XE;st.turn=st.start;xoRender()}
+async function xoCreate(){const n=($('#xn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{const code=await tFreeCode();await roomRef(code).set({kind:'xo',host:UID,state:'wait',ts:Date.now(),names:{[UID]:n},X:UID,O:null,b:XE,turn:'X',start:'X',sc:{X:0,O:0,D:0},math:S.xq!==0});xoRoom(code)}catch(e){netErr(e)}}
+async function xoJoin(){const code=($('#xcode').value||'').replace(/\D/g,''),n=($('#xn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الغرفة');S.cpme=n;save();
+try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='xo')return toast('لا توجد غرفة إكس أو بهذا الرقم');const r=d.data();if(r.X==UID||r.O==UID)return xoRoom(code);if(r.O)return toast('الغرفة ممتلئة');
+await roomRef(code).update({['names.'+UID]:n,O:UID,state:'play',ts:Date.now()});xoRoom(code)}catch(e){netErr(e)}}
+function xoRoom(code){if(XO&&XO.uns)XO.uns();const g=XO={mode:'net',code,math:true,st:null};shell('إكس أو ❌⭕',`<div id=xx></div><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به صديقك:</p><div class=cpcode dir=ltr>${code}</div><p>⏳ بانتظار اللاعب الثاني…</p></div>`);
+g.uns=roomRef(code).onSnapshot(d=>{if(XO!==g)return;if(!$('#xx')){g.uns&&g.uns();XO=null;return}if(!d.exists)return;const r=d.data();if(r.state=='wait')return;g.me=r.X==UID?'X':'O';g.math=r.math!==false;
+const nb=g.st&&g.st.b!=r.b;if(nb&&r.b!=XE)kSfx('card');if(r.b==XE)g.done=0;g.st={b:r.b,turn:r.turn,start:r.start,sc:r.sc,names:{X:r.names[r.X],O:r.names[r.O]}};if(!g.q)xoRender()},netErr)}
+function xoTx(fn){const ref=roomRef(XO.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();tx.set(ref,s)}).catch(e=>{if(e!=='no')netErr(e)})}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
@@ -1563,10 +1734,10 @@ for(const c of easy){const d=await roomRef(String(c)).get(),r=d.exists?d.data():
 if(!code)code=String(10+R(90));
 const N=S.cpq||100;await roomRef(code).set({host:UID,N,game:S.cpgm||'q',tabs:cpTabs(),seed:Date.now()%1e9,state:'wait',ts:Date.now(),players:{[UID]:newP(n)}});cpRoom(code)}catch(e){netErr(e)}}
 async function cpJoin(){const code=($('#cpcode').value||'').replace(/\D/g,''),n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}if(code.length<2)return toast('اكتب رقم الغرفة، مثل 50');S.cpme=n;save();
-try{const d=await roomRef(code).get();if(!d.exists||d.data().kind=='cards')return toast('لا توجد غرفة بهذا الرقم');const r=d.data();if(r.state!='wait'&&!(r.players||{})[UID])return toast('المسابقة بدأت بالفعل');
+try{const d=await roomRef(code).get();if(!d.exists||d.data().kind)return toast('لا توجد غرفة بهذا الرقم');const r=d.data();if(r.state!='wait'&&!(r.players||{})[UID])return toast('المسابقة بدأت بالفعل');
 const mine=(r.players||{})[UID];if(!mine)await roomRef(code).update({['players.'+UID]:newP(n)});else if(mine.n!=n)await roomRef(code).update({['players.'+UID+'.n']:n});cpRoom(code)}catch(e){netErr(e)}}
 function cpRoom(code){cpOff();CP={mode:'net',code,view:'lobby',P:[],me:null};cpLobby();CP.uns=roomRef(code).onSnapshot(cpSnap,netErr)}
-function cpSnap(d){if(!CP||CP.mode!='net')return;if(!$('#cpx')&&CP.view!='lobby')return cpOff();if(!d.exists)return;const r=CP.room=d.data();if(r.kind=='cards')return;const pl=r.players||{};CP.game=r.game||'q';
+function cpSnap(d){if(!CP||CP.mode!='net')return;if(!$('#cpx')&&CP.view!='lobby')return cpOff();if(!d.exists)return;const r=CP.room=d.data();if(r.kind)return;const pl=r.players||{};CP.game=r.game||'q';
 CP.P=Object.keys(pl).map(u=>Object.assign({u},pl[u]));CP.host=r.host==UID;
 if(CP.view=='lobby'){if(r.state=='wait')return cpLobby();if(r.state=='play'||r.state=='end'){CP.N=r.N;CP.seed=r.seed;CP.Q=genQs(r.N,r.tabs,r.seed);CP.me=Object.assign({},pl[UID]||newP(S.cpme||NM()));CP.view='play';
  if(r.state=='end'||CP.me.done)return cpWait();return cpNetGo()}}
