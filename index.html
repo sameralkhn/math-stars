@@ -573,7 +573,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.20.5';
+const VER='2.21.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1930,6 +1930,7 @@ o.own={};U(a.own,b.own).forEach(k=>o.own[k]=[...new Set([...((a.own||{})[k]||[])
 ['gd','cc','cj'].forEach(k=>o[k]=Math.max(a[k]||0,b[k]||0));return o}
 async function startSync(){SYN='⏳';refreshAcc();try{const d=await FB.d.collection('users').doc(UID).get(),r=d.exists?JSON.parse(d.data().data||'{}'):null;
 if(r){const m=!S.uid?merge(pack(),r):S.uid===UID?((r.ts||0)>(S.ts||0)?r:pack()):r;S=Object.assign(fresh(),m,keepL())}
+if(!d.exists){let cw=CFG.welcome;try{const cf=await FB.d.collection('config').doc('app').get();if(cf.exists)cw=cf.data().welcome}catch(e){}const w=cw==null?3000:Math.max(0,cw|0);if(w){S.gd=GD()+w;gLog(w,'🎁 هدية التسجيل');later(()=>{kSfx('win');clap(16);cpRain();ask(`أهلًا بك في نجوم الضرب 🌟<br>هديتك للتسجيل: <b>🪙 ${w.toLocaleString('en')}</b><br><small>العب واجمع المزيد!</small>`,{icon:'🎁',title:'مرحبًا '+esc(kShort(S.nm||'بك')),ok:'شكرًا! 🎉',no:'إغلاق'})},900)}}
 S.uid=UID;S.ts=Date.now();localSave();await push(1);
 UNS=uref().onSnapshot(d=>{if(!d.exists||d.metadata.hasPendingWrites)return;const r=JSON.parse(d.data().data||'{}');
 if((r.ts||0)>(S.ts||0)){S=Object.assign(fresh(),r,keepL(),{uid:UID});localSave();SYN='✅';if($('.chips'))home();else refreshAcc()}});
@@ -1989,6 +1990,7 @@ shell('لوحة الإدارة 🛡️',`<div id=adm></div><div class=admst><spa
 <p class=sm>يظهر هنا كل من دخل بحساب. من يلعب دون حساب لا يظهر — فعّل «إلزام تسجيل الدخول» لترى الجميع.</p></div>`:T=='games'?admGames():T=='notes'?`<div class=card><h3 style="margin-top:0">🔔 إرسال إشعار للجميع</h3><input id=ntt class=nm maxlength=60 placeholder="العنوان — مثل: لعبة جديدة! 🎉"><textarea id=ntb class=nm rows=2 maxlength=300 placeholder="نص الإشعار (اختياري)" style="margin-top:6px"></textarea><button class=big style="background:#ff8a1f" onclick="admNote('all')">📢 أرسل للجميع</button>
 ${NOTES.length?`<details><summary class=sm>آخر الإشعارات المرسلة (${NOTES.length})</summary>${NOTES.slice(0,10).map(n=>`<div class=admchip style="background:#f2f5fb"><span>${n.to=='all'?'📢':'💌'} ${esc(n.title||'')} <small>${ago(n.ts)}</small></span><button onclick="admNoteDel('${n.id}')">🗑️ حذف</button></div>`).join('')}</details>`:''}</div>
 `:`<div class=card><h3 style="margin-top:0">⚙️ إعدادات البرنامج</h3>${tg('requireLogin','🔐 إلزام تسجيل الدخول',!!CFG.requireLogin,'لا يفتح البرنامج إلا بحساب')}${tg('net','📱 اللعب الجماعي',CFG.net!==false,'الغرف والطاولات بين الأجهزة')}
+<label class=cplb for=admwel>🎁 هدية التسجيل لكل حساب جديد</label><div class=admrow><input id=admwel class=nm type=number inputmode=numeric min=0 step=500 dir=ltr value="${CFG.welcome==null?3000:CFG.welcome}"><button class=buy onclick="admCfg('welcome',Math.max(0,Math.round(+$('#admwel').value||0)))">💾 حفظ</button></div>
 <label class=cplb for=admmsg>📢 رسالة تظهر للجميع في الصفحة الرئيسية</label><textarea id=admmsg class=nm rows=2 maxlength=200 placeholder="اتركها فارغة لإخفائها">${esc(CFG.msg||'')}</textarea><button class=buy onclick="admCfg('msg',$('#admmsg').value.trim())">💾 حفظ الرسالة</button>
 <label class=cplb for=admbl>⛔ إيقاف إيميل (حتى قبل أن يسجّل)</label><div class=admrow><input id=admbl class=nm dir=ltr type=email placeholder="name@example.com"><button class=buy onclick=admBlockEmail()>إيقاف</button></div>${(CFG.blocked||[]).map(e=>`<div class=admchip><span dir=ltr>${esc(e)}</span><button onclick="admUnblockEmail('${esc(e)}')">↩️ إلغاء</button></div>`).join('')}</div>
 `}${ADM.sel?admUser():''}`)}
