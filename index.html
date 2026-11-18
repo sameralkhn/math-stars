@@ -567,7 +567,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.19.2';
+const VER='2.20.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1164,13 +1164,15 @@ const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest',
 ['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول']]]];
 const GDEF={cardsHome:1500,tarneeb:1500},GINT=['cardsHome','tarneeb'];
 const gFee=f=>{const v=((typeof CFG=='object'&&CFG.fees)||{})[f];return v==null?(GDEF[f]||0):Math.max(0,v|0)};
-const gBonus=f=>{const v=((typeof CFG=='object'&&CFG.bonus)||{})[f];return v==null?1500:Math.max(0,v|0)};
-function gFeeSet(f){FEE=gFee(f);BONUS=gBonus(f)}
+const RWP=1.25,gRw=fee=>Math.round(fee*RWP);
+function gFeeSet(f){FEE=gFee(f);BONUS=gRw(FEE)}
 const gName=f=>{for(const s of GSEC)for(const g of s[3])if(g[0]==f)return g[1]+' '+g[2];return f};
+let GPAY=null;
+function gWinPay(f){if(!GPAY||GPAY.f!=f)return;const rw=gRw(GPAY.fee);GPAY=null;S.gd=GD()+rw;gLog(rw,'🏆 '+gName(f)+' — مكافأة الفوز');save();later(()=>kPop(`🏆 <b>مكافأة الفوز</b> <small>+🪙 ${rw.toLocaleString('en')}</small>`,'turn',2500),900)}
 function gEnter(f){const fee=gFee(f);if(!fee||GINT.includes(f))return window[f]();const g=GD();
 if(g<fee)return kPop(`🔒 <b>${esc(gName(f))}</b> <small>الدخول بـ 🪙 ${fee.toLocaleString('en')} — معك 🪙 ${g.toLocaleString('en')}. اجمع المزيد من الألعاب المجانية 💪</small>`,'turn',3500);
 if(!confirm(`دخول «${gName(f)}» بـ ${fee.toLocaleString('en')} ذهبة؟\nرصيدك الآن: ${g.toLocaleString('en')}`))return;
-S.gd=g-fee;gLog(-fee,'🎟️ دخول '+gName(f));save();toast(`🎟️ دفعت 🪙 ${fee.toLocaleString('en')}`);window[f]()}
+S.gd=g-fee;gLog(-fee,'🎟️ دخول '+gName(f));GPAY={f,fee};save();toast(`🎟️ دفعت 🪙 ${fee.toLocaleString('en')}`);window[f]()}
 function games(){clr();const sc=cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول 1–'+cur):'كل الجداول';
 shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><div><b>${esc(NM())}</b><small>🎯 ${sc}</small></div><span class=gsg>🪙 ${GD().toLocaleString('en')}</span><span class=gsb>🦘 ${BK()}</span></div>
 ${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="gEnter('${f}')"><i>${e}</i><b>${n}</b><small>${d}</small>${gFee(f)>0?`<em class=gfee>🪙 ${gFee(f).toLocaleString('en')}</em>`:''}</button>`).join('')}</div>`).join('')}`)}
@@ -1229,8 +1231,8 @@ function sqQ(){const g=GX;if(g.r>=g.N)return gEnd('السلسلة المفقود
 shell('السلسلة المفقودة 🪜',`<p class=tip>💡 كل رقم يزيد ${a} عن الذي قبله.</p><p class=sm style="text-align:center;margin:0">${g.r+1}/${g.N}</p><div class="q seq">${terms.map((t,i)=>i==miss?'<b class=sqm>؟</b>':`<span>${t}</span>`).join('<i>،</i>')}</div>${optB(opts(a,k+miss),'sqA')}`);say(`جدول ${a}`)}
 function sqA(el,v){const g=GX,ok=v==g.a*g.b;optOff(g.a*g.b);rec(g.a,g.b,ok);g.r++;if(ok){el.classList.add('ok');good();later(sqQ,600)}else{el.classList.add('no');g.e++;oops();later(sqQ,1300)}}
 // ===== لعبة «آخر ورقة» 🃏 (لعبة أوراق ألوان وأرقام) =====
-// الدخول بـ 1500 ذهبة لكل مشاركة، والفائز يستردّ رسومه ويأخذ مكافأة 1500 (لا يأخذ من ذهب الآخرين). ضد الكمبيوتر، أو مع العائلة من عدة أجوال (rooms/{code} بنوع cards)
-let FEE=1500,BONUS=1500;const KC={r:'#e8453c',y:'#ffc531',g:'#18a959',b:'#2e8bff'},KN={r:'أحمر',y:'أصفر',g:'أخضر',b:'أزرق'};
+// الدخول برسوم يحددها المدير، والفائز يأخذ مكافأة = الرسوم + 25% (لا تُسترد الرسوم، ولا يأخذ من ذهب الآخرين). ضد الكمبيوتر، أو مع العائلة من عدة أجوال (rooms/{code} بنوع cards)
+let FEE=1500,BONUS=1875;const KC={r:'#e8453c',y:'#ffc531',g:'#18a959',b:'#2e8bff'},KN={r:'أحمر',y:'أصفر',g:'أخضر',b:'أزرق'};
 let KG=null;
 function kDeck(){const d=[];for(const c of 'rygb'){d.push(c+'0');for(let k=0;k<2;k++){for(let n=1;n<=9;n++)d.push(c+n);d.push(c+'S',c+'R',c+'D')}}for(let k=0;k<4;k++)d.push('W','W4');return sh(d)}
 const kWild=c=>c[0]=='W',kVal=c=>c.slice(1);
@@ -1259,7 +1261,7 @@ if(kWild(c))msg+=' • اللون '+KN[st.color];st.turn=kNext(st);st.msg=msg;re
 function cardsHome(){clr();gFeeSet('cardsHome');cpOff&&cpOff();if(KG&&KG.uns){KG.uns();KG=null}const g=GD(),can=g>=FEE,m=S.km||'bot',nb=S.kb||2;
 const b=(v,l)=>`<button class="${m==v?'on':''}" onclick="S.km='${v}';save();cardsHome()">${l}</button>`;
 const back=m=='net'&&FB&&UID&&S.klast&&Date.now()-S.klast.ts<3*3600e3?`<button class="big kback2" onclick="kRejoin('${S.klast.code}')">🔁 العودة إلى الطاولة ${S.klast.code}</button>`:'';
-let body=m=='bot'?`<h3>عدد اللاعبين الآليين</h3><div class=seg>${[1,2,3].map(n=>`<button class="${nb==n?'on':''}" onclick="S.kb=${n};save();cardsHome()">🤖 ${n}</button>`).join('')}</div><p class=sm>إن فزت تستردّ رسومك وتكسب مكافأة 🪙 ${BONUS.toLocaleString('en')}</p><button class=big ${can?'':'disabled'} onclick=kBotStart()>🃏 العب (🪙 ${FEE})</button>`
+let body=m=='bot'?`<h3>عدد اللاعبين الآليين</h3><div class=seg>${[1,2,3].map(n=>`<button class="${nb==n?'on':''}" onclick="S.kb=${n};save();cardsHome()">🤖 ${n}</button>`).join('')}</div><p class=sm>إن فزت تكسب مكافأة 🪙 ${BONUS.toLocaleString('en')} (الرسوم + 25%)</p><button class=big ${can?'':'disabled'} onclick=kBotStart()>🃏 العب (🪙 ${FEE})</button>`
 :!FB?`<p>☁️ تحتاج اللعبة الجماعية فتح اللعبة من رابطها على الإنترنت.</p>`:!UID?`<p>👤 سجّل الدخول أولًا، وكذلك كل من سيشارك.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`
 :`<label class=cplb for=kn>✏️ اسمك في اللعبة</label><input id=kn class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك"><button class=big ${can?'':'disabled'} onclick=kCreate()>🏠 أنشئ طاولة (🪙 ${FEE})</button><h3>أو انضم إلى طاولة</h3><input id=kcode class=nm inputmode=numeric maxlength=3 placeholder="رقم الطاولة (مثل 50)" dir=ltr value="${S.klast&&Date.now()-S.klast.ts<3*3600e3?S.klast.code:''}"><button class=big style="background:#18a999" onclick=kJoin()>🔑 انضمام / عودة إلى الطاولة</button>`;
 shell('آخر ورقة 🃏',`<div id=kx></div><div class="card kintro"><div class=kfan>${['r7','yR','gD','bS','W4'].map((c,i)=>kCard(c,'',`style="transform:rotate(${(i-2)*12}deg) translateY(${Math.abs(i-2)*6}px)"`)).join('')}</div>
@@ -1271,8 +1273,8 @@ const KSYM={S:'⊘',R:'⇄',D:'+2','4':'+4'};
 function kCard(c,cls='',attr=''){const tg=/data-c/.test(attr)&&KG&&KG.nxn&&/[DS4]$/.test(c)?`<b class=kto>➜ ${KG.nxn}</b>`:'';return kCard0(c,cls,attr).replace(/<\/div>$/,tg+'</div>')}
 function kCard0(c,cls='',attr=''){const w=kWild(c),v=kVal(c),sym=w?(c=='W4'?'+4':'🌈'):(KSYM[v]||v);return `<div class="kc ${w?'kw':''} ${cls}" style="--k:${w?'#222':KC[c[0]]}" ${attr}><span class=kcs>${sym}</span><i>${sym}</i></div>`}
 function kPay(key,lbl){S.kpaid=S.kpaid||{};if(key in S.kpaid)return true;if(GD()<FEE)return false;if(FEE>0){S.gd=GD()-FEE;gLog(-FEE,lbl||'🃏 آخر ورقة — رسوم');toast(`🎟️ دفعت 🪙 ${FEE} للمشاركة`)}S.kpaid[key]=FEE;const k=Object.keys(S.kpaid);if(k.length>30)delete S.kpaid[k[0]];save();return true}
-function kReward(key,game){const pd=(S.kpaid||{})[key],rf=typeof pd=='number'&&pd!==1?pd:FEE;if(rf>0)kPrize(key+'_r',rf,game+' — استرداد الرسوم');if(BONUS>0)kPrize(key+'_b',BONUS,game+' — مكافأة الفوز')}
-const kRwTxt=()=>`↩️ استرداد الرسوم 🪙 ${FEE.toLocaleString('en')} + 🎁 مكافأة 🪙 ${BONUS.toLocaleString('en')}`,kFeeNote=()=>`<p class=sm style="margin:4px 0 0">🏆 الفائز يستردّ رسومه ويكسب مكافأة 🪙 ${BONUS.toLocaleString('en')} — لا أحد يأخذ ذهب غيره</p>`;
+function kReward(key,game){const pd=(S.kpaid||{})[key],paid=typeof pd=='number'&&pd!==1?pd:FEE,rw=gRw(paid);if(rw>0)kPrize(key+'_w',rw,game+' — مكافأة الفوز')}
+const kRwTxt=()=>`🎁 مكافأة الفوز 🪙 ${BONUS.toLocaleString('en')} (الرسوم + 25%)`,kFeeNote=()=>FEE?`<p class=sm style="margin:4px 0 0">🏆 الفائز يكسب مكافأة 🪙 ${BONUS.toLocaleString('en')} — الرسوم + 25%</p>`:'';
 function kPrize(key,amt,lbl){S.kwon=S.kwon||{};if(S.kwon[key])return;S.kwon[key]=1;S.gd=GD()+amt;gLog(amt,lbl||'🏆 آخر ورقة — فوز');save()}
 // ضد الكمبيوتر
 const BOTN=['🤖 روبي','🦊 ثعلوب','🐼 باندو'];
@@ -1531,7 +1533,7 @@ function tSort(h,tp){const o=['S','H','C','D'];if(tp){o.splice(o.indexOf(tp),1);
 function tarneeb(){clr();gFeeSet('tarneeb');if(TG&&TG.uns)TG.uns();TG=null;const g=GD(),can=g>=FEE,m=S.tm||'bot',tg=S.tgt||21,b=(v,l)=>`<button class="${m==v?'on':''}" onclick="S.tm='${v}';save();tarneeb()">${l}</button>`,lastOk=S.tlast&&Date.now()-S.tlast.ts<3*3600e3;
 const back=m=='net'&&FB&&UID&&lastOk?`<button class="big kback2" onclick="tRejoin('${S.tlast.code}')">🔁 العودة إلى الطاولة ${S.tlast.code}</button>`:'';
 const tgt=`<h3>تنتهي اللعبة عند</h3><div class=seg>${[11,21,31].map(n=>`<button class="${tg==n?'on':''}" onclick="S.tgt=${n};save();tarneeb()">${n} نقطة</button>`).join('')}</div>`;
-const body=m=='bot'?`${tgt}<p class=sm>أنت وشريكك 🤖 ضد فريق الكمبيوتر. إن فاز فريقك تستردّ رسومك وتكسب مكافأة 🪙 ${BONUS.toLocaleString('en')}</p><button class=big ${can?'':'disabled'} onclick=tBotStart()>♠️ العب (🪙 ${FEE})</button>`
+const body=m=='bot'?`${tgt}<p class=sm>أنت وشريكك 🤖 ضد فريق الكمبيوتر. إن فاز فريقك تكسب مكافأة 🪙 ${BONUS.toLocaleString('en')} (الرسوم + 25%)</p><button class=big ${can?'':'disabled'} onclick=tBotStart()>♠️ العب (🪙 ${FEE})</button>`
 :!FB?`<p>☁️ تحتاج اللعبة الجماعية فتح اللعبة من رابطها على الإنترنت.</p>`:!UID?`<p>👤 سجّل الدخول أولًا، وكذلك كل من سيشارك.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`
 :`<label class=cplb for=tn>✏️ اسمك في اللعبة</label><input id=tn class=nm maxlength=20 value="${esc(S.cpme||'')}" placeholder="اكتب اسمك">${tgt}<button class=big ${can?'':'disabled'} onclick=tCreate()>🏠 أنشئ طاولة (🪙 ${FEE})</button><h3>أو انضم إلى طاولة</h3><input id=tcode class=nm inputmode=numeric maxlength=3 placeholder="رقم الطاولة (مثل 50)" dir=ltr value="${lastOk?S.tlast.code:''}"><button class=big style="background:#18a999" onclick=tJoin()>🔑 انضمام / عودة إلى الطاولة</button><p class=sm>من 2 إلى 4 لاعبين، والكمبيوتر يكمل الأماكن الفارغة. أول اثنين ينضمّان فريق واحد.</p>`;
 shell('الطرنيب ♠️',`<div id=tx></div><div class="card kintro"><div class=kfan>${['S14','H13','D12','C11','H10'].map((c,i)=>tCard(c,'',`style="transform:rotate(${(i-2)*12}deg) translateY(${Math.abs(i-2)*6}px)"`)).join('')}</div>
@@ -1612,7 +1614,7 @@ else if(g.q)pan=`<p class=sm style="margin:0">🧮 أجب لتضع علامتك 
 else pan=`<p class="kturn${myT?' me':''}">${myT?(g.mode=='local'?`دور ${st.turn=='X'?'❌':'⭕'} ${nm(st.turn)}`:'🎯 دورك! اختر مربعًا'):'⏳ دور '+nm(st.turn)}</p>`;
 shell('إكس أو ❌⭕',`<div id=xx></div><div class=xosc><span class="${st.turn=='X'&&!r?'on':''}"><i class=xx>✕</i> ${nm('X')}<b>${st.sc.X}</b></span><span>🤝<b>${st.sc.D}</b></span><span class="${st.turn=='O'&&!r?'on':''}"><i class=xoo>◯</i> ${nm('O')}<b>${st.sc.O}</b></span></div>
 <div class=xob>${[...st.b].map((c,i)=>`<button class="xoc${r&&r.l.includes(i)?' xw':''}${g.q&&g.q.i==i?' xsel':''}" ${c=='.'&&myT&&!g.q?'':'disabled'} onclick=xoTap(${i})>${c=='X'?'<i class=xx>✕</i>':c=='O'?'<i class=xoo>◯</i>':''}</button>`).join('')}</div><div id=xop class=card>${pan}</div>`);
-if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv)}else kSfx('bad')}
+if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv);if(g.mode!='local')gWinPay('xo')}else kSfx('bad')}
 if(g.mode=='net'&&myT&&g.pt!==st.turn+st.b){kSfx('turn');vib(60)}g.pt=st.turn+st.b;
 if(g.mode=='bot'&&!r&&st.turn=='O'){clearTimeout(g.bt);g.bt=setTimeout(()=>{if(XO!==g||st.turn!='O')return;xoPut(xoBest(st.b,'O',g.lv))},650)}}
 function xoTap(i){const g=XO,st=g.st;if(st.b[i]!='.'||g.q)return;if(g.math){const f=pick();g.q={i,a:f[0],b:f[1]};return xoRender()}xoPut(i)}
@@ -1698,7 +1700,7 @@ else if(!myT)pan=`<p class=kturn>⏳ دور ${nm(p)}${st.rm?' — يختار ح�
 else pan=`<p class="kturn me">${who}${st.rm?'🎯 إدريس! اختر حصاة من حصى خصمك لتأخذها':st.hand[p]>0?`🎯 ضع حصاة على نقطة فارغة (معك ${st.hand[p]})`:g.sel>=0?'👆 اختر النقطة المجاورة المضيئة':'👆 اختر حصاة لتحرّكها'}</p>`;
 const box=k=>`<span class="${p==k&&!r?'on':''}"><i class="iddot ${k=='X'?'idsx':'idso'}"></i> ${nm(k)}<b>${st.sc[k]}</b></span>`,mine=g.mode=='local'?'X':g.me,oth=IOP(mine),loc=g.mode=='local';
 shell('إدريس 🪨',`<div id=ix></div><div class="xosc idsc">${box('X')}<span>🤝<b>${st.sc.D}</b></span>${box('O')}</div>${idHand(st,mine,nm(mine),!loc)}${idHand(st,oth,nm(oth),0)}<div class="idb ${st.v=='b'?'idbig':''}">${idSvg(st,o)}</div><div id=xop class=card>${pan}</div>`);
-if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv)}else kSfx('bad')}
+if(r&&!g.done){g.done=1;if(r.w=='D')kSfx('rev');else if(g.mode=='local'||r.w==g.me){kSfx('win');good();clap(14);cpRain();if(g.mode=='bot')award(g.lv);if(g.mode!='local')gWinPay('idris')}else kSfx('bad')}
 const sig=st.b+st.turn+st.rm;if(g.mode=='net'&&myT&&g.pt!==sig){kSfx('turn');vib(60)}g.pt=sig;
 if(g.mode=='bot'&&!r&&p=='O'){clearTimeout(g.bt);g.bt=setTimeout(()=>{if(IG!==g||g.st!==st)return;const m=idBest(st,g.lv);if(m)idDo(m)},st.rm?900:700)}}
 function idTap(i){const g=IG,st=g&&g.st;if(!st||st.win||g.q)return;if(g.mode!='local'&&st.turn!=g.me)return;const V=IDV[st.v],p=st.turn,c=st.b[i];
@@ -1975,11 +1977,11 @@ function admGames(){const sel=ADM.gs=ADM.gs||new Set(),all=GSEC.flatMap(x=>x[3].
 const pill=f=>{const v=gFee(f);return v?`<em class=agp>🪙 ${v.toLocaleString('en')}</em>`:'<em class="agp free">مجانية</em>'};
 const secAll=L=>L.every(g=>sel.has(g[0]));
 return `<div class=card style="padding:12px"><div class=agtop><b>🎮 أسعار الدخول</b><button class="agsel${n==all.length?' on':''}" onclick="admGSel('*')">${n==all.length?'☑️ إلغاء الكل':'☐ تحديد الكل'}</button></div><p class=sm style="margin:2px 0 8px">المس الألعاب لتحديدها، ثم اكتب السعر في الأسفل وطبّقه عليها مرة واحدة.</p>
-${GSEC.map(([ic,t,col,L],si)=>`<div class=agsh style="--c:${col}"><span>${ic} ${t}</span><button onclick="admGSel(${si})">${secAll(L)?'إلغاء القسم':'تحديد القسم'}</button></div><div class=aggrid>${L.map(([f,e,nm])=>`<button class="agt${sel.has(f)?' on':''}" style="--c:${col}" onclick="admGSel('${f}')"><i class=agck>${sel.has(f)?'✓':''}</i><span class=age>${e}</span><b>${nm}</b>${pill(f)}${GINT.includes(f)?`<small>🎁 فوز ${gBonus(f).toLocaleString('en')}</small>`:''}</button>`).join('')}</div>`).join('')}</div>
+${GSEC.map(([ic,t,col,L],si)=>`<div class=agsh style="--c:${col}"><span>${ic} ${t}</span><button onclick="admGSel(${si})">${secAll(L)?'إلغاء القسم':'تحديد القسم'}</button></div><div class=aggrid>${L.map(([f,e,nm])=>`<button class="agt${sel.has(f)?' on':''}" style="--c:${col}" onclick="admGSel('${f}')"><i class=agck>${sel.has(f)?'✓':''}</i><span class=age>${e}</span><b>${nm}</b>${pill(f)}${gFee(f)&&['cardsHome','tarneeb','xo','idris'].includes(f)?`<small>🏆 فوز ${gRw(gFee(f)).toLocaleString('en')}</small>`:''}</button>`).join('')}</div>`).join('')}</div>
 <div class="agbar${n?' on':''}"><div class=agbt>${n?`✅ محدد <b>${n}</b> ${n==1?'لعبة':'ألعاب'}`:'حدّد لعبة أو أكثر'}</div>
 <div class=agrow><input id=agv type=number inputmode=numeric min=0 step=50 dir=ltr placeholder="السعر" ${n?'':'disabled'}><button class=agapply ${n?'':'disabled'} onclick="admGApply(+$('#agv').value)">🪙 طبّق</button><button class="agapply free" ${n?'':'disabled'} onclick="admGApply(0)">مجانية</button></div>
 <div class=agq>${[100,250,500,1000,1500].map(v=>`<button ${n?'':'disabled'} onclick="$('#agv').value=${v}">${v.toLocaleString('en')}</button>`).join('')}</div>
-${[...sel].some(f=>GINT.includes(f))?`<div class=agrow><span class=sm>🎁 مكافأة الفوز:</span><input id=agb type=number inputmode=numeric min=0 step=50 dir=ltr placeholder="المكافأة"><button class=agapply onclick="admGBonus(+$('#agb').value)">طبّق</button></div>`:''}</div>`}
+<p class=sm style="color:#cdd6f0;margin:6px 0 0">🏆 مكافأة الفائز تُحسب تلقائيًا: الرسوم + 25% (في الأوراق والطرنيب وإكس أو وإدريس)</p></div>`}
 function admGSel(k){const sel=ADM.gs=ADM.gs||new Set(),all=GSEC.flatMap(x=>x[3].map(g=>g[0]));
 if(k==='*'){if(sel.size==all.length)sel.clear();else all.forEach(f=>sel.add(f))}
 else if(typeof k=='number'){const L=GSEC[k][3].map(g=>g[0]),on=L.every(f=>sel.has(f));L.forEach(f=>on?sel.delete(f):sel.add(f))}
