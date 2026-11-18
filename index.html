@@ -573,7 +573,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.20.3';
+const VER='2.20.4';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1159,9 +1159,9 @@ let n=0;const chk=()=>{if(FC.vt!==tk)return;if(SAYD){const ms=SAYD.dur*1000;bar(
 function fcKnow(k){if(FC.flip!==2)return;FC.flip=0;const[a,b]=FC.cur,id=key(a,b);FC.q.shift();rec(a,b,!!k,1);
 if(k){FC.ok++;if(!FC.miss.has(id))FC.first.add(id);S.gd=GD()+3;gLog(3,'🎴 البطاقات');save();toast('🪙 +3');FC.kc=(FC.kc||0)+1;(FC.rc=FC.rc||[]).push([a,b]);good();clap(3);const p=mid($('.fk1'));burst(p[0],p[1])}else{FC.miss.add(id);FC.q.splice(Math.min(FC.q.length,3),0,FC.cur);oops()}later(k&&FC.kc%10==0?fcTest:fcDeck,k?600:350)}
 function fcTest(){const L=FC.rc||[];FC.rc=[];if(!L.length)return fcDeck();const [a,b]=L[R(L.length)];FC.t=[a,b];FC.tp=Math.round(L.length*1.5);
-shell('البطاقات 🎴',`<div class="card fctest"><div style="font-size:52px">🕵️</div><h2 style="margin:4px 0">اختبار الصدق!</h2><p class=sm style="margin:0 0 6px">قلت إنك تعرف هذه البطاقة… أثبت ذلك 😉<br>✅ الصح: <b>+25</b> ذهبة • ❌ الخطأ: <b>−${FC.tp}</b> (نصف ما كسبته)</p>${qHTML(a,b)}<div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=fcTA(this,${v})>${v}</button>`).join('')}</div></div>`);say(`${a} ضرب ${b}`)}
+shell('البطاقات 🎴',`<div class="card fctest"><div style="font-size:52px">🕵️</div><h2 style="margin:4px 0">اختبار الصدق!</h2><p class=sm style="margin:0 0 6px">قلت إنك تعرف هذه البطاقة… أثبت ذلك 😉<br>✅ الصح: <b>+${FC.tp}</b> ذهبة • ❌ الخطأ: <b>−${FC.tp}</b></p>${qHTML(a,b)}<div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=fcTA(this,${v})>${v}</button>`).join('')}</div></div>`);say(`${a} ضرب ${b}`)}
 function fcTA(el,v){const t=FC.t;if(!t)return;FC.t=null;const [a,b]=t,ok=v==a*b;rec(a,b,ok,1);document.querySelectorAll('.fctest .opt').forEach(o=>{o.disabled=true;if(+o.textContent==a*b)o.classList.add('ok')});
-if(ok){el.classList.add('ok');S.gd=GD()+25;gLog(25,'🕵️ اختبار الصدق — نجاح');good();clap(14);cpRain();kPop('🕵️ <b>صادق وبطل!</b> <small>+🪙 25</small>','turn',2000)}
+if(ok){el.classList.add('ok');const w=FC.tp||15;S.gd=GD()+w;gLog(w,'🕵️ اختبار الصدق — نجاح');good();clap(14);cpRain();kPop(`🕵️ <b>صادق وبطل!</b> <small>+🪙 ${w}</small>`,'turn',2000)}
 else{el.classList.add('no');const d=Math.min(FC.tp||15,GD());S.gd=GD()-d;if(d)gLog(-d,'🕵️ اختبار الصدق — خطأ');oops();kPop(`🙈 <b>${a} × ${b} = ${a*b}</b> <small>−🪙 ${d} • راجعها مرة أخرى</small>`,'turn',2600);FC.q.splice(Math.min(FC.q.length,2),0,[a,b])}
 save();later(fcDeck,ok?1800:2800)}
 function fcEnd(){const r=FC.first.size/FC.n,n=r>=.9?3:r>=.7?2:r>=.4?1:0;award(n);if(n){good();clap(16);say('أحسنت يا بطل');for(let i=0;i<5;i++)later(()=>burst(R(innerWidth),R(300)+100),i*250)}
