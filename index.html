@@ -562,12 +562,14 @@ svg[class^=mv]{transform-origin:50% 85%}
 .agbar{display:none;position:sticky;bottom:8px;background:#1b2a5c;color:#fff;border-radius:20px;padding:10px 12px;box-shadow:0 8px 24px #1b2a5c55;z-index:6;opacity:.75}.agbar.on{opacity:1;display:block}.agbt{font-size:14px;margin-bottom:6px}.agbt b{font-size:18px;color:#ffc531}
 .agrow{display:flex;gap:6px;align-items:center;margin-top:4px}.agrow input{flex:1;min-width:0;border:0;border-radius:12px;padding:10px;font:inherit;font-size:18px;font-weight:900;text-align:center}.agapply{border:0;border-radius:12px;padding:10px 12px;background:#ffc531;color:#1b2a5c;font:inherit;font-weight:900;cursor:pointer}.agapply.free{background:#3ddc97}.agapply:disabled,.agrow input:disabled{opacity:.45}
 .agq{display:flex;gap:4px;margin-top:6px}.agq button{flex:1;border:0;border-radius:10px;padding:6px 0;background:#ffffff22;color:#fff;font:inherit;font-weight:800;font-size:12px;cursor:pointer}.agq button:disabled{opacity:.4}.agrow .sm{color:#cdd6f0;margin:0;flex:none}
+.fkt{position:relative;height:30px;background:#e7ecf6;border-radius:15px;overflow:hidden;margin:4px 0 8px}.fkt i{position:absolute;inset:0 0 0 auto;width:0;background:linear-gradient(90deg,#8a63ff,#5b8cff);border-radius:15px}.fkt span{position:relative;display:flex;height:100%;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#1b2a5c}.fkt.done i{background:#3ddc97;width:100%!important;transition:width .25s!important}
+#fk .opt:disabled{opacity:.45;filter:grayscale(.5)}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.20.0';
+const VER='2.20.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -604,7 +606,8 @@ if(m)q=[...numK(+m[1]),'ضرب',...numK(+m[2]),...(m[3]?['يساوي',...numK(+m
 stopA();const tok=++AQT,sl=SLOW();Promise.all(q.map(k=>loadB(PI[k]))).then(L=>{if(tok!==AQT)return;const c=actx();let at=c.currentTime+.05;
 L.forEach((x,j)=>{if(j){const k=q[j],pk=q[j-1];at+=k=='يساوي'?(sl?.5:.22):pk=='يساوي'?(sl?.38:.16):k[0]=='w'?.03:(sl?.2:.08)}
 const s=c.createBufferSource();s.buffer=x.bf;s.connect(c.destination);s.start(at,x.o,x.d);ASRC.push(s);at+=x.d});
-if(cb)setTimeout(()=>{if(tok===AQT)cb()},(at-c.currentTime)*1000+60)}).catch(()=>{if(cb)cb()});return true}
+SAYD={dur:at-c.currentTime};if(cb)setTimeout(()=>{if(tok===AQT)cb()},(at-c.currentTime)*1000+60)}).catch(()=>{if(cb)cb()});return true}
+let SAYD=null;
 function stopA(){AQT++;ASRC.forEach(s=>{try{s.stop()}catch(e){}});ASRC=[]}
 let VO=null,VW=0;
 function pickV(){try{const v=speechSynthesis.getVoices();VO=v.find(x=>S.vn&&x.name==S.vn)||v.find(x=>/^ar[-_]SA/i.test(x.lang))||v.find(x=>/^ar/i.test(x.lang))||null}catch(e){}}
@@ -1141,9 +1144,15 @@ function face(f,back){const[a,b]=f,p=a*b;if(back)return FC.rv?`<div class=fq>${a
 return FC.rv?`<div class=fq>${a} × <bdi class=qm>؟</bdi> = ${p}</div><div class=fh>ما الرقم المخفي؟</div>`:`<div class=fq>${a} × ${b} = <bdi class=qm>؟</bdi></div><div class=fh>فكّر في الجواب</div>`}
 const dotsM=([a,b])=>`<div class=fdots style="grid-template-columns:repeat(${b},8px)">${Array.from({length:a*b},(_,i)=>`<i style="background:hsl(${(i/b|0)*37+10},85%,58%)"></i>`).join('')}</div>`;
 function fcDeck(){const f=FC.q[0];if(!f)return fcEnd();FC.cur=f;FC.flip=0;
-shell('البطاقات 🎴',fcOpts()+`<div class=prog><i style="width:${(FC.n-FC.q.length)*100/FC.n}%"></i></div><p class=sm style="text-align:center;margin:0">✅ عرفت ${FC.ok} من ${FC.n} • باقي ${FC.q.length}</p><div class="fc fbig" id=fc onclick="fcFlip()"><div class=in><div class=fa>${face(f,0)}<span class=tap>👆 فكّر في الجواب، ثم اضغط لتقلب البطاقة</span></div><div class=fb>${face(f,1)}${dotsM(f)}</div></div></div><div id=fk class=opts style="visibility:hidden"><button class="opt fk1" onclick="fcKnow(1)">✅ عرفتها</button><button class="opt fk0" onclick="fcKnow(0)">🔁 أعدها لي</button></div>`)}
-function fcFlip(){const e=$('#fc');if(!e||FC.flip)return;FC.flip=1;e.classList.add('on');tone(660,.12,'triangle',.15);const[a,b]=FC.cur;later(()=>say(`${a} ضرب ${b} يساوي ${a*b}`),350);later(()=>{const k=$('#fk');if(k)k.style.visibility='visible'},500)}
-function fcKnow(k){if(!FC.flip)return;FC.flip=0;const[a,b]=FC.cur,id=key(a,b);FC.q.shift();rec(a,b,!!k,1);
+shell('البطاقات 🎴',fcOpts()+`<div class=prog><i style="width:${(FC.n-FC.q.length)*100/FC.n}%"></i></div><p class=sm style="text-align:center;margin:0">✅ عرفت ${FC.ok} من ${FC.n} • باقي ${FC.q.length}</p><div class="fc fbig" id=fc onclick="fcFlip()"><div class=in><div class=fa>${face(f,0)}<span class=tap>👆 فكّر في الجواب، ثم اضغط لتقلب البطاقة</span></div><div class=fb>${face(f,1)}${dotsM(f)}</div></div></div><div id=fk style="visibility:hidden"><div class=fkt><i></i><span>🔊 استمع للبطاقة…</span></div><div class=opts><button class="opt fk1" disabled onclick="fcKnow(1)">✅ عرفتها</button><button class="opt fk0" disabled onclick="fcKnow(0)">🔁 أعدها لي</button></div></div>`)}
+function fcFlip(){const e=$('#fc');if(!e||FC.flip)return;FC.flip=1;e.classList.add('on');tone(660,.12,'triangle',.15);const[a,b]=FC.cur,tk=FC.vt=(FC.vt||0)+1;
+const bar=ms=>{const i=$('#fk .fkt i');if(i){i.style.transition='none';i.style.width='0';void i.offsetWidth;i.style.transition=`width ${ms}ms linear`;i.style.width='100%'}};
+const ok=()=>{if(FC.vt!==tk||FC.flip!==1)return;FC.flip=2;const k=$('#fk');if(!k)return;k.querySelectorAll('button').forEach(b=>b.disabled=false);k.querySelector('.fkt').classList.add('done');k.querySelector('.fkt span').textContent='✅ الآن: هل عرفتها؟'};
+later(()=>{const k=$('#fk');if(k)k.style.visibility='visible'},300);
+if(!S.sound){bar(1200);return later(ok,1200)}
+later(()=>{if(FC.vt!==tk)return;SAYD=null;say(`${a} ضرب ${b} يساوي ${a*b}`,ok);
+let n=0;const chk=()=>{if(FC.vt!==tk)return;if(SAYD){const ms=SAYD.dur*1000;bar(ms);later(ok,Math.max(300,ms-300))}else if(++n<6)later(chk,80);else bar(2600)};chk()},350)}
+function fcKnow(k){if(FC.flip!==2)return;FC.flip=0;const[a,b]=FC.cur,id=key(a,b);FC.q.shift();rec(a,b,!!k,1);
 if(k){FC.ok++;if(!FC.miss.has(id))FC.first.add(id);S.gd=GD()+1;gLog(1,'🎴 البطاقات');save();toast('🪙 +1');FC.kc=(FC.kc||0)+1;(FC.rc=FC.rc||[]).push([a,b]);good();clap(3);const p=mid($('.fk1'));burst(p[0],p[1])}else{FC.miss.add(id);FC.q.splice(Math.min(FC.q.length,3),0,FC.cur);oops()}later(k&&FC.kc%10==0?fcTest:fcDeck,k?600:350)}
 function fcTest(){const L=FC.rc||[];FC.rc=[];if(!L.length)return fcDeck();const [a,b]=L[R(L.length)];FC.t=[a,b];
 shell('البطاقات 🎴',`<div class="card fctest"><div style="font-size:52px">🕵️</div><h2 style="margin:4px 0">اختبار الصدق!</h2><p class=sm style="margin:0 0 6px">قلت إنك تعرف هذه البطاقة… أثبت ذلك 😉<br>✅ الصح: <b>+25</b> ذهبة • ❌ الخطأ: <b>−10</b></p>${qHTML(a,b)}<div class=opts>${opts(a,b).map(v=>`<button class=opt onclick=fcTA(this,${v})>${v}</button>`).join('')}</div></div>`);say(`${a} ضرب ${b}`)}
