@@ -564,12 +564,16 @@ svg[class^=mv]{transform-origin:50% 85%}
 .agq{display:flex;gap:4px;margin-top:6px}.agq button{flex:1;border:0;border-radius:10px;padding:6px 0;background:#ffffff22;color:#fff;font:inherit;font-weight:800;font-size:12px;cursor:pointer}.agq button:disabled{opacity:.4}.agrow .sm{color:#cdd6f0;margin:0;flex:none}
 .fkt{position:relative;height:30px;background:#e7ecf6;border-radius:15px;overflow:hidden;margin:4px 0 8px}.fkt i{position:absolute;inset:0 0 0 auto;width:0;background:linear-gradient(90deg,#8a63ff,#5b8cff);border-radius:15px}.fkt span{position:relative;display:flex;height:100%;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#1b2a5c}.fkt.done i{background:#3ddc97;width:100%!important;transition:width .25s!important}
 #fk .opt:disabled{opacity:.45;filter:grayscale(.5)}
+.askw{position:fixed;inset:0;z-index:200;background:#1b2a5c00;display:flex;align-items:center;justify-content:center;padding:20px;transition:background .2s}.askw.show{background:#1b2a5c66}
+.askc{background:#fff;border-radius:26px;padding:22px 18px 16px;width:100%;max-width:360px;text-align:center;box-shadow:0 18px 50px #1b2a5c55;transform:scale(.85);opacity:0;transition:transform .22s cubic-bezier(.3,1.5,.6,1),opacity .2s;border-top:6px solid #ffc531}.askw.show .askc{transform:none;opacity:1}.askc.dng{border-top-color:#e8453c}
+.aski{font-size:54px;line-height:1;margin-bottom:6px}.askc h3{margin:4px 0;font-size:21px;color:#1b2a5c}.askc p{margin:6px 0 14px;font-size:17px;color:#33415c;line-height:1.6}.askc p b{font-size:22px;color:#b07a00}.askc p small{font-size:14px;color:#5b6b8c}
+.askb{display:flex;gap:8px}.askb button{flex:1;border:0;border-radius:16px;padding:13px 6px;font:inherit;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 #0002}.asky{background:#18a959;color:#fff}.askc.dng .asky{background:#e8453c}.askn{background:#eef1f6;color:#33415c}.askb button:active{transform:translateY(2px);box-shadow:0 2px 0 #0002}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.20.1';
+const VER='2.20.2';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1178,9 +1182,9 @@ function gFeeSet(f){FEE=gFee(f);BONUS=gRw(FEE)}
 const gName=f=>{for(const s of GSEC)for(const g of s[3])if(g[0]==f)return g[1]+' '+g[2];return f};
 let GPAY=null;
 function gWinPay(f){if(!GPAY||GPAY.f!=f)return;const rw=gRw(GPAY.fee);GPAY=null;S.gd=GD()+rw;gLog(rw,'🏆 '+gName(f)+' — مكافأة الفوز');save();later(()=>kPop(`🏆 <b>مكافأة الفوز</b> <small>+🪙 ${rw.toLocaleString('en')}</small>`,'turn',2500),900)}
-function gEnter(f){const fee=gFee(f);if(!fee||GINT.includes(f))return window[f]();const g=GD();
+async function gEnter(f){const fee=gFee(f);if(!fee||GINT.includes(f))return window[f]();const g=GD();
 if(g<fee)return kPop(`🔒 <b>${esc(gName(f))}</b> <small>الدخول بـ 🪙 ${fee.toLocaleString('en')} — معك 🪙 ${g.toLocaleString('en')}. اجمع المزيد من الألعاب المجانية 💪</small>`,'turn',3500);
-if(!confirm(`دخول «${gName(f)}» بـ ${fee.toLocaleString('en')} ذهبة؟\nرصيدك الآن: ${g.toLocaleString('en')}`))return;
+if(!await ask(`ادفع <b>🪙 ${fee.toLocaleString('en')}</b> لتدخل اللعبة${['xo','idris'].includes(f)?`<br><small>🏆 إن فزت تأخذ 🪙 ${gRw(fee).toLocaleString('en')}</small>`:''}<br><small>رصيدك الآن: 🪙 ${g.toLocaleString('en')}</small>`,{icon:gName(f).split(' ')[0],title:esc(gName(f).split(' ').slice(1).join(' ')),ok:'🎟️ ادفع وادخل',no:'لاحقًا'}))return;if(GD()<fee)return;
 S.gd=g-fee;gLog(-fee,'🎟️ دخول '+gName(f));GPAY={f,fee};save();toast(`🎟️ دفعت 🪙 ${fee.toLocaleString('en')}`);window[f]()}
 function games(){clr();const sc=cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول 1–'+cur):'كل الجداول';
 shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><div><b>${esc(NM())}</b><small>🎯 ${sc}</small></div><span class=gsg>🪙 ${GD().toLocaleString('en')}</span><span class=gsb>🦘 ${BK()}</span></div>
@@ -1194,9 +1198,15 @@ ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leav
 Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){if(LV[n]===2||n=='learn'||n=='cards')CURG=n;const d=curD(),l=LV[n]=='r'?Math.min(d+1,3):LV[n],st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
 // BACKHOOK: شاشة داخلية (مثل نافذة اختيار اللون أو جولة أوراق جارية) تلتقط زر الرجوع بدل مغادرة الصفحة
 let BACKHOOK=null;
+// نافذة تأكيد داخل البرنامج بدل نافذة المتصفح
+function ask(msg,o){o=o||{};return new Promise(res=>{const old=$('.askw');if(old&&old._no)old._no();const w=document.createElement('div');w.className='askw';
+w.innerHTML=`<div class="askc${o.danger?' dng':''}"><div class=aski>${o.icon||(o.danger?'⚠️':'🤔')}</div>${o.title?`<h3>${o.title}</h3>`:''}<p>${msg}</p><div class=askb><button class=asky>${o.ok||'نعم'}</button><button class=askn>${o.no||'إلغاء'}</button></div></div>`;
+let done=0;const end=v=>{if(done)return;done=1;w.classList.remove('show');setTimeout(()=>w.remove(),220);res(v)};w._no=()=>end(false);
+w.querySelector('.asky').onclick=()=>{tone(880,.08,'triangle',.12);end(true)};w.querySelector('.askn').onclick=()=>end(false);w.onclick=e=>{if(e.target==w)end(false)};
+document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('show'))})}
 function backGuard(fn){if(!BACKHOOK)history.pushState(Object.assign({},history.state,{g:1}),'');BACKHOOK=fn}
 const BNOOP=()=>{};function backRelease(){if(BACKHOOK&&BACKHOOK!==BNOOP){BACKHOOK=BNOOP;history.back()}}
-addEventListener('popstate',e=>{const ks=$('.ksheetw');if(ks)ks.remove();if(BACKHOOK){const f=BACKHOOK;BACKHOOK=null;return f()}clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
+addEventListener('popstate',e=>{const ks=$('.ksheetw');if(ks)ks.remove();const am=$('.askw');if(am&&am._no)am._no();if(BACKHOOK){const f=BACKHOOK;BACKHOOK=null;return f()}clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
 // ===== خمس ألعاب إضافية =====
 let GX={};
 const qHTML=(a,b)=>`<div class=q>${a} × ${b} = <bdi>؟</bdi></div>`;
@@ -1304,7 +1314,7 @@ function kPickClose(){KG.pick=0;KGB();kRender()}
 function kPickDone(c,k){KG.pick=0;KGB();kDo({t:'play',c,col:k})}
 // أثناء الجولة: زر الرجوع يسأل قبل المغادرة (حتى لا تضيع الرسوم)
 function KGB(){if(KG&&KG.st&&!KG.st.winner&&$('.khand'))backGuard(kLeaveAsk);else backRelease()}
-function kLeaveAsk(){if(confirm('هل تريد مغادرة الجولة؟ لن تُعاد رسوم المشاركة.')){KG&&KG.uns&&KG.uns();KG=null;history.back()}else{backGuard(kLeaveAsk)}}
+async function kLeaveAsk(){if(await ask('لن تُعاد رسوم المشاركة.',{title:'مغادرة الجولة؟',icon:'🚪',ok:'نعم، اخرج',no:'أكمل اللعب',danger:1})){KG&&KG.uns&&KG.uns();KG=null;history.back()}else{backGuard(kLeaveAsk)}}
 function kOne(){const g=KG,st=g.st;st.one=st.one||{};if(g.mode=='net')return kTx(s=>{s.one=s.one||{};s.one[UID]=1;s.msg=s.names[UID]+': ورقة! 🙋';kLogAdd(s,s.msg,'one');return true});st.one[g.me]=1;kLogAdd(st,st.names[g.me]+': ورقة! 🙋','one');tone(880,.15,'square',.12);toast('🙋 ورقة!');kRender()}
 function kDo(mv){const g=KG;if(g.mode=='net')return kTx(s=>kMove(s,UID,mv));if(!kMove(g.st,g.me,mv))return;kSfx(mv.t=='play'?(kWild(mv.c)?'wild':'card'):'draw');kRender();if(g.st.winner)return kEnd();kBotTick()}
 function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me]||[],myTurn=st.order[st.turn]===me&&!st.winner,top=st.disc[st.disc.length-1],n=st.order.length;
@@ -1578,7 +1588,7 @@ else if(cur.tl>P.tl)kSfx('card');
 if(cur.phase=='play'&&P.phase=='trump'){kPop(`👑 <b>${esc(kShort(st.names[st.order[st.bid.s]]))}</b> اشترى <b>${st.bid.v}</b> • الطرنيب <b style="color:${TSC[st.trump]}">${TS[st.trump]} ${TSN[st.trump]}</b>`,'give',2400);kSfx('wild')}
 if(cur.phase=='roundEnd'&&P.phase!='roundEnd')kSfx(st.res.made==(st.res.bt==ms%2)?'win':'bad');
 if(st.turn===ms&&(P.turn!==ms||P.phase!==cur.phase)&&['bid','trump','play'].includes(st.phase))later(()=>{if(TG!==g||g.st.turn!==ms)return;kSfx('turn');vib([60,40,60]);kPop('🎯 <b>دورك!</b>','turn',1400)},ln!==P.ln?1500:200)}
-function tLeaveAsk(){if(confirm('هل تريد مغادرة اللعبة؟ لن تُعاد رسوم المشاركة.')){if(TG&&TG.uns)TG.uns();TG=null;history.back()}else backGuard(tLeaveAsk)}
+async function tLeaveAsk(){if(await ask('لن تُعاد رسوم المشاركة.',{title:'مغادرة اللعبة؟',icon:'🚪',ok:'نعم، اخرج',no:'أكمل اللعب',danger:1})){if(TG&&TG.uns)TG.uns();TG=null;history.back()}else backGuard(tLeaveAsk)}
 function tLogPop(){const st=TG&&TG.st;if(!st)return;$('.ksheetw')&&$('.ksheetw').remove();const d=document.createElement('div');d.className='ksheetw';d.onclick=e=>{if(e.target===d)kSheetClose(d)};const L=(st.log||[]).slice().reverse();
 d.innerHTML=`<div class=ksheet><div class=kgrab></div><div class=kshh><b>📜 سجل الأحداث</b><button class=kpx onclick="kSheetClose(this.closest('.ksheetw'))" aria-label="إغلاق">✖</button></div><div class=kshl>${L.length?L.map((x,i)=>`<div class="klr${i==0?' new':''}"><span class=klic>${x.c=='trick'?'🃏':'•'}</span><span>${esc(kSm(x.m,st))}</span><small>${new Date(x.t).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})}</small></div>`).join(''):'<p>لا أحداث بعد</p>'}</div></div>`;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'))}
 function tEnd(){const g=TG,st=g.st,ms=st.order.indexOf(g.me),win=st.winner==ms%2;if(g.ended2)return;g.ended2=1;backRelease();if(win){kReward(g.key,'♠️ الطرنيب');good()}kSfx('win');clap(win?25:12);cpRain();vib(win?[100,60,300]:[200]);
@@ -1962,7 +1972,7 @@ if(ACLU){ACLU();ACLU=null}ACL=null;if(UID)ACLU=FB.d.collection('acl').doc(UID).o
 function admGate(){if($('#adm'))return;if($('#acc'))return acc();if(isBlocked()||(CFG.requireLogin&&FB&&!UID)){if(!$('#gate'))gate()}else if($('#gate'))home()}
 function gate(){clr();const bl=isBlocked();app.innerHTML=`<div id=gate class=card style="margin:24px 12px;text-align:center"><div style="font-size:64px">${bl?'⛔':'🔐'}</div><h2>${bl?'تم إيقاف هذا الحساب':'سجّل الدخول للعب'}</h2><p class=sm>${bl?'تواصل مع مدير البرنامج إن كان هناك خطأ.':'يحتاج البرنامج حسابًا لتحفظ تقدّمك وتلعب من أي جهاز.'}</p>${bl?`<p class=sm dir=ltr>${esc(UEM)}</p><button class=big style="background:#e8579a" onclick="FB.a.signOut()">🚪 تسجيل الخروج</button>`:`<button class=big onclick=acc()>👤 تسجيل الدخول</button>`}<p class=sm style="margin-top:14px;opacity:.6">نجوم الضرب • الإصدار ${VER}</p></div>`}
 function netOK(){if(canNet())return true;toast(isBlocked()?'⛔ حسابك موقوف':'🔒 اللعب الجماعي غير متاح لحسابك حاليًا');return false}
-async function admClaim(){if(!UID||OWN)return;if(!confirm('تثبيت هذا الحساب مالكًا للبرنامج؟ لا يمكن تغييره لاحقًا إلا من Firebase.'))return;
+async function admClaim(){if(!UID||OWN)return;if(!await ask('لا يمكن تغييره لاحقًا إلا من Firebase.',{title:'تثبيت هذا الحساب مالكًا للبرنامج؟',icon:'👑',ok:'نعم، ثبّته'}))return;
 try{await FB.d.collection('config').doc('owner').set({uid:UID,email:(UEM||'').toLowerCase(),ts:Date.now()});await FB.d.collection('config').doc('app').set({requireLogin:false,net:true,msg:'',blocked:[],ts:Date.now()},{merge:true});toast('👑 أصبحت مالك البرنامج')}catch(e){netErr(e)}}
 const ago=t=>{if(!t)return '—';const m=(Date.now()-t)/6e4;return m<2?'الآن':m<60?`قبل ${m|0} د`:m<1440?`قبل ${m/60|0} س`:`قبل ${m/1440|0} يوم`};
 const uBlk=u=>u.acl.status=='blocked'||(CFG.blocked||[]).includes(u.email),uOwn=u=>!!OWN&&u.uid==OWN.uid,uAdm=u=>u.acl.role=='admin'||uOwn(u);
@@ -2010,17 +2020,17 @@ ${isOwner()?btn(`admSet('${u.uid}',{role:'${ad?'user':'admin'}'})`,ad?'👤 إز
 <div class=admgold style="background:#fff1e6"><h3 style="margin:0 0 6px">💌 إشعار لهذا الحساب فقط</h3><input id=ntt class=nm maxlength=60 placeholder="العنوان"><textarea id=ntb class=nm rows=2 maxlength=300 placeholder="النص (اختياري)" style="margin-top:6px"></textarea><button class=big style="background:#ff8a1f" onclick="admNote('${u.uid}')">💌 أرسل الإشعار</button></div>
 <div class=admgold><h3 style="margin:0 0 6px">🪙 إرسال ذهب لهذا الحساب</h3><div class=admrow><input id=admamt class=nm type=number inputmode=numeric dir=ltr placeholder="الكمية" value="1000"></div><div class=seg style="margin:6px 0">${[500,1000,3000,5000].map(v=>`<button onclick="$('#admamt').value=${v}">${v.toLocaleString('en')}</button>`).join('')}</div><input id=admgn class=nm maxlength=60 placeholder="رسالة مع الهدية (اختياري)"><button class=big style="background:#f0a400" onclick="admGift('${u.uid}')">🎁 أرسل الذهب</button><p class=sm style="margin:2px 0 0">يصل للاعب فور فتحه البرنامج. لخصم ذهب اكتب رقمًا سالبًا مثل -500.</p></div>
 <label class=cplb for=admnote>📝 ملاحظة (للمدراء فقط)</label><textarea id=admnote class=nm rows=2 maxlength=200>${esc(a.note||'')}</textarea><button class=buy onclick="admSet('${u.uid}',{note:$('#admnote').value.trim()})">💾 حفظ الملاحظة</button></div></div>`}
-async function admSet(uid,ch){const u=(ADM.list||[]).find(x=>x.uid==uid);if(!u)return;if(ch.status=='blocked'&&!confirm('إيقاف هذا الحساب؟ لن يستطيع اللعب حتى تعيد تفعيله.'))return;
+async function admSet(uid,ch){const u=(ADM.list||[]).find(x=>x.uid==uid);if(!u)return;if(ch.status=='blocked'&&!await ask('لن يستطيع اللعب حتى تعيد تفعيله.',{title:'إيقاف هذا الحساب؟',icon:'⛔',ok:'أوقفه',danger:1}))return;
 try{const d=Object.assign({status:'active',role:'user',net:true,note:''},u.acl,ch,{email:u.email,by:(UEM||'').toLowerCase(),ts:Date.now()});await FB.d.collection('acl').doc(uid).set(d);u.acl=d;toast('✅ تم الحفظ');admin()}catch(e){netErr(e)}}
 async function admGift(uid){const u=(ADM.list||[]).find(x=>x.uid==uid),a=Math.round(+($('#admamt').value||0)),n=($('#admgn').value||'').trim();if(!u)return;if(!a||Math.abs(a)>1e6)return toast('اكتب كمية صحيحة');
-if(!confirm(`${a>0?'إرسال':'خصم'} 🪙 ${Math.abs(a).toLocaleString('en')} ${a>0?'إلى':'من'} ${u.name||u.email}؟`))return;
+if(!await ask(`${a>0?'إرسال':'خصم'} <b>🪙 ${Math.abs(a).toLocaleString('en')}</b> ${a>0?'إلى':'من'} ${esc(u.name||u.email)}؟`,{icon:a>0?'🎁':'🛡️',ok:a>0?'أرسل':'اخصم',danger:a<0}))return;
 try{await FB.d.collection('grants').add({to:uid,amt:a,note:n,by:(UEM||'').toLowerCase(),ts:Date.now(),claimed:false});u.gd=Math.max(0,u.gd+a);toast(a>0?'🎁 أُرسل الذهب':'✅ تم الخصم');admin()}catch(e){netErr(e)}}
 async function admFees(){const fees={},bonus={};document.querySelectorAll('.admfee').forEach(i=>fees[i.dataset.g]=Math.max(0,Math.round(+i.value||0)));document.querySelectorAll('.admbon').forEach(i=>bonus[i.dataset.g]=Math.max(0,Math.round(+i.value||0)));
 try{await FB.d.collection('config').doc('app').set({fees,bonus,ts:Date.now(),by:(UEM||'').toLowerCase()},{merge:true});toast('✅ حُفظت الأسعار — تظهر للجميع فورًا')}catch(e){netErr(e)}}
 async function admNote(to){const sh=$('.admsh'),sc=sh||document,t=(sc.querySelector('#ntt').value||'').trim(),b=(sc.querySelector('#ntb').value||'').trim();if(!t)return toast('اكتب عنوان الإشعار');
-const u=to=='all'?null:(ADM.list||[]).find(x=>x.uid==to);if(!confirm(`إرسال الإشعار «${t}» ${u?'إلى '+(u.name||u.email):'إلى جميع المستخدمين'}؟`))return;
+const u=to=='all'?null:(ADM.list||[]).find(x=>x.uid==to);if(!await ask(`«${esc(t)}»<br><small>${u?'إلى '+esc(u.name||u.email):'إلى جميع المستخدمين'}</small>`,{title:'إرسال الإشعار؟',icon:'🔔',ok:'أرسل'}))return;
 try{await FB.d.collection('notes').add({to,title:t,body:b,by:(UEM||'').toLowerCase(),ts:Date.now()});toast('✅ أُرسل الإشعار');sc.querySelector('#ntt').value='';sc.querySelector('#ntb').value=''}catch(e){netErr(e)}}
-async function admNoteDel(id){if(!confirm('حذف هذا الإشعار من عند الجميع؟'))return;try{await FB.d.collection('notes').doc(id).delete();toast('🗑️ حُذف')}catch(e){netErr(e)}}
+async function admNoteDel(id){if(!await ask('سيُحذف من عند الجميع.',{title:'حذف الإشعار؟',icon:'🗑️',ok:'احذف',danger:1}))return;try{await FB.d.collection('notes').doc(id).delete();toast('🗑️ حُذف')}catch(e){netErr(e)}}
 async function admCfg(k,v){try{await FB.d.collection('config').doc('app').set({[k]:v,ts:Date.now(),by:(UEM||'').toLowerCase()},{merge:true});toast('✅ تم الحفظ')}catch(e){netErr(e)}if($('#adm'))admin()}
 function admBlockEmail(){const e=($('#admbl').value||'').trim().toLowerCase();if(!/^\S+@\S+\.\S+$/.test(e))return toast('اكتب إيميلًا صحيحًا');if(OWN&&e==OWN.email)return toast('لا يمكن إيقاف المالك');admCfg('blocked',firebase.firestore.FieldValue.arrayUnion(e))}
 function admUnblockEmail(e){admCfg('blocked',firebase.firestore.FieldValue.arrayRemove(e))}
@@ -2035,7 +2045,7 @@ const cred=()=>[($('#em').value||'').trim(),$('#pw').value||''];
 function ein(){const[e,p]=cred();FB.a.signInWithEmailAndPassword(e,p).then(()=>toast('👋 أهلًا بعودتك!')).catch(x=>toast(aerr(x)))}
 function eup(){const[e,p]=cred();FB.a.createUserWithEmailAndPassword(e,p).then(()=>toast('🎉 تم إنشاء حسابك!')).catch(x=>toast(aerr(x)))}
 function erst(){const e=($('#em').value||'').trim();if(!e)return toast('اكتب إيميلك أولًا');FB.a.sendPasswordResetEmail(e).then(()=>toast('📧 أرسلنا رابط تغيير كلمة المرور إلى إيميلك')).catch(x=>toast(aerr(x)))}
-function aout(){if(!confirm('تسجيل الخروج؟ سيبقى تقدّمك محفوظًا في حسابك.'))return;Promise.resolve(push(1)).finally(()=>FB.a.signOut().then(()=>{S=Object.assign(fresh(),keepL());localSave();home()}))}
+async function aout(){if(!await ask('سيبقى تقدّمك محفوظًا في حسابك.',{title:'تسجيل الخروج؟',icon:'🚪',ok:'خروج'}))return;Promise.resolve(push(1)).finally(()=>FB.a.signOut().then(()=>{S=Object.assign(fresh(),keepL());localSave();home()}))}
 addEventListener('load',fbInit);
 if('serviceWorker'in navigator&&location.protocol=='https:')navigator.serviceWorker.register('sw.js').catch(()=>{});
 if(curD()>0)history.go(-curD());else{history.replaceState({d:0},'');home()}
