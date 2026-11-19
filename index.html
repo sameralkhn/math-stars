@@ -573,7 +573,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.21.0';
+const VER='2.21.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -659,7 +659,10 @@ const award=n=>{const w=S.stars[tk()]||0;S.stars[tk()]=Math.max(w,n);save();U=(f
 const total=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
 function shell(title,body,back){app.innerHTML=`<header>${back===false?'':(typeof curD=='function'&&curD()>=2?'<button class=ic aria-label="رجوع" onclick="history.back()">↩️</button>':'<button class=ic aria-label="الرئيسية" onclick="home()">🏠</button>')}<h1>${title}</h1>${back===false?'<button class=ic aria-label="حسابي" onclick="acc()">'+(UID?'☁️':'👤')+'</button><button class=ic aria-label="الإعدادات" onclick="settings()">⚙️</button><button class="ic nbell" aria-label="الإشعارات" onclick="notes()">🔔'+(typeof nUnread=='function'&&nUnread()?'<i>'+nUnread()+'</i>':'')+'</button>':''}<button class=ic aria-label="الصوت" onclick="S.sound=!S.sound;save();this.textContent=S.sound?'🔊':'🔇'">${S.sound?'🔊':'🔇'}</button><span class=st>⭐ ${total()}</span></header>${body}<footer class=ver>نجوم الضرب • الإصدار ${VER}</footer>`}
 const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
-function home(){clr();if(typeof isBlocked=='function'&&(isBlocked()||(CFG.requireLogin&&FB&&!UID)))return gate();const ch=(t,lbl,n)=>`<button class="hchip${cur==t?' on':''}" onclick="cur=S.cur=${t};save();home()"><b>${lbl}</b><small>${'★'.repeat(n)}<span>${'★'.repeat(3-n)}</span></small></button>`;
+function nameGate(){clr();app.innerHTML=`<div id=ngate class=card style="margin:24px 12px;text-align:center"><div style="font-size:64px">👋</div><h2 style="margin:6px 0">أهلًا بك! ما اسمك؟</h2><p class=sm>اكتب اسمك الحقيقي ليظهر في المسابقات واللعب مع الأصدقاء.</p>
+<input id=ngn class=nm maxlength=20 placeholder="اكتب اسمك هنا" style="font-size:22px;text-align:center" onkeydown="if(event.key=='Enter')ngSave()"><p id=nge class=sm style="color:#e8453c;min-height:1.2em;margin:4px 0"></p><button class=big onclick=ngSave()>✅ ابدأ</button><p class=sm style="margin-top:14px;opacity:.6">نجوم الضرب • الإصدار ${VER}</p></div>`;setTimeout(()=>{const i=$('#ngn');if(i)i.focus()},300)}
+function ngSave(){const v=($('#ngn').value||'').replace(/\s+/g,' ').trim(),e=$('#nge');if(v.replace(/[^\p{L}]/gu,'').length<2){e.textContent='✏️ اكتب اسمك (حرفان على الأقل)';return}S.nm=v;save();if(typeof push=='function'&&UID)try{push(1)}catch(x){}good();home()}
+function home(){clr();if(typeof isBlocked=='function'&&(isBlocked()||(CFG.requireLogin&&FB&&!UID)))return gate();if(!(S.nm||'').trim())return nameGate();const ch=(t,lbl,n)=>`<button class="hchip${cur==t?' on':''}" onclick="cur=S.cur=${t};save();home()"><b>${lbl}</b><small>${'★'.repeat(n)}<span>${'★'.repeat(3-n)}</span></small></button>`;
 let c=ch(0,'الكل',S.stars.m||0);for(let t=1;t<=10;t++)c+=ch(t,t,S.stars[t]||0);
 shell('نجوم الضرب 🌟',`<div class=hhello><span class=gsav>${AV()}</span><div><b>مرحبًا ${esc(NM())}! 👋</b><small>اختر جدولًا ثم العب — نعيد لك الأرقام الصعبة حتى تحفظها</small></div></div>${CFG.msg?`<div class=admmsg>📢 ${esc(CFG.msg)}</div>`:''}${balCard()}<h3 class=gsh style="--c:#2e8bff"><span>🔢</span>اختر الجدول</h3><div class=hchips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<h3 class=gsh style="--c:#ff6b5b"><span>🚀</span>ابدأ</h3><div class=hacts><button class="ht hbig" style="--c:#18a959" onclick="learn()"><i>📖</i><div><b>تعلّم وردّد</b><small>جدول ${cur||1} • استمع وكرّر</small></div><em>←</em></button><button class=gt style="--c:#8a63ff" onclick="cards()"><i>🎴</i><b>البطاقات</b><small>اقلب واحفظ</small></button><button class=gt style="--c:#ff6b5b" onclick="games()"><i>🎮</i><b>الألعاب</b><small>${GSEC.reduce((a,x)=>a+x[3].length,0)} لعبة</small></button></div>`,false)}
 // بطاقة الرصيد في الرئيسية مع عبارة تشجيعية
@@ -912,7 +915,7 @@ return `<svg ${has(eq.m)?`class="mv${eq.m}" `:''}viewBox="0 -12 100 112" xmlns="
 const NM=()=>esc((S.nm||'').trim()||CH[S.ch|0].n);
 // ===== الإعدادات =====
 const SW=['#ffffff','#ff6b5b','#ff9f1c','#ffd23f','#7ee06a','#3ed6a0','#4aa3ff','#8a63ff','#ff7aa8','#a0764f','#9aa3b5','#2b2b35'];
-function settings(){clr();shell('الإعدادات ⚙️',`<div class=card><div id=pv class=pv></div><input id=nm class=nm maxlength=12 placeholder="اكتب اسمك لتسمّي شخصيتك" value="${esc(S.nm||'')}" oninput="S.nm=this.value.trim();save()"><p class=sm>اكتب اسمك أو أي اسم تحبه 💛</p></div><h3>🎨 اختر اللون</h3><div class=sw id=sw></div><button class=big onclick="shop()">🛍️ تغيير الشخصية والملابس من المتجر</button><button class=big style="background:#18a999" onclick="vtest()">🗣️ جرّب صوت النطق</button><button class=big style="background:#5b6b8c;font-size:16px;padding:10px" onclick="vtest(1)">🔤 جرّب النطق بالإنجليزية</button><p class=sm id=vt style="text-align:center;line-height:1.6"></p><div id=vl style="text-align:center"></div>`);drawS(1)}
+function settings(){clr();shell('الإعدادات ⚙️',`<div class=card><div id=pv class=pv></div><input id=nm class=nm maxlength=20 placeholder="اكتب اسمك" value="${esc(S.nm||'')}" oninput="if(this.value.trim()){S.nm=this.value.trim();save()}"><p class=sm>اكتب اسمك الحقيقي — يظهر في المسابقات واللعب الجماعي 💛</p></div><h3>🎨 اختر اللون</h3><div class=sw id=sw></div><button class=big onclick="shop()">🛍️ تغيير الشخصية والملابس من المتجر</button><button class=big style="background:#18a999" onclick="vtest()">🗣️ جرّب صوت النطق</button><button class=big style="background:#5b6b8c;font-size:16px;padding:10px" onclick="vtest(1)">🔤 جرّب النطق بالإنجليزية</button><p class=sm id=vt style="text-align:center;line-height:1.6"></p><div id=vl style="text-align:center"></div>`);drawS(1)}
 function drawS(sw){$('#pv').innerHTML=AV();
 if(sw)$('#sw').innerHTML=SW.map(c=>`<button class="${S.col==c?'on':''}" style="background:${c}" aria-label="لون" onclick="pcol('${c}')"></button>`).join('')+`<input type=color value="${S.col||CH[S.ch|0].c}" oninput="pcol(this.value,1)" aria-label="لون مخصص"><button onclick="pcol(null)" aria-label="اللون الأصلي">↺</button>`;
 }
@@ -1931,7 +1934,7 @@ o.own={};U(a.own,b.own).forEach(k=>o.own[k]=[...new Set([...((a.own||{})[k]||[])
 async function startSync(){SYN='⏳';refreshAcc();try{const d=await FB.d.collection('users').doc(UID).get(),r=d.exists?JSON.parse(d.data().data||'{}'):null;
 if(r){const m=!S.uid?merge(pack(),r):S.uid===UID?((r.ts||0)>(S.ts||0)?r:pack()):r;S=Object.assign(fresh(),m,keepL())}
 if(!d.exists){let cw=CFG.welcome;try{const cf=await FB.d.collection('config').doc('app').get();if(cf.exists)cw=cf.data().welcome}catch(e){}const w=cw==null?3000:Math.max(0,cw|0);if(w){S.gd=GD()+w;gLog(w,'🎁 هدية التسجيل');later(()=>{kSfx('win');clap(16);cpRain();ask(`أهلًا بك في نجوم الضرب 🌟<br>هديتك للتسجيل: <b>🪙 ${w.toLocaleString('en')}</b><br><small>العب واجمع المزيد!</small>`,{icon:'🎁',title:'مرحبًا '+esc(kShort(S.nm||'بك')),ok:'شكرًا! 🎉',no:'إغلاق'})},900)}}
-S.uid=UID;S.ts=Date.now();localSave();await push(1);
+S.uid=UID;S.ts=Date.now();localSave();await push(1);if($('#ngate')&&(S.nm||'').trim())home();
 UNS=uref().onSnapshot(d=>{if(!d.exists||d.metadata.hasPendingWrites)return;const r=JSON.parse(d.data().data||'{}');
 if((r.ts||0)>(S.ts||0)){S=Object.assign(fresh(),r,keepL(),{uid:UID});localSave();SYN='✅';if($('.chips'))home();else refreshAcc()}});
 SYN='✅'}catch(e){console.warn(e);SYN='⚠️'}refreshAcc()}
