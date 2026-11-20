@@ -579,7 +579,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.22.0';
+const VER='2.22.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1856,6 +1856,7 @@ const fi=M.items.find(x=>!x.done&&x.a*x.b==it.a*it.b&&+q.dataset.i==x.i)||it;fi.
 const t=(performance.now()-CP.qt)/1000;cpScore(true,t,fi.miss,fi.a,fi.b);const pg=$('.prog i');if(pg)pg.style.width=cpMe().q*100/CP.N+'%';
 if(M.items.every(x=>x.done)){CP.tk++;later(cpQ,500)}else cpTimer()}
 function cpDone(){const p=cpMe();p.done=true;
+if((CP.mode=='net'||CP.mode=='solo')&&!CP.paid&&p.g>0){CP.paid=1;const k='cp'+(CP.code||'s')+'_'+(CP.seed||CP.ts||0);S.cpPaid=S.cpPaid||[];if(!S.cpPaid.includes(k)){S.cpPaid=[k,...S.cpPaid].slice(0,30);S.gd=GD()+p.g;gLog(p.g,'🏆 تجميع الذهب — ما جمعته');save();later(()=>kPop(`🪙 <b>+${p.g.toLocaleString('en')}</b> <small>أُضيف ما جمعته إلى رصيدك</small>`,'turn',2600),700)}}
 if(CP.mode=='net'){cpPush();return cpWait()}
 if(CP.mode=='local'&&CP.i<CP.P.length-1){CP.i++;good();return cpTurn()}cpEnd(CP.P)}
 const cpRank=P=>P.slice().sort((x,y)=>y.g-x.g||y.ok-x.ok||x.t-y.t);
