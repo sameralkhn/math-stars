@@ -568,12 +568,18 @@ svg[class^=mv]{transform-origin:50% 85%}
 .askc{background:#fff;border-radius:26px;padding:22px 18px 16px;width:100%;max-width:360px;text-align:center;box-shadow:0 18px 50px #1b2a5c55;transform:scale(.85);opacity:0;transition:transform .22s cubic-bezier(.3,1.5,.6,1),opacity .2s;border-top:6px solid #ffc531}.askw.show .askc{transform:none;opacity:1}.askc.dng{border-top-color:#e8453c}
 .aski{font-size:54px;line-height:1;margin-bottom:6px}.askc h3{margin:4px 0;font-size:21px;color:#1b2a5c}.askc p{margin:6px 0 14px;font-size:17px;color:#33415c;line-height:1.6}.askc p b{font-size:22px;color:#b07a00}.askc p small{font-size:14px;color:#5b6b8c}
 .askb{display:flex;gap:8px}.askb button{flex:1;border:0;border-radius:16px;padding:13px 6px;font:inherit;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 4px 0 #0002}.asky{background:#18a959;color:#fff}.askc.dng .asky{background:#e8453c}.askn{background:#eef1f6;color:#33415c}.askb button:active{transform:translateY(2px);box-shadow:0 2px 0 #0002}
+.uttabs{display:flex;gap:4px;overflow-x:auto;margin:8px 0 10px;padding-bottom:2px}.uttabs button{flex:none;border:0;background:#eef1f6;border-radius:12px;padding:8px 10px;font:inherit;font-size:13px;font-weight:800;color:#33415c;cursor:pointer}.uttabs button.on{background:#1b2a5c;color:#fff}
+.admst.rp span{background:#f6f8fc;box-shadow:none}.admst.rp b{font-size:16px}
+.rpg{padding:8px 0;border-bottom:1px solid #eef1f6}.rpgh{display:flex;justify-content:space-between;align-items:baseline;gap:6px}.rpgh small{color:#5b6b8c;font-size:12px;white-space:nowrap}.rpbar{height:10px;background:#eef1f6;border-radius:6px;margin:5px 0 2px;overflow:hidden}.rpbar i{display:block;height:100%;background:linear-gradient(90deg,#8a63ff,#2e8bff);border-radius:6px;margin-inline-start:auto}
+.rps{background:#f6f8fc;border-radius:14px;padding:9px 11px;margin-bottom:7px}.rpsh{display:flex;justify-content:space-between;align-items:center}.rpsh em{font-style:normal;font-weight:800;background:#fff;border-radius:10px;padding:2px 8px;font-size:13px}.rpsg{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 3px}.rpsg span{background:#fff;border-radius:10px;padding:2px 8px;font-size:13px}.rpsg small{color:#5b6b8c}
+.rpl{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #eef1f6}.rpl span{display:flex;flex-direction:column}.rpl small{color:#5b6b8c;font-size:11px}.rpl em{font-style:normal;font-weight:900;font-size:16px}.rpl em.p{color:#18a959}.rpl em.m{color:#e8453c}
+.rpt{display:grid;grid-template-columns:repeat(11,1fr);gap:2px;direction:ltr}.rpt span{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;border-radius:4px;color:#1b2a5c}.rpt span.h{background:none;color:#5b6b8c;font-size:11px}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.21.1';
+const VER='2.22.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -640,7 +646,13 @@ const key=(a,b)=>a+'x'+b;
 // سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
 let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم',xo:'❌ إكس أو',idris:'🪨 إدريس'};
 function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
-if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150}
+if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150;try{const c=sesCur();d>0?c.gp+=d:c.gm-=d}catch(e){}}
+// ----- تتبّع الجلسات والألعاب (يُزامَن مع الحساب ليراه المدير) -----
+let TRK={g:null,gt:0};
+function sesCur(){const now=Date.now();S.ses=S.ses||[];let c=S.ses[0];if(!c||now-c.e>30*60e3){c={s:now,e:now,g:{},ok:0,x:0,gp:0,gm:0,v:VER};S.ses.unshift(c);if(S.ses.length>60)S.ses.length=60}return c}
+function sesTick(){if(document.hidden)return;const c=sesCur(),now=Date.now();c.e=now;if(TRK.g){const d=now-TRK.gt;TRK.gt=now;if(d>0&&d<5*60e3){const G=c.g[TRK.g]=c.g[TRK.g]||{n:0,t:0};G.t+=d;const A=(S.gs=S.gs||{})[TRK.g]=S.gs[TRK.g]||{n:0,t:0};A.t+=d;A.l=now}}}
+function trkGame(k){sesTick();TRK.g=k||null;TRK.gt=Date.now();if(k){const c=sesCur(),G=c.g[k]=c.g[k]||{n:0,t:0};G.n++;const A=(S.gs=S.gs||{})[k]=S.gs[k]||{n:0,t:0};A.n++;A.l=Date.now()}}
+setInterval(()=>{sesTick();save()},30e3);document.addEventListener('visibilitychange',()=>{if(document.hidden){sesTick();save()}else{TRK.gt=Date.now();sesTick()}});
 const gSince=ms=>(S.gl||[]).filter(x=>x.ts>=ms&&x.d>0).reduce((a,x)=>a+x.d,0);
 const dayStart=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
 let QT=Date.now(),LASTG={g:0,t:0};
@@ -648,7 +660,7 @@ const GTIER=[[.5,50],[1,40],[1.5,25],[2,20],[3,10],[4,5]],goldFor=t=>(GTIER.find
 // يبدأ العدّ لحظة ظهور سؤال جديد على الشاشة
 let QTX='';new MutationObserver(()=>{const q=document.querySelector('.q,#fc:not(.on) .fq,.bl');const k=q?q.textContent+(q.closest('[id]')||{}).id:'';if(k&&k!==QTX){QTX=k;QT=Date.now()}}).observe(document.body,{childList:true,subtree:true});
 const fuelFor=g=>({50:25,40:20,25:15,20:12,10:8,5:5}[g]||3);
-const rec=(a,b,ok,ng)=>{const o=S.f[key(a,b)]=S.f[key(a,b)]||{o:0,x:0};ok?o.o++:o.x++;const t=(Date.now()-QT)/1000;QT=Date.now();
+const rec=(a,b,ok,ng)=>{try{const c=sesCur();ok?c.ok++:c.x++}catch(e){}const o=S.f[key(a,b)]=S.f[key(a,b)]||{o:0,x:0};ok?o.o++:o.x++;const t=(Date.now()-QT)/1000;QT=Date.now();
 if(ok&&!ng){const g=goldFor(t);LASTG={g,t};S.gd=GD()+g;gLog(g);tone(1046,.1,'triangle',.15);if(g>=20)tone(1318,.2,'triangle',.15,.08);toast(`🪙 +${g} • ⏱️ ${t<10?t.toFixed(1):Math.round(t)} ث${g==50?' ⚡ برق!':''}`)}else LASTG={g:0,t};save()};
 const tabs=()=>{if(!cur)return[1,2,3,4,5,6,7,8,9,10];if(S.scope=='one')return[cur];return Array.from({length:cur},(_,i)=>i+1)};
 // ذكاء التكرار: الحقائق التي يخطئ فيها الطفل تظهر أكثر
@@ -662,7 +674,7 @@ const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
 function nameGate(){clr();app.innerHTML=`<div id=ngate class=card style="margin:24px 12px;text-align:center"><div style="font-size:64px">👋</div><h2 style="margin:6px 0">أهلًا بك! ما اسمك؟</h2><p class=sm>اكتب اسمك الحقيقي ليظهر في المسابقات واللعب مع الأصدقاء.</p>
 <input id=ngn class=nm maxlength=20 placeholder="اكتب اسمك هنا" style="font-size:22px;text-align:center" onkeydown="if(event.key=='Enter')ngSave()"><p id=nge class=sm style="color:#e8453c;min-height:1.2em;margin:4px 0"></p><button class=big onclick=ngSave()>✅ ابدأ</button><p class=sm style="margin-top:14px;opacity:.6">نجوم الضرب • الإصدار ${VER}</p></div>`;setTimeout(()=>{const i=$('#ngn');if(i)i.focus()},300)}
 function ngSave(){const v=($('#ngn').value||'').replace(/\s+/g,' ').trim(),e=$('#nge');if(v.replace(/[^\p{L}]/gu,'').length<2){e.textContent='✏️ اكتب اسمك (حرفان على الأقل)';return}S.nm=v;save();if(typeof push=='function'&&UID)try{push(1)}catch(x){}good();home()}
-function home(){clr();if(typeof isBlocked=='function'&&(isBlocked()||(CFG.requireLogin&&FB&&!UID)))return gate();if(!(S.nm||'').trim())return nameGate();const ch=(t,lbl,n)=>`<button class="hchip${cur==t?' on':''}" onclick="cur=S.cur=${t};save();home()"><b>${lbl}</b><small>${'★'.repeat(n)}<span>${'★'.repeat(3-n)}</span></small></button>`;
+function home(){clr();try{if(TRK.g)trkGame(null)}catch(e){}if(typeof isBlocked=='function'&&(isBlocked()||(CFG.requireLogin&&FB&&!UID)))return gate();if(!(S.nm||'').trim())return nameGate();const ch=(t,lbl,n)=>`<button class="hchip${cur==t?' on':''}" onclick="cur=S.cur=${t};save();home()"><b>${lbl}</b><small>${'★'.repeat(n)}<span>${'★'.repeat(3-n)}</span></small></button>`;
 let c=ch(0,'الكل',S.stars.m||0);for(let t=1;t<=10;t++)c+=ch(t,t,S.stars[t]||0);
 shell('نجوم الضرب 🌟',`<div class=hhello><span class=gsav>${AV()}</span><div><b>مرحبًا ${esc(NM())}! 👋</b><small>اختر جدولًا ثم العب — نعيد لك الأرقام الصعبة حتى تحفظها</small></div></div>${CFG.msg?`<div class=admmsg>📢 ${esc(CFG.msg)}</div>`:''}${balCard()}<h3 class=gsh style="--c:#2e8bff"><span>🔢</span>اختر الجدول</h3><div class=hchips>${c}</div>${cur>1?`<div class=seg><button class="${S.scope!='one'?'on':''}" onclick="S.scope='up';save();home()">📚 من 1 إلى ${cur}</button><button class="${S.scope=='one'?'on':''}" onclick="S.scope='one';save();home()">🎯 الجدول ${cur} فقط</button></div>`:''}<h3 class=gsh style="--c:#ff6b5b"><span>🚀</span>ابدأ</h3><div class=hacts><button class="ht hbig" style="--c:#18a959" onclick="learn()"><i>📖</i><div><b>تعلّم وردّد</b><small>جدول ${cur||1} • استمع وكرّر</small></div><em>←</em></button><button class=gt style="--c:#8a63ff" onclick="cards()"><i>🎴</i><b>البطاقات</b><small>اقلب واحفظ</small></button><button class=gt style="--c:#ff6b5b" onclick="games()"><i>🎮</i><b>الألعاب</b><small>${GSEC.reduce((a,x)=>a+x[3].length,0)} لعبة</small></button></div>`,false)}
 // بطاقة الرصيد في الرئيسية مع عبارة تشجيعية
@@ -1198,7 +1210,7 @@ const LV={notes:1,admin:2,ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
-Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){if(LV[n]===2||n=='learn'||n=='cards')CURG=n;const d=curD(),l=LV[n]=='r'?Math.min(d+1,3):LV[n],st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
+Object.keys(LV).forEach(n=>{const o=window[n];ORIG[n]=o;window[n]=function(){if(LV[n]===2||n=='learn'||n=='cards')CURG=n;try{const gk=(LV[n]===2||n=='learn'||n=='cards')&&n!='admin'?n:null;if(gk!==TRK.g)trkGame(gk)}catch(e){}const d=curD(),l=LV[n]=='r'?Math.min(d+1,3):LV[n],st={d:l,s:n};if(l>d)history.pushState(st,'');else history.replaceState(st,'');return o.apply(this,arguments)}});
 // BACKHOOK: شاشة داخلية (مثل نافذة اختيار اللون أو جولة أوراق جارية) تلتقط زر الرجوع بدل مغادرة الصفحة
 let BACKHOOK=null;
 // نافذة تأكيد داخل البرنامج بدل نافذة المتصفح
@@ -1209,7 +1221,7 @@ w.querySelector('.asky').onclick=()=>{tone(880,.08,'triangle',.12);end(true)};w.
 document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('show'))})}
 function backGuard(fn){if(!BACKHOOK)history.pushState(Object.assign({},history.state,{g:1}),'');BACKHOOK=fn}
 const BNOOP=()=>{};function backRelease(){if(BACKHOOK&&BACKHOOK!==BNOOP){BACKHOOK=BNOOP;history.back()}}
-addEventListener('popstate',e=>{const ks=$('.ksheetw');if(ks)ks.remove();const am=$('.askw');if(am&&am._no)am._no();if(BACKHOOK){const f=BACKHOOK;BACKHOOK=null;return f()}clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
+addEventListener('popstate',e=>{try{if(!BACKHOOK&&TRK.g)trkGame(null)}catch(x){}const ks=$('.ksheetw');if(ks)ks.remove();const am=$('.askw');if(am&&am._no)am._no();if(BACKHOOK){const f=BACKHOOK;BACKHOOK=null;return f()}clr();leaveGame();const st=e.state;if(!st||!st.d)return ORIG.home();(ORIG[st.s]||ORIG.home)()});
 // ===== خمس ألعاب إضافية =====
 let GX={};
 const qHTML=(a,b)=>`<div class=q>${a} × ${b} = <bdi>؟</bdi></div>`;
@@ -1981,7 +1993,7 @@ try{await FB.d.collection('config').doc('owner').set({uid:UID,email:(UEM||'').to
 const ago=t=>{if(!t)return '—';const m=(Date.now()-t)/6e4;return m<2?'الآن':m<60?`قبل ${m|0} د`:m<1440?`قبل ${m/60|0} س`:`قبل ${m/1440|0} يوم`};
 const uBlk=u=>u.acl.status=='blocked'||(CFG.blocked||[]).includes(u.email),uOwn=u=>!!OWN&&u.uid==OWN.uid,uAdm=u=>u.acl.role=='admin'||uOwn(u);
 async function admLoad(){try{const [u,a]=await Promise.all([FB.d.collection('users').get(),FB.d.collection('acl').get()]),A={};a.forEach(d=>A[d.id]=d.data());
-ADM.list=u.docs.map(d=>{const x=d.data();let s={};try{s=JSON.parse(x.data||'{}')}catch(e){}const st=Object.values(s.stars||{});return {uid:d.id,email:(x.email||'').toLowerCase(),name:x.name||s.nm||'',seen:x.seen||x.ts||0,ver:x.ver||'',dev:x.dev||'',gd:s.gd||0,stars:st.reduce((p,q)=>p+q,0),acl:A[d.id]||{}}}).sort((p,q)=>q.seen-p.seen)}catch(e){ADM.list=[];netErr(e)}if($('#adm'))admin()}
+ADM.list=u.docs.map(d=>{const x=d.data();let s={};try{s=JSON.parse(x.data||'{}')}catch(e){}const st=Object.values(s.stars||{});return {uid:d.id,email:(x.email||'').toLowerCase(),name:x.name||s.nm||'',seen:x.seen||x.ts||0,ver:x.ver||'',dev:x.dev||'',gd:s.gd||0,stars:st.reduce((p,q)=>p+q,0),acl:A[d.id]||{},S:s}}).sort((p,q)=>q.seen-p.seen)}catch(e){ADM.list=[];netErr(e)}if($('#adm'))admin()}
 function admin(){clr();if(!isAdmin())return home();if(ADM.list===null){ADM.list=0;admLoad()}const L=ADM.list||[],now=Date.now(),q=ADM.q.toLowerCase(),f=ADM.f,wk=u=>now-u.seen<7*864e5;
 const tg=(k,lbl,on,sub)=>`<button class="admt${on?' on':''}" onclick="admCfg('${k}',${!on})"><span><b>${lbl}</b><small>${sub}</small></span><i>${on?'✓':''}</i></button>`;
 const rows=L.filter(u=>(!q||u.email.includes(q)||u.name.toLowerCase().includes(q))&&(f=='all'||(f=='blk'?uBlk(u):f=='adm'?uAdm(u):wk(u)))).map(u=>`<button class=admu onclick="ADM.sel='${u.uid}';admin()"><span class=admav>${esc(((u.name||u.email||'?').trim()[0]||'?').toUpperCase())}</span><span class=admi><b>${esc(u.name||'بلا اسم')} ${uOwn(u)?'<em class=adbad>👑 المالك</em>':uAdm(u)?'<em class=adbad>🛡️ مدير</em>':''}${uBlk(u)?'<em class=adbbl>⛔ موقوف</em>':''}${u.acl.net===false?'<em class=adbnt>📵</em>':''}</b><small dir=ltr>${esc(u.email||u.uid.slice(0,8))}</small><small>🕒 ${ago(u.seen)} • ⭐ ${u.stars} • 🪙 ${u.gd.toLocaleString('en')}${u.ver?' • v'+esc(u.ver):''}</small></span></button>`).join('');
@@ -2019,12 +2031,31 @@ function admUser(){const u=(ADM.list||[]).find(x=>x.uid==ADM.sel);if(!u)return '
 const btn=(js,l,c)=>`<button class=big style="background:${c}" onclick="${js}">${l}</button>`;
 return `<div class=admsh onclick="if(event.target==this){ADM.sel=null;admin()}"><div class=card><button class=ic style="float:left" onclick="ADM.sel=null;admin()">✖️</button><h2 style="margin:4px 0">${esc(u.name||'بلا اسم')}</h2><p class=sm dir=ltr style="margin:0">${esc(u.email)}</p>
 <div class=admst><span><b>⭐ ${u.stars}</b>نجوم</span><span><b>🪙 ${u.gd.toLocaleString('en')}</b>ذهب</span><span><b>${ago(u.seen)}</b>آخر دخول</span></div><p class=sm>📱 ${esc(u.dev||'—')} ${u.ver?'• الإصدار '+esc(u.ver):''}</p>
-${uOwn(u)?'<p>👑 هذا حساب مالك البرنامج — لا يمكن إيقافه.</p>':me?'<p class=sm>هذا حسابك.</p>':`${btn(`admSet('${u.uid}',{status:'${b?'active':'blocked'}'})`,b?'✅ إعادة تفعيل الحساب':'⛔ إيقاف الحساب',b?'#18a959':'#e8453c')}
+<div class=uttabs>${[['sum','📊 ملخص'],['games','🎮 الألعاب'],['ses','🕒 الجلسات'],['gold','🪙 الرصيد'],['tbl','✖️ الجداول'],['act','🛠️ إجراءات']].map(([k,l])=>`<button class="${(ADM.ut||'sum')==k?'on':''}" onclick="ADM.ut='${k}';const c=document.querySelector('.admsh>.card'),y=c?c.scrollTop:0;admin();const d=document.querySelector('.admsh>.card');if(d)d.scrollTop=y">${l}</button>`).join('')}</div>
+${(ADM.ut||'sum')=='act'?`${uOwn(u)?'<p>👑 هذا حساب مالك البرنامج — لا يمكن إيقافه.</p>':me?'<p class=sm>هذا حسابك.</p>':`${btn(`admSet('${u.uid}',{status:'${b?'active':'blocked'}'})`,b?'✅ إعادة تفعيل الحساب':'⛔ إيقاف الحساب',b?'#18a959':'#e8453c')}
 ${btn(`admSet('${u.uid}',{net:${a.net===false}})`,a.net===false?'📱 السماح باللعب الجماعي':'📵 منع اللعب الجماعي','#2e8bff')}
 ${isOwner()?btn(`admSet('${u.uid}',{role:'${ad?'user':'admin'}'})`,ad?'👤 إزالة صلاحية المدير':'🛡️ اجعله مديرًا','#8a63ff'):''}`}
 <div class=admgold style="background:#fff1e6"><h3 style="margin:0 0 6px">💌 إشعار لهذا الحساب فقط</h3><input id=ntt class=nm maxlength=60 placeholder="العنوان"><textarea id=ntb class=nm rows=2 maxlength=300 placeholder="النص (اختياري)" style="margin-top:6px"></textarea><button class=big style="background:#ff8a1f" onclick="admNote('${u.uid}')">💌 أرسل الإشعار</button></div>
 <div class=admgold><h3 style="margin:0 0 6px">🪙 إرسال ذهب لهذا الحساب</h3><div class=admrow><input id=admamt class=nm type=number inputmode=numeric dir=ltr placeholder="الكمية" value="1000"></div><div class=seg style="margin:6px 0">${[500,1000,3000,5000].map(v=>`<button onclick="$('#admamt').value=${v}">${v.toLocaleString('en')}</button>`).join('')}</div><input id=admgn class=nm maxlength=60 placeholder="رسالة مع الهدية (اختياري)"><button class=big style="background:#f0a400" onclick="admGift('${u.uid}')">🎁 أرسل الذهب</button><p class=sm style="margin:2px 0 0">يصل للاعب فور فتحه البرنامج. لخصم ذهب اكتب رقمًا سالبًا مثل -500.</p></div>
-<label class=cplb for=admnote>📝 ملاحظة (للمدراء فقط)</label><textarea id=admnote class=nm rows=2 maxlength=200>${esc(a.note||'')}</textarea><button class=buy onclick="admSet('${u.uid}',{note:$('#admnote').value.trim()})">💾 حفظ الملاحظة</button></div></div>`}
+<label class=cplb for=admnote>📝 ملاحظة (للمدراء فقط)</label><textarea id=admnote class=nm rows=2 maxlength=200>${esc(a.note||'')}</textarea><button class=buy onclick="admSet('${u.uid}',{note:$('#admnote').value.trim()})">💾 حفظ الملاحظة</button>`:admRep(u,ADM.ut||'sum')}</div></div>`}
+const dur=ms=>{ms=Math.max(0,ms|0);const m=Math.round(ms/6e4);return m<1?'أقل من دقيقة':m<60?m+' د':Math.floor(m/60)+' س '+(m%60?m%60+' د':'')};
+const dt=t=>{if(!t)return '—';const d=new Date(t);return d.toLocaleDateString('ar-SA-u-ca-gregory-nu-latn',{weekday:'short',day:'numeric',month:'short'})+' '+d.toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})};
+const gLbl=k=>GLBL[k]||(typeof gName=='function'?gName(k):k);
+function admRep(u,t){const S2=u.S||{},ses=S2.ses||[],gs=S2.gs||{},gl=S2.gl||[],F=S2.f||{},tot=ses.reduce((a,x)=>a+(x.e-x.s),0),ok=Object.values(F).reduce((a,x)=>a+(x.o||0),0),bad=Object.values(F).reduce((a,x)=>a+(x.x||0),0);
+const card=(v,l)=>`<span><b>${v}</b>${l}</span>`,empty=m=>`<p class=sm style="text-align:center;padding:14px 0">${m}</p>`;
+if(t=='sum'){const wk=ses.filter(x=>Date.now()-x.s<7*864e5),earn=gl.filter(x=>x.d>0).reduce((a,x)=>a+x.d,0),spent=gl.filter(x=>x.d<0).reduce((a,x)=>a-x.d,0),top=Object.entries(gs).sort((a,b)=>b[1].t-a[1].t)[0];
+return `<div class="admst rp">${card(ses.length,'جلسة')}${card(dur(tot),'وقت اللعب')}${card(ses.length?dur(tot/ses.length):'—','متوسط الجلسة')}</div><div class="admst rp">${card(wk.length,'جلسات هذا الأسبوع')}${card(dur(wk.reduce((a,x)=>a+(x.e-x.s),0)),'وقت هذا الأسبوع')}${card(ok+bad?Math.round(ok*100/(ok+bad))+'%':'—','دقة الإجابات')}</div>
+<div class="admst rp">${card('✅ '+ok.toLocaleString('en'),'إجابة صحيحة')}${card('❌ '+bad.toLocaleString('en'),'إجابة خاطئة')}${card(top?`<small style="font-size:13px">${gLbl(top[0])}</small>`:'—','الأكثر لعبًا')}</div>
+<div class="admst rp">${card('+'+earn.toLocaleString('en'),'كسب (آخر 150 حركة)')}${card('−'+spent.toLocaleString('en'),'صرف')}${card(ses.length?dt(ses[ses.length-1].s).split(' ').slice(0,3).join(' '):'—','أول جلسة مسجّلة')}</div>
+${ses.length?'':`<p class=sm>📌 تسجيل الجلسات والألعاب بدأ من الإصدار 2.22.0 — تظهر البيانات بعد أن يفتح البرنامج بالتحديث.</p>`}`}
+if(t=='games'){const L=Object.entries(gs).sort((a,b)=>b[1].t-a[1].t),mx=Math.max(1,...L.map(x=>x[1].t));if(!L.length)return empty('لم تُسجَّل ألعاب بعد');
+return L.map(([k,v])=>`<div class=rpg><div class=rpgh><b>${gLbl(k)}</b><small>${v.n} مرة • ${dur(v.t)}</small></div><div class=rpbar><i style="width:${Math.max(3,v.t*100/mx)}%"></i></div><small class=sm>آخر مرة: ${ago(v.l)}</small></div>`).join('')}
+if(t=='ses'){if(!ses.length)return empty('لا توجد جلسات مسجّلة بعد');return ses.slice(0,25).map(x=>{const G=Object.entries(x.g||{}).sort((a,b)=>b[1].t-a[1].t);return `<div class=rps><div class=rpsh><b>${dt(x.s)}</b><em>⏱️ ${dur(x.e-x.s)}</em></div>
+<div class=rpsg>${G.length?G.map(([k,v])=>`<span>${gLbl(k)} <small>${dur(v.t)}${v.n>1?' ×'+v.n:''}</small></span>`).join(''):'<span class=sm>تصفّح فقط</span>'}</div>
+<small class=sm>${x.ok||x.x?`✅ ${x.ok} • ❌ ${x.x} • `:''}${x.gp?`🪙 +${x.gp.toLocaleString('en')} `:''}${x.gm?`• −${x.gm.toLocaleString('en')}`:''}${x.v?' • v'+esc(x.v):''}</small></div>`}).join('')}
+if(t=='gold'){if(!gl.length)return empty('لا توجد حركات في الرصيد');return `<p class=sm style="margin:0 0 6px">الرصيد الحالي: <b>🪙 ${(S2.gd||0).toLocaleString('en')}</b> — آخر ${gl.length} حركة</p>`+gl.slice(0,80).map(x=>`<div class=rpl><span><b>${esc(x.s)}</b>${x.n>1?` <small>×${x.n}</small>`:''}<small>${dt(x.ts)}</small></span><em class="${x.d>0?'p':'m'}" dir=ltr>${x.d>0?'+':''}${x.d.toLocaleString('en')}</em></div>`).join('')}
+if(t=='tbl'){let h='<div class=rpt><span></span>'+[...Array(10)].map((_,i)=>`<span class=h>${i+1}</span>`).join('');for(let a=1;a<=10;a++){h+=`<span class=h>${a}</span>`;for(let b=1;b<=10;b++){const o=F[a+'x'+b]||{o:0,x:0},n=o.o+o.x,r=n?o.o/n:-1;h+=`<span style="background:${r<0?'#f2f5fb':r>=.85?'#3ddc97':r>=.6?'#ffd166':'#ff8a80'}" title="${a}×${b}: ✅${o.o} ❌${o.x}">${n||''}</span>`}}
+return h+`</div><p class=sm>الرقم = عدد مرات السؤال • 🟩 يتقنها • 🟨 متوسط • 🟥 يحتاج تدريب • ⬜ لم يُسأل</p>`}return ''}
 async function admSet(uid,ch){const u=(ADM.list||[]).find(x=>x.uid==uid);if(!u)return;if(ch.status=='blocked'&&!await ask('لن يستطيع اللعب حتى تعيد تفعيله.',{title:'إيقاف هذا الحساب؟',icon:'⛔',ok:'أوقفه',danger:1}))return;
 try{const d=Object.assign({status:'active',role:'user',net:true,note:''},u.acl,ch,{email:u.email,by:(UEM||'').toLowerCase(),ts:Date.now()});await FB.d.collection('acl').doc(uid).set(d);u.acl=d;toast('✅ تم الحفظ');admin()}catch(e){netErr(e)}}
 async function admGift(uid){const u=(ADM.list||[]).find(x=>x.uid==uid),a=Math.round(+($('#admamt').value||0)),n=($('#admgn').value||'').trim();if(!u)return;if(!a||Math.abs(a)>1e6)return toast('اكتب كمية صحيحة');
