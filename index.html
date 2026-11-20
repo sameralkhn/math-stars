@@ -579,7 +579,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.22.1';
+const VER='2.22.2';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1190,12 +1190,17 @@ const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest',
 ['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
 ['⚡','سرعة','#2e8bff',[['balloons','🎈','فرقعة البالونات','اضرب البالونة الصحيحة'],['meteor','☄️','حارس الأرض','أسقط النيازك'],['tfg','✅','صح أم خطأ','60 ثانية'],['frog','🐸','قفزة الضفدع','إلى الجزيرة']]],
 ['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول']]]];
-const GDEF={cardsHome:1500,tarneeb:1500},GINT=['cardsHome','tarneeb'];
+const GDEF={cardsHome:1500,tarneeb:1500},GINT=['cardsHome','tarneeb','contest'];
 const gFee=f=>{const v=((typeof CFG=='object'&&CFG.fees)||{})[f];return v==null?(GDEF[f]||0):Math.max(0,v|0)};
 const RWP=1.25,gRw=fee=>Math.round(fee*RWP);
 function gFeeSet(f){FEE=gFee(f);BONUS=gRw(FEE)}
 const gName=f=>{for(const s of GSEC)for(const g of s[3])if(g[0]==f)return g[1]+' '+g[2];return f};
 let GPAY=null;
+// دفع رسوم مرة واحدة لكل مشاركة فعلية (لا عند فتح الصفحة)
+async function gPay(f,key){const fee=gFee(f);if(!fee)return true;S.gpk=S.gpk||[];if(S.gpk.includes(key))return true;const g=GD();
+if(g<fee){kPop(`🔒 <b>${esc(gName(f))}</b> <small>المشاركة بـ 🪙 ${fee.toLocaleString('en')} — معك 🪙 ${g.toLocaleString('en')}</small>`,'turn',3500);return false}
+if(!await ask(`ادفع <b>🪙 ${fee.toLocaleString('en')}</b> للمشاركة<br><small>رصيدك الآن: 🪙 ${g.toLocaleString('en')}</small>`,{icon:gName(f).split(' ')[0],title:esc(gName(f).split(' ').slice(1).join(' ')),ok:'🎟️ ادفع وشارك',no:'لاحقًا'}))return false;
+if(GD()<fee)return false;S.gd=GD()-fee;gLog(-fee,'🎟️ مشاركة '+gName(f));S.gpk=[key,...S.gpk].slice(0,40);save();toast(`🎟️ دفعت 🪙 ${fee.toLocaleString('en')}`);return true}
 function gWinPay(f){if(!GPAY||GPAY.f!=f)return;const rw=gRw(GPAY.fee);GPAY=null;S.gd=GD()+rw;gLog(rw,'🏆 '+gName(f)+' — مكافأة الفوز');save();later(()=>kPop(`🏆 <b>مكافأة الفوز</b> <small>+🪙 ${rw.toLocaleString('en')}</small>`,'turn',2500),900)}
 async function gEnter(f){const fee=gFee(f);if(!fee||GINT.includes(f))return window[f]();const g=GD();
 if(g<fee)return kPop(`🔒 <b>${esc(gName(f))}</b> <small>الدخول بـ 🪙 ${fee.toLocaleString('en')} — معك 🪙 ${g.toLocaleString('en')}. اجمع المزيد من الألعاب المجانية 💪</small>`,'turn',3500);
@@ -1779,8 +1784,9 @@ const all10=()=>cpTabs().length==10;function cpTabRe(){const e=$('#cptbw');if(e)
 const cpRow=(n,i)=>`<div class=cpr><input class=nm maxlength=20 value="${esc(n)}" placeholder="اسم المتسابق"><button class=ic onclick="if(document.querySelectorAll('.cpr').length>2)this.parentNode.remove()" aria-label="حذف">✖️</button></div>`;
 function cpAdd(){const l=$('#cpl');if(l.children.length<10)l.insertAdjacentHTML('beforeend',cpRow('',l.children.length))}
 const newP=n=>({n,g:0,ok:0,q:0,t:0,done:false});
-function cpStartLocal(solo){const names=solo?[($('#cpn1').value||'').trim()||NM()]:[...document.querySelectorAll('.cpr input')].map(e=>e.value.trim()).filter(Boolean);
+async function cpStartLocal(solo){const names=solo?[($('#cpn1').value||'').trim()||NM()]:[...document.querySelectorAll('.cpr input')].map(e=>e.value.trim()).filter(Boolean);
 if(!solo&&names.length<2)return toast('اكتب اسمي متسابقَين على الأقل');if(!solo){S.cpn=names;save()}
+if(!await gPay('contest','cpl'+Date.now()))return;
 const N=S.cpq||100;CP={mode:solo?'solo':'local',game:S.cpgm||'q',seed:Date.now()%1e6,N,Q:genQs(N,solo?tabs():cpTabs(),Date.now()%1e9),P:names.map(newP),i:0};cpTurn()}
 function cpTurn(){const p=CP.P[CP.i];shell('تجميع الذهب 🏆',`<div id=cpx></div><div class="card cpt"><div class=res>🎯</div><h2>${CP.mode=='local'?'دور '+esc(p.n):'مستعد يا '+esc(p.n)+'؟'}</h2><p><b>${cpGName()}</b> • ${CP.N} سؤال • أجب بسرعة لتجمع ذهبًا أكثر!</p>${CP.mode=='local'&&CP.i?cpBoard(CP.P.slice(0,CP.i)):''}<button class=big onclick=cpGo()>🚀 أنا جاهز</button></div>`)}
 function cpGo(){CP.rp=0;const ct=$('.cpt');let n=3;const step=()=>{if(!$('#cpx'))return;if(n){ct.innerHTML=`<div class="res cd">${n}</div>`;tone(440,.2,'square',.1);n--;later(step,700)}else cpQ()};step()}
@@ -1908,9 +1914,10 @@ const netErr=e=>{console.warn(e);toast(e&&e.code=='permission-denied'?'⚠️ ي
 async function cpCreate(){if(!netOK())return;const n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}S.cpme=n;save();try{let code=null;const easy=[...sh([10,20,30,40,50,60,70,80,90]),...sh([11,22,33,44,55,66,77,88,99]),...sh([100,200,300,400,500,600,700,800,900])];
 for(const c of easy){const d=await roomRef(String(c)).get(),r=d.exists?d.data():null;if(!r||Date.now()-(r.ts||0)>3*3600e3||(r.state=='end'&&Date.now()-(r.ts||0)>600e3)){code=String(c);break}}
 if(!code)code=String(10+R(90));
+if(!await gPay('contest','cpc'+code+'_'+Date.now()))return;
 const N=S.cpq||100;await roomRef(code).set({host:UID,N,game:S.cpgm||'q',tabs:cpTabs(),seed:Date.now()%1e9,state:'wait',ts:Date.now(),players:{[UID]:newP(n)}});cpRoom(code)}catch(e){netErr(e)}}
 async function cpJoin(){if(!netOK())return;const code=($('#cpcode').value||'').replace(/\D/g,''),n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}if(code.length<2)return toast('اكتب رقم الغرفة، مثل 50');S.cpme=n;save();
-try{const d=await roomRef(code).get();if(!d.exists||d.data().kind)return toast('لا توجد غرفة بهذا الرقم');const r=d.data();if(r.state!='wait'&&!(r.players||{})[UID])return toast('المسابقة بدأت بالفعل');
+try{const d=await roomRef(code).get();if(!d.exists||d.data().kind)return toast('لا توجد غرفة بهذا الرقم');const r=d.data();if(r.state!='wait'&&!(r.players||{})[UID])return toast('المسابقة بدأت بالفعل');if(!(r.players||{})[UID]&&!await gPay('contest','cpj'+code+'_'+r.seed))return;
 const mine=(r.players||{})[UID];if(!mine)await roomRef(code).update({['players.'+UID]:newP(n)});else if(mine.n!=n)await roomRef(code).update({['players.'+UID+'.n']:n});cpRoom(code)}catch(e){netErr(e)}}
 function cpRoom(code){cpOff();CP={mode:'net',code,view:'lobby',P:[],me:null};cpLobby();CP.uns=roomRef(code).onSnapshot(cpSnap,netErr)}
 function cpSnap(d){if(!CP||CP.mode!='net')return;if(!$('#cpx')&&CP.view!='lobby')return cpOff();if(!d.exists)return;const r=CP.room=d.data();if(r.kind)return;const pl=r.players||{};CP.game=r.game||'q';
