@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>نجوم الضرب</title>
-<meta name="theme-color" content="#1aa3e8">
+<meta name="theme-color" content="#e6edfc">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -12,7 +12,8 @@
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script defer src="firebase-config.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;800&display=swap" rel="stylesheet">
+<!-- v5: خط Tajawal الواضح مع بقاء Baloo احتياطيًا -->
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800&family=Baloo+Bhaijaan+2:wght@500;800&display=swap" rel="stylesheet">
 <style>
 :root{--navy:#1b2a5c;--ink:#1b2a5c;--sky:#bfe6ff;--sun:#ffc531;--coral:#ff6b5b;--mint:#3ed6a0;--grape:#8a63ff;--paper:#fffaf0}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -589,6 +590,49 @@ svg[class^=mv]{transform-origin:50% 85%}
 .wfound{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:10px}.wfound b{background:var(--sky);border-radius:12px;padding:4px 12px;font-size:18px}.wfound b.l4{background:#d8c7ff}.wfound b.l5{background:var(--sun)}.wfound b.l6{background:var(--coral);color:#fff}.wmiss b{background:#eef0f5!important;color:#5b6b8c!important}
 /* v1: تنسيق الحرف الناقص */
 .ltw{text-align:center}.lte{font-size:76px;line-height:1.1;margin:4px 0}.ltq{font-size:46px!important;margin:4px 0 10px}.ltq .sqm{display:inline-block;min-width:1.1em}
+/* v5: هوية بصرية هادئة واحترافية للواجهة الرئيسية وصفحة الألعاب (ألوان متناسقة، ظلال ناعمة، خط واضح) */
+:root{--ink:#1c2a4d;--navy:#1c2a4d;--mute:#6b7893;--line:#e3e8f2;--pri:#3f5fd6;--pri2:#5a7bef;--gold:#a96f00;--gold-t:#fff7e1;--ok:#1f9d7a;--sh1:0 1px 2px #1c2a4d0d,0 6px 18px #1c2a4d12}
+html{background:#f3f6fc}
+body{font-family:'Tajawal','Baloo Bhaijaan 2',Tahoma,Arial,sans-serif;background:linear-gradient(180deg,#e6edfc 0,#f3f6fc 240px,#f7f8fb 100%) fixed;min-height:100vh;color:var(--ink)}
+header{gap:5px;margin-bottom:14px}
+h1{font-size:20px;font-weight:800;white-space:nowrap;min-width:0;color:var(--ink)}
+.ic,.st{height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;box-shadow:var(--sh1);font-size:18px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;color:var(--ink)}
+.ic{width:38px;padding:0;font-size:17px}
+.st{padding:0 9px;font-size:14px;font-weight:800;color:var(--gold);background:var(--gold-t);border-color:#f2e2b0}
+.card{border-radius:18px;box-shadow:var(--sh1);border:1px solid var(--line)}
+.big{background:linear-gradient(135deg,var(--pri),var(--pri2));border-radius:16px;box-shadow:0 6px 16px #3f5fd633}
+.big:active{box-shadow:0 2px 6px #3f5fd633}
+.hhello{border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh1);padding:12px 14px;gap:12px;margin-bottom:12px}
+.hhello b{font-size:17px;color:var(--ink)}.hhello small{font-size:13px;color:var(--mute);line-height:1.5}
+.admmsg{background:#fff8e6;border:1px solid #f2e2b0;box-shadow:none;color:#7a5a12;border-radius:14px}
+.balc{background:linear-gradient(180deg,#fffdf7,#fff5da)!important;border:1px solid #f0e0ae!important;border-radius:16px!important;box-shadow:var(--sh1)!important;padding:12px 14px!important;margin-bottom:14px}
+.balc .balg{gap:8px}.balc .balg b{font-size:34px!important;color:var(--gold);-webkit-text-stroke:0;text-shadow:none}
+.balc .cpcoin{font-size:32px;filter:none;animation:none}.balg small{color:#8a6a1f;font-size:13px}
+.bals{font-size:13px;color:#6f5a2a;gap:4px 14px}.bup{color:var(--ok)}
+.balm{font-size:14px!important;color:var(--ink);font-weight:700}.ball{color:var(--pri);font-size:13px}
+.balbar{background:#f1e6c6;height:8px}.balbar i{background:linear-gradient(90deg,#e0a82e,#f2c653)}
+.gsh{font-size:16px;color:#3a4a72;margin:18px 2px 10px;font-weight:800}
+.gsh span{width:28px;height:28px;border-radius:9px;font-size:15px;box-shadow:none;background:color-mix(in srgb,var(--c) 14%,#fff)}
+.hchips{gap:8px}
+.hchip{border:1px solid var(--line);border-radius:12px;box-shadow:var(--sh1);padding:8px 0 6px;color:var(--ink)}
+.hchip b{font-size:19px;color:var(--ink)}.hchip small{font-size:9px;color:#e0a82e}
+.hchip.on{background:var(--pri);border-color:var(--pri);box-shadow:0 4px 12px #3f5fd640}.hchip.on b{color:#fff}.hchip.on small{color:#ffe08a}
+.seg{background:#e8edf8;border-radius:14px;padding:4px;gap:4px;margin:12px 0 4px}
+.seg button{border:0!important;background:transparent;box-shadow:none;border-radius:11px;font-size:14px;color:var(--mute);padding:9px 4px}
+.seg .on{background:#fff;color:var(--pri);box-shadow:0 1px 3px #1c2a4d1f}
+.hacts{gap:12px}
+.ht{border:1px solid var(--line);border-right:1px solid var(--line);border-radius:16px;box-shadow:var(--sh1)}
+.ht.hbig{background:linear-gradient(135deg,var(--pri),var(--pri2));border:0;color:#fff;box-shadow:0 8px 20px #3f5fd62e;padding:16px}
+.ht.hbig i{background:#ffffff26}.ht.hbig b{color:#fff}.ht.hbig small{color:#dfe7ff}.ht.hbig em{color:#fff}
+.gt{border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh1);padding:14px 8px 12px;min-height:118px}
+.gt:active{transform:scale(.98);box-shadow:var(--sh1)}
+.gt i{background:color-mix(in srgb,var(--c) 12%,#fff);width:50px;height:50px;border-radius:14px;font-size:27px}
+.gt b{font-size:15px;color:var(--ink)}.gt small{font-size:12px;color:var(--mute)}
+.gstat{border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh1)}
+.ver{opacity:.6}
+.cpgms button{background:#f1f4fb;color:var(--ink)}.cpgms button.on{background:#e6edff;color:var(--pri);box-shadow:0 0 0 2px var(--pri)}
+.nm{border:2px solid var(--line);background:#fff}.nm:focus{outline:0;border-color:var(--pri)}
+.buy{background:var(--ok);color:#fff}
 </style>
 </head>
 <body>
