@@ -618,12 +618,15 @@ svg[class^=mv]{transform-origin:50% 85%}
 @keyframes kmeb{50%{transform:translateY(10px)}}@keyframes kmeg{50%{box-shadow:0 0 0 3px #fff,0 0 28px 12px #ffd23fdd}}
 .ktable.kmyt{outline:5px solid #ffd23f;outline-offset:3px;animation:kmeo 1.2s ease-in-out infinite}@keyframes kmeo{50%{outline-color:#fff3a0}}
 .ktg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 12px}.ktg button{height:62px;border:0;border-radius:14px;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:5px;box-shadow:0 3px 0 #0002}.ktg button.on{box-shadow:0 0 0 4px #1b2a5c}.ktg span{background:#fffd;border-radius:10px;padding:1px 8px;font-size:13px;font-weight:800;color:#1b2a5c}
+#invb{position:fixed;right:10px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;border:0;border-radius:25px;height:50px;padding:0 16px;background:linear-gradient(135deg,#ff8a1f,#e8579a);color:#fff;font:inherit;font-weight:900;font-size:15px;box-shadow:0 6px 16px #e8579a66;cursor:pointer}
+.invr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eef1f6}.invn{flex:1;display:flex;flex-direction:column}.invn small{font-size:12px;color:#5b6b8c}.invs{border:0;border-radius:12px;padding:8px 12px;background:#ff8a1f;color:#fff;font:inherit;font-weight:800;cursor:pointer}.invs:disabled{background:#18a959}
+.invcard{border-top-color:#18a959!important}.invav{width:84px;height:84px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,#18a959,#2e8bff);color:#fff;font-size:40px;font-weight:900;display:flex;align-items:center;justify-content:center;animation:invp 1s ease-in-out infinite}@keyframes invp{0%,100%{box-shadow:0 0 0 0 #18a95988}50%{box-shadow:0 0 0 18px #18a95900}}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.26.1';
+const VER='2.27.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1547,7 +1550,7 @@ await roomRef(code).set({kind:'cards',host:UID,state:'wait',ts:Date.now(),names:
 async function kJoin(){if(!netOK())return;const code=($('#kcode').value||'').replace(/\D/g,''),n=($('#kn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الطاولة');S.cpme=n;save();
 try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='cards')return toast('لا توجد طاولة بهذا الرقم');const r=d.data(),mine=!!(r.names||{})[UID];if(mine&&r.state!='wait')return kRoom(code);if(r.state!='wait')return toast('اللعبة بدأت بالفعل — انتظر الجولة القادمة');if(!mine&&GD()<FEE)return toast(`تحتاج 🪙 ${FEE} للمشاركة`);if(Object.keys(r.names||{}).length>=6&&!(r.names||{})[UID])return toast('الطاولة ممتلئة (6 لاعبين)');
 await roomRef(code).update({['names.'+UID]:n});kRoom(code)}catch(e){netErr(e)}}
-function kRoom(code){chatOn('k'+code,'#kx');S.klast={code,ts:Date.now()};save();if(KG&&KG.uns)KG.uns();KG={mode:'net',code,me:UID,st:null};KG.uns=roomRef(code).onSnapshot(d=>{const g=KG;if(!g||g.code!==code)return;if(!$('#kx')){g.uns&&g.uns();KG=null;return}if(!d.exists)return;const r=d.data();g.room=r;
+function kRoom(code){invOn('k',code,'#kx');chatOn('k'+code,'#kx');S.klast={code,ts:Date.now()};save();if(KG&&KG.uns)KG.uns();KG={mode:'net',code,me:UID,st:null};KG.uns=roomRef(code).onSnapshot(d=>{const g=KG;if(!g||g.code!==code)return;if(!$('#kx')){g.uns&&g.uns();KG=null;return}if(!d.exists)return;const r=d.data();g.room=r;
 if(r.state=='wait')return kLobby();const key='k'+code+'_'+r.started;if(!(r.order||[]).includes(UID)){return shell('آخر ورقة 🃏','<div id=kx></div><div class=card><p>بدأت اللعبة بدونك.</p></div>')}
 if(!g.paid){g.paid=1;if(!kPay(key))toast('⚠️ رصيدك لا يكفي للرسوم')}g.key=key;g.pot=FEE*r.order.length;g.st=r;kRender();if(r.winner&&!g.ended){g.ended=1;kEnd()}},netErr);kLobby()}
 function kLobby(){const r=KG.room||{},ns=r.names||{},host=r.host==UID;shell('طاولة آخر ورقة 🃏',`<div id=kx></div><div class="card cpt"><p class=sm>رقم الطاولة:</p><div class=cpcode dir=ltr>${KG.code}</div><p class=sm>يفتح كل لاعب «آخر ورقة ← 📱 مع العائلة» ويكتب هذا الرقم. رسوم كل لاعب 🪙 ${FEE}، والفائز يأخذ الكل.</p>
@@ -1736,7 +1739,7 @@ async function tJoin(){if(!netOK())return;const code=($('#tcode').value||'').rep
 try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='tarneeb')return toast('لا توجد طاولة طرنيب بهذا الرقم');const r=d.data();if((r.names||{})[UID])return tRoom(code);if(r.state!='wait')return toast('اللعبة بدأت بالفعل');if((r.jn||[]).length>=4)return toast('الطاولة ممتلئة (4 لاعبين)');if(GD()<FEE)return toast(`تحتاج 🪙 ${FEE} للمشاركة`);
 await roomRef(code).update({['names.'+UID]:n,jn:firebase.firestore.FieldValue.arrayUnion(UID)});tRoom(code)}catch(e){netErr(e)}}
 async function tRejoin(code){try{const d=await roomRef(code).get(),r=d.exists?d.data():null;if(!r||r.kind!='tarneeb'||!(r.names||{})[UID]){S.tlast=null;save();toast('انتهت هذه الطاولة');return tarneeb()}tRoom(code)}catch(e){netErr(e)}}
-function tRoom(code){chatOn('t'+code,'#tx');S.tlast={code,ts:Date.now()};save();if(TG&&TG.uns)TG.uns();const g=TG={mode:'net',code,me:UID,st:null};tLobby();
+function tRoom(code){invOn('t',code,'#tx');chatOn('t'+code,'#tx');S.tlast={code,ts:Date.now()};save();if(TG&&TG.uns)TG.uns();const g=TG={mode:'net',code,me:UID,st:null};tLobby();
 g.uns=roomRef(code).onSnapshot(d=>{if(TG!==g)return;if(!$('#tx')){g.uns&&g.uns();TG=null;return}if(!d.exists)return;const r=d.data();g.room=r;g.host=r.host==UID;
 if(r.state=='wait')return tLobby();if(!(r.order||[]).includes(UID))return shell('الطرنيب ♠️','<div id=tx></div><div class=card><p>بدأت اللعبة بدونك.</p></div>');
 const key='t'+code+'_'+r.started;if(!g.paid){g.paid=1;kPay(key,'♠️ الطرنيب — رسوم')}g.key=key;g.st=r;tRender()},netErr)}
@@ -1782,7 +1785,7 @@ async function xoCreate(){if(!netOK())return;const n=($('#xn').value||'').trim()
 async function xoJoin(){if(!netOK())return;const code=($('#xcode').value||'').replace(/\D/g,''),n=($('#xn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الغرفة');S.cpme=n;save();
 try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='xo')return toast('لا توجد غرفة إكس أو بهذا الرقم');const r=d.data();if(r.X==UID||r.O==UID)return xoRoom(code);if(r.O)return toast('الغرفة ممتلئة');
 await roomRef(code).update({['names.'+UID]:n,O:UID,state:'play',ts:Date.now()});xoRoom(code)}catch(e){netErr(e)}}
-function xoRoom(code){chatOn('x'+code,'#xx');if(XO&&XO.uns)XO.uns();const g=XO={mode:'net',code,math:true,st:null};shell('إكس أو ❌⭕',`<div id=xx></div><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به صديقك:</p><div class=cpcode dir=ltr>${code}</div><p>⏳ بانتظار اللاعب الثاني…</p></div>`);
+function xoRoom(code){invOn('x',code,'#xx');chatOn('x'+code,'#xx');if(XO&&XO.uns)XO.uns();const g=XO={mode:'net',code,math:true,st:null};shell('إكس أو ❌⭕',`<div id=xx></div><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به صديقك:</p><div class=cpcode dir=ltr>${code}</div><p>⏳ بانتظار اللاعب الثاني…</p></div>`);
 g.uns=roomRef(code).onSnapshot(d=>{if(XO!==g)return;if(!$('#xx')){g.uns&&g.uns();XO=null;return}if(!d.exists)return;const r=d.data();if(r.state=='wait')return;g.me=r.X==UID?'X':'O';g.math=r.math!==false;
 const nb=g.st&&g.st.b!=r.b;if(nb&&r.b!=XE)kSfx('card');if(r.b==XE)g.done=0;g.st={b:r.b,turn:r.turn,start:r.start,sc:r.sc,names:{X:r.names[r.X],O:r.names[r.O]}};if(!g.q)xoRender()},netErr)}
 function xoTx(fn){const ref=roomRef(XO.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();tx.set(ref,s)}).catch(e=>{if(e!=='no')netErr(e)})}
@@ -1874,7 +1877,7 @@ async function idCreate(){if(!netOK())return;const n=($('#inn').value||'').trim(
 async function idJoin(){if(!netOK())return;const code=($('#icode').value||'').replace(/\D/g,''),n=($('#inn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الغرفة');S.cpme=n;save();
 try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='idris')return toast('لا توجد غرفة إدريس بهذا الرقم');const r=d.data();if(r.X==UID||r.O==UID)return idRoom(code);if(r.O)return toast('الغرفة ممتلئة');
 await roomRef(code).update({['names.'+UID]:n,O:UID,state:'play',ts:Date.now()});idRoom(code)}catch(e){netErr(e)}}
-function idRoom(code){chatOn('i'+code,'#ix');if(IG&&IG.uns)IG.uns();const g=IG={mode:'net',code,math:true,sel:-1,st:null};shell('إدريس 🪨',`<div id=ix></div><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به صديقك:</p><div class=cpcode dir=ltr>${code}</div><p>⏳ بانتظار اللاعب الثاني…</p></div>`);
+function idRoom(code){invOn('i',code,'#ix');chatOn('i'+code,'#ix');if(IG&&IG.uns)IG.uns();const g=IG={mode:'net',code,math:true,sel:-1,st:null};shell('إدريس 🪨',`<div id=ix></div><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به صديقك:</p><div class=cpcode dir=ltr>${code}</div><p>⏳ بانتظار اللاعب الثاني…</p></div>`);
 g.uns=roomRef(code).onSnapshot(d=>{if(IG!==g)return;if(!$('#ix')){g.uns&&g.uns();IG=null;return}if(!d.exists)return;const r=d.data();if(r.state=='wait')return;g.me=r.X==UID?'X':'O';g.math=r.math!==false;g.names={X:r.names[r.X],O:r.names[r.O]};
 if(g.st&&g.st.b!=r.g.b)idSfx(g.st,r.g);if(!r.g.win&&g.st&&g.st.win)g.done=0;g.st=r.g;if(!g.q)idRender()},netErr)}
 function idTx(fn){const ref=roomRef(IG.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();tx.set(ref,s)}).catch(e=>{if(e!=='no')netErr(e)})}
@@ -1907,6 +1910,22 @@ if(!rec||rec.cancel)return;if(Date.now()-rec.t0<600)return toast('🎤 اضغط 
 r.start();const ind=document.createElement('div');ind.id='chrec';ind.innerHTML='🔴 يسجّل… اترك الزر للإرسال <i></i>';document.body.appendChild(ind);CHAT.rec.to=setTimeout(()=>chatRecStop(),8000)}
 catch(e){toast('🎤 اسمح للبرنامج باستخدام المايكروفون من إعدادات المتصفح')}}
 function chatRecStop(cancel){const R0=CHAT&&CHAT.rec;if(!R0)return;clearTimeout(R0.to);if(cancel)R0.cancel=1;try{R0.r.state!='inactive'&&R0.r.stop()}catch(e){}}
+// ===== دعوة اللاعبين إلى غرفة: حضور + دعوة برنين =====
+let INVU=null,PRT=0,INV=null;const INVK={k:['cardsHome','km','kcode','kn','kJoin','🃏 آخر ورقة'],t:['tarneeb','tm','tcode','tn','tJoin','♠️ الطرنيب'],x:['xo','xm','xcode','xn','xoJoin','❌ إكس أو'],i:['idris','im','icode','inn','idJoin','🪨 إدريس'],c:['contest','cpm','cpcode','cpn1','cpJoin','🏆 تجميع الذهب']};
+function presPing(){if(!FB||!UID||document.hidden||Date.now()-PRT<90e3)return;PRT=Date.now();FB.d.collection('presence').doc(UID).set({n:(S.nm||'').trim()||'لاعب',ts:Date.now()}).catch(()=>{})}
+setInterval(presPing,30e3);document.addEventListener('visibilitychange',()=>{if(!document.hidden){PRT=0;presPing()}});
+function invWatch(){if(INVU){INVU();INVU=null}if(!UID)return;PRT=0;presPing();INVU=FB.d.collection('invites').where('to','==',UID).onSnapshot(q=>{q.docChanges().forEach(c=>{if(c.type!='added')return;const v={id:c.doc.id,ref:c.doc.ref,...c.doc.data()};if(Date.now()-v.ts>5*60e3){c.doc.ref.delete().catch(()=>{});return}invRing(v)})},()=>{})}
+function invRing(v){const K=INVK[v.k];if(!K)return v.ref.delete().catch(()=>{});if($('#invc'))return;const w=document.createElement('div');w.id='invc';w.className='askw show';
+w.innerHTML=`<div class="askc invcard"><div class=invav>${esc(((v.n||'?').trim()[0]||'?'))}</div><h3>${esc(v.n||'لاعب')} يدعوك!</h3><p>للعب <b>${K[5]}</b><br><small>رقم الغرفة: <bdi>${esc(v.code)}</bdi></small></p><div class=askb><button class=asky>✅ انضم الآن</button><button class=askn>لاحقًا</button></div></div>`;document.body.appendChild(w);
+let n=0;const ring=()=>{if(!$('#invc'))return;tone(880,.18,'sine',.2);setTimeout(()=>tone(1175,.22,'sine',.2),220);vib([300,150,300]);if(++n<12)w._t=setTimeout(ring,1800);else end()};ring();ntDevice('📣 '+(v.n||'لاعب')+' يدعوك للعب',K[5]+' — غرفة '+v.code);
+const end=()=>{clearTimeout(w._t);w.remove();v.ref.delete().catch(()=>{})};w.querySelector('.askn').onclick=end;w.querySelector('.asky').onclick=()=>{end();invJoin(v.k,v.code)}}
+async function invJoin(k,code){const K=INVK[k];S[K[1]]='net';save();if(typeof gEnter=='function')await gEnter(K[0]);else window[K[0]]();setTimeout(()=>{const c=$('#'+K[2]),n=$('#'+K[3]);if(!c)return toast('افتح اللعبة وادخل رقم الغرفة '+code);c.value=code;if(n&&!n.value.trim())n.value=(S.cpme||S.nm||'').trim();window[K[4]]()},350)}
+function invOn(k,code,sel){if(!FB||!UID)return;INV={k,code,sel,sent:new Set()};let b=$('#invb');if(!b){b=document.createElement('button');b.id='invb';b.innerHTML='📣 <span>ادعُ لاعبين</span>';b.onclick=invPick;document.body.appendChild(b)}
+clearInterval(invOn.iv);invOn.iv=setInterval(()=>{const e=$('#invb');if(!INV||!document.querySelector(INV.sel)){INV=null;if(e)e.remove();clearInterval(invOn.iv)}else if(e)e.style.display=$('.cpcode')?'':'none'},700)}
+async function invPick(){if(!INV)return;const w=document.createElement('div');w.className='ksheetw';w.innerHTML=`<div class=ksheet style="padding:14px;overflow:auto"><h3 style="margin:0 0 4px">📣 ادعُ لاعبين إلى غرفتك <bdi>${esc(INV.code)}</bdi></h3><p class=sm style="margin:0 0 8px">يرنّ عنده البرنامج ويظهر له زر «انضم» إن كان البرنامج مفتوحًا.</p><div id=invl><p class=sm>⏳ جارٍ التحميل…</p></div><button class=big style="background:#5b6b8c" onclick="this.closest('.ksheetw').remove()">إغلاق</button></div>`;w.style.zIndex=80;w.onclick=e=>{if(e.target==w)w.remove()};document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('show'));
+try{const q=await FB.d.collection('presence').orderBy('ts','desc').limit(60).get(),L=q.docs.map(d=>({u:d.id,...d.data()})).filter(x=>x.u!=UID);const l=$('#invl');if(!l)return;
+l.innerHTML=L.length?L.map(x=>{const on=Date.now()-x.ts<4*60e3;return `<div class=invr><span class=admav style="width:36px;height:36px;font-size:16px">${esc((x.n||'?').trim()[0]||'?')}</span><span class=invn><b>${esc(x.n||'لاعب')}</b><small>${on?'🟢 متصل الآن':'⚪ '+ago(x.ts)}</small></span><button class=invs ${INV.sent.has(x.u)?'disabled':''} onclick="invSend('${x.u}',this)">${INV.sent.has(x.u)?'✓ أُرسلت':'📣 ادعُه'}</button></div>`}).join(''):'<p class=sm>لا يوجد لاعبون آخرون بعد — يظهرون هنا عندما يفتحون البرنامج بحساباتهم.</p>'}catch(e){netErr(e)}}
+async function invSend(u,el){if(!INV)return;el.disabled=true;el.textContent='…';try{await FB.d.collection('invites').add({to:u,from:UID,n:kShort(S.cpme||S.nm||'لاعب'),k:INV.k,code:INV.code,ts:Date.now()});INV.sent.add(u);el.textContent='✓ أُرسلت';toast('📣 أُرسلت الدعوة')}catch(e){el.disabled=false;el.textContent='📣 ادعُه';netErr(e)}}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
@@ -3138,7 +3157,7 @@ const N=cpN();await roomRef(code).set({host:UID,N,game:S.cpgm||'q',tabs:cpTabs()
 async function cpJoin(){if(!netOK())return;const code=($('#cpcode').value||'').replace(/\D/g,''),n=($('#cpn1').value||'').trim();if(!n){$('#cpn1').focus();return toast('✏️ اكتب اسمك أولًا')}if(code.length<2)return toast('اكتب رقم الغرفة، مثل 50');S.cpme=n;save();
 try{const d=await roomRef(code).get();if(!d.exists||d.data().kind)return toast('لا توجد غرفة بهذا الرقم');const r=d.data();if(r.state!='wait'&&!(r.players||{})[UID])return toast('المسابقة بدأت بالفعل');if(!(r.players||{})[UID]&&!await gPay('contest','cpj'+code+'_'+r.seed))return;
 const mine=(r.players||{})[UID];if(!mine)await roomRef(code).update({['players.'+UID]:newP(n)});else if(mine.n!=n)await roomRef(code).update({['players.'+UID+'.n']:n});cpRoom(code)}catch(e){netErr(e)}}
-function cpRoom(code){chatOn('c'+code,'#cpx');cpOff();CP={mode:'net',code,view:'lobby',P:[],me:null};cpLobby();CP.uns=roomRef(code).onSnapshot(cpSnap,netErr)}
+function cpRoom(code){invOn('c',code,'#cpx');chatOn('c'+code,'#cpx');cpOff();CP={mode:'net',code,view:'lobby',P:[],me:null};cpLobby();CP.uns=roomRef(code).onSnapshot(cpSnap,netErr)}
 function cpSnap(d){if(!CP||CP.mode!='net')return;if(!$('#cpx')&&CP.view!='lobby')return cpOff();if(!d.exists)return;const r=CP.room=d.data();if(r.kind)return;const pl=r.players||{};CP.game=r.game||'q';
 CP.P=Object.keys(pl).map(u=>Object.assign({u},pl[u]));CP.host=r.host==UID;
 if(CP.view=='lobby'){if(r.state=='wait')return cpLobby();if(r.state=='play'||r.state=='end'){CP.N=r.N;CP.seed=r.seed;CP.Q=cpGenQ(r.game||'q',r.N,r.tabs,r.seed);CP.me=Object.assign({},pl[UID]||newP(S.cpme||NM()));CP.view='play';
@@ -3354,7 +3373,7 @@ const L=NOTES.map(n=>`<div class="ntc${n.ts>seen?' new':''}"><b>${n.to=='all'?'�
 S.nseen=Math.max(seen,...NOTES.map(n=>n.ts),0);save();
 shell('الإشعارات 🔔',`<div id=notes></div>${pm=='granted'?'':pm=='na'?'':`<div class="card" style="text-align:center"><p style="margin:0 0 6px">🔔 فعّل إشعارات الجهاز لتصلك الرسائل في شريط الإشعارات أيضًا</p>${pm=='denied'?'<p class=sm>الإشعارات ممنوعة في المتصفح — فعّلها من إعدادات الموقع (رمز القفل بجانب الرابط).</p>':'<button class=big onclick=ntAsk()>🔔 تفعيل الإشعارات</button>'}</div>`}
 ${L||`<div class=card style="text-align:center"><div style="font-size:48px">📭</div><p>لا توجد إشعارات بعد</p></div>`}`)}
-function admWatch(){if(!FB)return;grWatch();ntWatch();const C=FB.d.collection('config');
+function admWatch(){if(!FB)return;grWatch();invWatch();ntWatch();const C=FB.d.collection('config');
 if(!CFGU)CFGU=C.doc('app').onSnapshot(d=>{CFG=d.exists?d.data():{};admGate()},()=>{});
 if(!OWNU)OWNU=C.doc('owner').onSnapshot(d=>{OWN=d.exists?d.data():false;admGate()},()=>{OWN=null});
 if(ACLU){ACLU();ACLU=null}ACL=null;if(UID)ACLU=FB.d.collection('acl').doc(UID).onSnapshot(d=>{ACL=d.exists?d.data():null;admGate()},()=>{});admGate()}

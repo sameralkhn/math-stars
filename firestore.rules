@@ -74,6 +74,18 @@ service cloud.firestore {
       allow delete: if signed() && (resource.data.from == request.auth.uid || isAdmin());
     }
 
+    // الحضور: اسم اللاعب وآخر ظهور (لقائمة الدعوات)
+    match /presence/{uid} {
+      allow read: if signed();
+      allow write: if signed() && request.auth.uid == uid && notBlocked();
+    }
+
+    // دعوات الانضمام إلى غرفة
+    match /invites/{id} {
+      allow create: if netAllowed() && request.resource.data.from == request.auth.uid;
+      allow read, delete: if signed() && (resource.data.to == request.auth.uid || resource.data.from == request.auth.uid);
+    }
+
     // الغرف والطاولات الجماعية
     match /rooms/{code} {
       allow read: if signed();
