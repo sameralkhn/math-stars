@@ -63,6 +63,17 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    // رسائل الغرف (إيموجي وصوت قصير) — يحذفها صاحبها أو المدير
+    match /chat/{id} {
+      allow read: if signed();
+      allow create: if netAllowed() && request.resource.data.from == request.auth.uid
+        && (!exists(appDoc()) || get(appDoc()).data.get('chat', true) != false)
+        && (!hasAcl() || myAcl().get('chat', true) != false)
+        && (request.resource.data.t != 'v' || ((!exists(appDoc()) || get(appDoc()).data.get('voice', true) != false)
+            && (!hasAcl() || myAcl().get('voice', true) != false)));
+      allow delete: if signed() && (resource.data.from == request.auth.uid || isAdmin());
+    }
+
     // الغرف والطاولات الجماعية
     match /rooms/{code} {
       allow read: if signed();
