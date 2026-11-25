@@ -611,12 +611,19 @@ svg[class^=mv]{transform-origin:50% 85%}
 .chm b{white-space:nowrap}.che{font-size:17px}.chplay{border:0;background:#eef3ff;border-radius:10px;padding:4px 10px;font:inherit;font-weight:800;cursor:pointer}.chmute{border:0;background:none;font-size:14px;cursor:pointer;opacity:.6}
 @keyframes chin{from{opacity:0;transform:translateY(-8px)}}
 #chrec{position:fixed;bottom:80px;left:10px;z-index:72;background:#e8453c;color:#fff;border-radius:14px;padding:8px 12px;font-weight:800;font-size:14px;box-shadow:0 6px 18px #e8453c66}
+.ktheme{right:auto!important;left:10px}
+.kme{position:absolute;right:14px;top:50%;transform:translateY(-10%);display:flex;flex-direction:column;align-items:center;pointer-events:none;z-index:3}
+.kme i{font-style:normal;font-size:52px;line-height:1;filter:drop-shadow(0 4px 6px #0006);animation:kmeb .8s ease-in-out infinite}
+.kme b{margin-top:2px;background:#ffd23f;color:#1b2a5c;font-size:16px;font-weight:900;border-radius:14px;padding:3px 12px;box-shadow:0 0 0 3px #fff,0 0 18px 6px #ffd23faa;animation:kmeg 1.2s ease-in-out infinite}
+@keyframes kmeb{50%{transform:translateY(10px)}}@keyframes kmeg{50%{box-shadow:0 0 0 3px #fff,0 0 28px 12px #ffd23fdd}}
+.ktable.kmyt{outline:5px solid #ffd23f;outline-offset:3px;animation:kmeo 1.2s ease-in-out infinite}@keyframes kmeo{50%{outline-color:#fff3a0}}
+.ktg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0 12px}.ktg button{height:62px;border:0;border-radius:14px;cursor:pointer;display:flex;align-items:flex-end;justify-content:center;padding:5px;box-shadow:0 3px 0 #0002}.ktg button.on{box-shadow:0 0 0 4px #1b2a5c}.ktg span{background:#fffd;border-radius:10px;padding:1px 8px;font-size:13px;font-weight:800;color:#1b2a5c}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.26.0';
+const VER='2.26.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1442,9 +1449,12 @@ function KGB(){if(KG&&KG.st&&!KG.st.winner&&$('.khand'))backGuard(kLeaveAsk);els
 async function kLeaveAsk(){if(await ask('لن تُعاد رسوم المشاركة.',{title:'مغادرة الجولة؟',icon:'🚪',ok:'نعم، اخرج',no:'أكمل اللعب',danger:1})){KG&&KG.uns&&KG.uns();KG=null;history.back()}else{backGuard(kLeaveAsk)}}
 function kOne(){const g=KG,st=g.st;st.one=st.one||{};if(g.mode=='net')return kTx(s=>{s.one=s.one||{};s.one[UID]=1;s.msg=s.names[UID]+': ورقة! 🙋';kLogAdd(s,s.msg,'one');return true});st.one[g.me]=1;kLogAdd(st,st.names[g.me]+': ورقة! 🙋','one');tone(880,.15,'square',.12);toast('🙋 ورقة!');kRender()}
 function kDo(mv){const g=KG;if(g.mode=='net')return kTx(s=>kMove(s,UID,mv));if(!kMove(g.st,g.me,mv))return;kSfx(mv.t=='play'?(kWild(mv.c)?'wild':'card'):'draw');kRender();if(g.st.winner)return kEnd();kBotTick()}
+const KTB=[['🟠 برتقالي','linear-gradient(135deg,#ff6b5b,#ff8a1f 30%,#e8579a 65%,#8a63ff)'],['🟢 طاولة خضراء','radial-gradient(circle at 50% 40%,#2fae4a,#17652a)'],['🔵 أزرق ليلي','linear-gradient(135deg,#1f3b8a,#2e6bff 55%,#1b2a5c)'],['🟣 بنفسجي','linear-gradient(135deg,#6a3fd8,#9b6bff 55%,#4a2a9a)'],['🌸 وردي','linear-gradient(135deg,#ff8fb8,#e8579a 55%,#b43f7e)'],['🪵 خشبي','linear-gradient(135deg,#a8743f,#7a4f26 55%,#5c3a1b)'],['🌊 فيروزي','linear-gradient(135deg,#19b3a6,#13827e 55%,#0e5f66)'],['⚫ داكن','linear-gradient(135deg,#3a4256,#232a3b 60%,#151a26)']];
+const kTbg=()=>{const t=KTB[S.ktc|0]||KTB[0];return `background:radial-gradient(circle at 30% 20%,#ffffff22,transparent 40%),${t[1]}!important`};
+function kTheme(){const w=document.createElement('div');w.className='askw show';w.innerHTML=`<div class=askc style="opacity:1;transform:none"><div class=aski>🎨</div><h3>لون الطاولة</h3><div class=ktg>${KTB.map((t,i)=>`<button class="${(S.ktc|0)==i?'on':''}" style="background:${t[1]}" onclick="S.ktc=${i};save();this.closest('.askw').remove();kRender()"><span>${t[0]}</span></button>`).join('')}</div><div class=askb><button class=askn onclick="this.closest('.askw').remove()">إغلاق</button></div></div>`;w.onclick=e=>{if(e.target==w)w.remove()};document.body.appendChild(w)}
 function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me]||[],myTurn=st.order[st.turn]===me&&!st.winner,top=st.disc[st.disc.length-1],n=st.order.length;
 const opp=kRing(st,me);
-shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class=ktable style="--kc:${KC[st.color]}"><button class=klogb onclick=kLogPop() aria-label="سجل الأحداث">📜<small>السجل</small></button><span class=kdot title="اللون المطلوب: ${KN[st.color]}" style="background:${KC[st.color]}"></span><div class=kpile>${kCard(top,'ktop')}</div>
+shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class="ktable${myTurn?' kmyt':''}" style="--kc:${KC[st.color]};${kTbg()}"><button class=klogb onclick=kLogPop() aria-label="سجل الأحداث">📜<small>السجل</small></button><button class="klogb ktheme" onclick=kTheme() aria-label="لون الطاولة">🎨<small>اللون</small></button>${myTurn?'<div class=kme><i>👇</i><b>دورك</b></div>':''}<span class=kdot title="اللون المطلوب: ${KN[st.color]}" style="background:${KC[st.color]}"></span><div class=kpile>${kCard(top,'ktop')}</div>
 <button class=kdeck onclick="kDo({t:'draw'})" ${myTurn&&!st.drew?'':'disabled'}><span>🂠</span><small>سحب</small></button><span class=kdir>${st.dir>0?'↻':'↺'}</span></div>
 <p class=kmsg>${esc(kSm(st.msg,st))}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(kShort(st.names[st.order[st.turn]]))}</p>
 ${(()=>{const n=st.order.length,mi=st.order.indexOf(me);if(mi<0||n<2)return'';const nx=st.order[((mi+st.dir)%n+n)%n],nn=nx===me?'أنت':esc(kShort(st.names[nx]));KG.nxn=nn;return `<div class=knext>👉 بعدك: <b>${nn}</b> <span>🃏 ${st.hands[nx].length}</span> <i>${st.dir>0?'↻':'↺'}</i><small>هو من يأخذ +2/+4 ويُتخطّى ⊘</small></div>`})()}<div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)+'').join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
