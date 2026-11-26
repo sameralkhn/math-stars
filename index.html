@@ -603,7 +603,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 .wcleave{display:block;margin:12px auto 0;border:0;background:#fff;border-radius:14px;padding:8px 16px;font:inherit;font-weight:800;box-shadow:0 3px 0 #0002}
 .wcpr{display:flex;align-items:center;justify-content:space-between;background:#f4f7ff;border-radius:12px;padding:6px 12px;margin:4px 0;font-weight:800}.wcpr button{border:0;background:#ffd9d4;border-radius:8px;padding:2px 8px}.wcadd{border:2px dashed var(--grape);background:none;color:var(--grape);border-radius:14px;padding:8px 14px;font:inherit;font-weight:800;margin:6px 0 4px}
 .wcend h2{margin:4px 0 8px}
-#dock{max-width:640px;margin:-28px auto 0;padding:0 14px calc(24px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:flex-end;gap:8px}#dock:empty{display:none}
+#dock{max-width:640px;margin:-28px auto 0;padding:0 14px calc(24px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;align-items:flex-end;gap:8px}#dock:empty{display:none}#dock.in{margin:4px 0 8px;padding:0}#dock.in .chb{width:44px;height:44px;font-size:21px}#dock.in #invb{height:40px}#dock.in .chp{bottom:auto;top:52px;width:260px;max-width:none}#dock.in #chatw{z-index:30}
 #chatw{position:relative;z-index:5;display:flex;flex-direction:column;align-items:flex-start;gap:6px}
 .chbar{display:flex;gap:6px}.chb{width:50px;height:50px;border-radius:50%;border:0;background:#fff;font-size:24px;box-shadow:0 4px 14px #1b2a5c40;cursor:pointer;touch-action:none;user-select:none;-webkit-user-select:none}.chmic{background:#ff5a6e}.chmic:active{transform:scale(1.15);background:#e8453c}
 .chp{position:absolute;bottom:58px;left:0;display:grid;grid-template-columns:1fr 1fr;gap:5px;background:#fff;border-radius:18px;padding:8px;box-shadow:0 8px 24px #1b2a5c40;max-width:250px}.chp button{border:0;background:#f2f5fb;border-radius:12px;padding:8px 6px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
@@ -629,7 +629,7 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 <body>
 <div id="app"></div>
 <script>
-const VER='2.28.3';
+const VER='2.28.4';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1462,7 +1462,7 @@ function kRender(){const g=KG,st=g.st;if(!st)return;const me=g.me,my=st.hands[me
 const opp=kRing(st,me);
 shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class="ktable${myTurn?' kmyt':''}" style="--kc:${KC[st.color]};${kTbg()}"><button class=klogb onclick=kLogPop() aria-label="سجل الأحداث">📜<small>السجل</small></button><button class="klogb ktheme" onclick=kTheme() aria-label="لون الطاولة">🎨<small>اللون</small></button>${myTurn?'<div class=kme><i>👇</i><b>دورك</b></div>':''}<span class=kdot title="اللون المطلوب: ${KN[st.color]}" style="background:${KC[st.color]}"></span><div class=kpile>${kCard(top,'ktop')}</div>
 <button class=kdeck onclick="kDo({t:'draw'})" ${myTurn&&!st.drew?'':'disabled'}><span>🂠</span><small>سحب</small></button><span class=kdir>${st.dir>0?'↻':'↺'}</span></div>
-<p class=kmsg>${esc(kSm(st.msg,st))}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(kShort(st.names[st.order[st.turn]]))}</p>
+<p class=kmsg>${esc(kSm(st.msg,st))}</p><div id=dockslot></div>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(kShort(st.names[st.order[st.turn]]))}</p>
 ${(()=>{const n=st.order.length,mi=st.order.indexOf(me);if(mi<0||n<2)return'';const nx=st.order[((mi+st.dir)%n+n)%n],nn=nx===me?'أنت':esc(kShort(st.names[nx]));KG.nxn=nn;return `<div class=knext>👉 بعدك: <b>${nn}</b> <span>🃏 ${st.hands[nx].length}</span> <i>${st.dir>0?'↻':'↺'}</i><small>هو من يأخذ +2/+4 ويُتخطّى ⊘</small></div>`})()}<div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)+'').join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
 <div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>30000?`<button class="buy kskip" onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB();kAlerts();const sl=$('#kshl');if(sl)sl.innerHTML=kLogRows()}
 // النتيجة النهائية لجلسة الغرفة
@@ -1904,7 +1904,8 @@ g.uns=roomRef(code).onSnapshot(d=>{if(IG!==g)return;if(!$('#ix')){g.uns&&g.uns()
 if(g.st&&g.st.b!=r.g.b)idSfx(g.st,r.g);if(!r.g.win&&g.st&&g.st.win)g.done=0;g.st=r.g;if(!g.q)idRender()},netErr)}
 function idTx(fn){const ref=roomRef(IG.code);return FB.d.runTransaction(async tx=>{const d=await tx.get(ref),s=d.data();if(!fn(s))throw 'no';s.ts=Date.now();tx.set(ref,s)}).catch(e=>{if(e!=='no')netErr(e)})}
 // ===== التواصل داخل الغرف: إيموجي ورسائل جاهزة + رسائل صوتية قصيرة =====
-const dock=()=>{let d=$('#dock');if(!d){d=document.createElement('div');d.id='dock';app.after(d)}return d};
+let DOCK=null;const dock=()=>{if(!DOCK){DOCK=document.createElement('div');DOCK.id='dock';new MutationObserver(dockPlace).observe(app,{childList:true})}dockPlace();return DOCK};
+function dockPlace(){if(!DOCK)return;const sl=document.getElementById('dockslot');if(sl){if(DOCK.parentNode!==sl){sl.appendChild(DOCK);DOCK.classList.add('in')}}else if(DOCK.previousElementSibling!==app||!DOCK.isConnected){app.after(DOCK);DOCK.classList.remove('in')}}
 let CHAT=null;const CHQ=['👏 أحسنت','😂','⏳ أسرع!','🤝 لعبة حلوة','😮 واو','🔥 ممتاز','😅 أوبس','🍀 حظًا موفقًا','💪 سأفوز!','❤️'];
 const chatOK=()=>CFG.chat!==false&&!(ACL&&ACL.chat===false)&&(typeof canNet!='function'||canNet());
 const voiceOK=()=>chatOK()&&CFG.voice!==false&&!(ACL&&ACL.voice===false)&&!!(navigator.mediaDevices&&window.MediaRecorder);
@@ -1925,7 +1926,7 @@ if(m.t=='v'){box.innerHTML=`${nm}<button class=chplay>▶️ رسالة صوتي
 else box.innerHTML=`${nm}<span class=che>${esc(m.e||'')}</span>${mine?'':`<button class=chmute title="كتم">🔇</button>`}`;
 const mt=box.querySelector('.chmute');if(mt)mt.onclick=()=>{CHAT.mute.add(m.from);S.chmute=[...CHAT.mute].slice(-20);save();box.remove();toast('🔇 كتمت '+(m.n||'اللاعب'))};
 let st=$('#chst');if(!st){st=document.createElement('div');st.id='chst';document.body.appendChild(st)}st.appendChild(box);while(st.children.length>3)st.firstChild.remove();
-if(!mine){tone(990,.06,'sine',.08);vib(30)}setTimeout(()=>{box.classList.add('out');setTimeout(()=>box.remove(),400)},m.t=='v'?14000:5000)}
+if(!mine){tone(990,.06,'sine',.08);vib(30)}setTimeout(()=>{box.classList.add('out');setTimeout(()=>box.remove(),400)},mine?2500:m.t=='v'?14000:5000)}
 async function chatRec(ev){ev.preventDefault();if(!CHAT||CHAT.rec)return;try{const s=await navigator.mediaDevices.getUserMedia({audio:true});if(!CHAT){s.getTracks().forEach(t=>t.stop());return}
 const mt=['audio/webm;codecs=opus','audio/mp4','audio/webm'].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t))||'';const r=new MediaRecorder(s,mt?{mimeType:mt,audioBitsPerSecond:16000}:{audioBitsPerSecond:16000}),ch=[];
 CHAT.rec={r,s,t0:Date.now(),ch};r.ondataavailable=e=>e.data.size&&ch.push(e.data);r.onstop=()=>{s.getTracks().forEach(t=>t.stop());const rec=CHAT&&CHAT.rec;if(CHAT)CHAT.rec=null;$('#chrec')&&$('#chrec').remove();
