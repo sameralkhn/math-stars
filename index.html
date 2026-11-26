@@ -621,12 +621,13 @@ svg[class^=mv]{transform-origin:50% 85%}
 #invb{position:fixed;right:10px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:70;border:0;border-radius:25px;height:50px;padding:0 16px;background:linear-gradient(135deg,#ff8a1f,#e8579a);color:#fff;font:inherit;font-weight:900;font-size:15px;box-shadow:0 6px 16px #e8579a66;cursor:pointer}
 .invr{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid #eef1f6}.invn{flex:1;display:flex;flex-direction:column}.invn small{font-size:12px;color:#5b6b8c}.invs{border:0;border-radius:12px;padding:8px 12px;background:#ff8a1f;color:#fff;font:inherit;font-weight:800;cursor:pointer}.invs:disabled{background:#18a959}
 .invcard{border-top-color:#18a959!important}.invav{width:84px;height:84px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,#18a959,#2e8bff);color:#fff;font-size:40px;font-weight:900;display:flex;align-items:center;justify-content:center;animation:invp 1s ease-in-out infinite}@keyframes invp{0%,100%{box-shadow:0 0 0 0 #18a95988}50%{box-shadow:0 0 0 18px #18a95900}}
+#invb.play{height:34px;padding:0 12px;font-size:13px;background:#1b2a5ccc;box-shadow:0 3px 10px #1b2a5c55;bottom:calc(22px + env(safe-area-inset-bottom))}#invb.play b{font-size:16px;color:#ffd23f}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.28.0';
+const VER='2.28.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1939,8 +1940,8 @@ w.innerHTML=`<div class="askc invcard"><div class=invav>${esc(((v.n||'?').trim()
 let n=0;const ring=()=>{if(!$('#invc'))return;tone(880,.18,'sine',.2);setTimeout(()=>tone(1175,.22,'sine',.2),220);vib([300,150,300]);if(++n<12)w._t=setTimeout(ring,1800);else end()};ring();ntDevice('📣 '+(v.n||'لاعب')+' يدعوك للعب',K[5]+' — غرفة '+v.code);
 const end=()=>{clearTimeout(w._t);w.remove();v.ref.delete().catch(()=>{})};w.querySelector('.askn').onclick=end;w.querySelector('.asky').onclick=()=>{end();invJoin(v.k,v.code)}}
 async function invJoin(k,code){const K=INVK[k];S[K[1]]='net';save();if(typeof gEnter=='function')await gEnter(K[0]);else window[K[0]]();setTimeout(()=>{const c=$('#'+K[2]),n=$('#'+K[3]);if(!c)return toast('افتح اللعبة وادخل رقم الغرفة '+code);c.value=code;if(n&&!n.value.trim())n.value=(S.cpme||S.nm||'').trim();window[K[4]]()},350)}
-function invOn(k,code,sel){if(!FB||!UID)return;INV={k,code,sel,sent:new Set()};let b=$('#invb');if(!b){b=document.createElement('button');b.id='invb';b.innerHTML='📣 <span>ادعُ لاعبين</span>';b.onclick=invPick;document.body.appendChild(b)}
-clearInterval(invOn.iv);invOn.iv=setInterval(()=>{const e=$('#invb');if(!INV||!document.querySelector(INV.sel)){INV=null;if(e)e.remove();clearInterval(invOn.iv)}else if(e)e.style.display=$('.cpcode')?'':'none'},700)}
+function invOn(k,code,sel){if(!FB||!UID)return;INV={k,code,sel,sent:new Set()};let b=$('#invb');if(!b){b=document.createElement('button');b.id='invb';b.innerHTML='📣 <span>ادعُ لاعبين</span>';b.onclick=()=>b.classList.contains('play')?toast('🚪 رقم الغرفة: '+INV.code+' — أخبر به من يريد المتابعة'):invPick();document.body.appendChild(b)}
+clearInterval(invOn.iv);invOn.iv=setInterval(()=>{const e=$('#invb');if(!INV||!document.querySelector(INV.sel)){INV=null;if(e)e.remove();clearInterval(invOn.iv)}else if(e){const lob=!!$('.cpcode');e.classList.toggle('play',!lob);e.innerHTML=lob?'📣 <span>ادعُ لاعبين</span>':`🚪 غرفة <b dir=ltr>${esc(INV.code)}</b>`}},700)}
 async function invPick(){if(!INV)return;const w=document.createElement('div');w.className='ksheetw';w.innerHTML=`<div class=ksheet style="padding:14px;overflow:auto"><h3 style="margin:0 0 4px">📣 ادعُ لاعبين إلى غرفتك <bdi>${esc(INV.code)}</bdi></h3><p class=sm style="margin:0 0 8px">يرنّ عنده البرنامج ويظهر له زر «انضم» إن كان البرنامج مفتوحًا.</p><div id=invl><p class=sm>⏳ جارٍ التحميل…</p></div><button class=big style="background:#5b6b8c" onclick="this.closest('.ksheetw').remove()">إغلاق</button></div>`;w.style.zIndex=80;w.onclick=e=>{if(e.target==w)w.remove()};document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('show'));
 try{const q=await FB.d.collection('presence').orderBy('ts','desc').limit(60).get(),L=q.docs.map(d=>({u:d.id,...d.data()})).filter(x=>x.u!=UID);const l=$('#invl');if(!l)return;
 l.innerHTML=L.length?L.map(x=>{const on=Date.now()-x.ts<4*60e3;return `<div class=invr><span class=admav style="width:36px;height:36px;font-size:16px">${esc((x.n||'?').trim()[0]||'?')}</span><span class=invn><b>${esc(x.n||'لاعب')}</b><small>${on?'🟢 متصل الآن':'⚪ '+ago(x.ts)}</small></span><button class=invs ${INV.sent.has(x.u)?'disabled':''} onclick="invSend('${x.u}',this)">${INV.sent.has(x.u)?'✓ أُرسلت':'📣 ادعُه'}</button></div>`}).join(''):'<p class=sm>لا يوجد لاعبون آخرون بعد — يظهرون هنا عندما يفتحون البرنامج بحساباتهم.</p>'}catch(e){netErr(e)}}
