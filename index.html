@@ -626,7 +626,7 @@ svg[class^=mv]{transform-origin:50% 85%}
 <body>
 <div id="app"></div>
 <script>
-const VER='2.27.1';
+const VER='2.28.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1462,6 +1462,17 @@ shell('آخر ورقة 🃏',`<div id=kx></div>${opp}<div class="ktable${myTurn?
 <p class=kmsg>${esc(kSm(st.msg,st))}</p>${myTurn?'<div class=kglow></div>':''}<p class="kturn${myTurn?' me':''}">${st.winner?'':myTurn?'🎯 دورك!'+(st.drew?' العب الورقة التي سحبتها أو مرّر':''):'⏳ دور '+esc(kShort(st.names[st.order[st.turn]]))}</p>
 ${(()=>{const n=st.order.length,mi=st.order.indexOf(me);if(mi<0||n<2)return'';const nx=st.order[((mi+st.dir)%n+n)%n],nn=nx===me?'أنت':esc(kShort(st.names[nx]));KG.nxn=nn;return `<div class=knext>👉 بعدك: <b>${nn}</b> <span>🃏 ${st.hands[nx].length}</span> <i>${st.dir>0?'↻':'↺'}</i><small>هو من يأخذ +2/+4 ويُتخطّى ⊘</small></div>`})()}<div class=khand id=khand>${kSort(my).map((c,i,A)=>kCard(c,(i&&A[i-1][0]!==c[0]?'kgrp ':'')+(myTurn&&kCan(c,st)&&(!st.drew||c==st.drew)?'kok':''),`onclick="kPlay('${c}')" data-c="${c}"`)+'').join('')}</div><p class=kmine>🃏 أوراقي: <b>${my.length}</b></p>
 <div class=kbtns>${myTurn&&st.drew?`<button class=buy onclick="kDo({t:'pass'})">⏭️ مرّر</button>`:''}${my.length==2&&myTurn&&!(st.one||{})[me]?`<button class="buy kone" onclick=kOne()>🙋 ورقة!</button>`:''}${g.mode=='net'&&!myTurn&&!st.winner&&Date.now()-(st.ts||0)>30000?`<button class="buy kskip" onclick=kSkip()>⏭️ تخطَّ دور ${esc(st.names[st.order[st.turn]]||'')}</button>`:''}</div><p class=sm style="text-align:center">🏆 الجائزة: 🪙 ${(g.pot||0).toLocaleString('en')}</p>`);if(!g.pick)KGB();kAlerts();const sl=$('#kshl');if(sl)sl.innerHTML=kLogRows()}
+// النتيجة النهائية لجلسة الغرفة
+function finBoard(title,icon,rows,draws,rounds,back){rows=rows.slice().sort((a,b)=>b.w-a.w);const top=rows[0],tie=rows.length>1&&rows[1].w==top.w,md=['🥇','🥈','🥉'];backRelease();
+if(top&&top.me&&!tie){kSfx('win');clap(25);cpRain()}else kSfx('rev');
+shell(title,`<div class="card kend"><div class=cpflow>🌹🎈🌷🎈🌹</div><div class=res>🏁</div><p class=kendt>النتيجة النهائية</p>
+<h2>${!top||!top.w?'لم يفز أحد بعد':tie?'🤝 تعادل في الصدارة!':`البطل: <span class=kwn>${esc(top.n)}</span>`}</h2><p class=sm style="margin:0">${icon} ${rounds} ${rounds==1?'جولة':'جولات'}${draws?` • 🤝 ${draws} تعادل`:''}</p>
+<table class=cptb><tr><th>#</th><th>اللاعب</th><th>الفوز</th></tr>${rows.map((p,i)=>`<tr${i==0&&p.w&&!tie?' class=win':''}><td>${md[i]||i+1}</td><td>${esc(p.n)}${p.me?' (أنت)':''}</td><td><b>${p.w}</b></td></tr>`).join('')}</table>
+<button class=big onclick="${back}">🎮 رجوع</button></div>`)}
+function kTally(r){const t={};Object.keys(r.names||{}).forEach(u=>t[u]=0);(r.hist||[]).forEach(h=>{if(h.w in t)t[h.w]++;else t[h.w]=1});if(r.winner)t[r.winner]=(t[r.winner]||0)+1;return t}
+function kRound(){const r=KG.room;if(!r||!r.winner)return;const hist=[...(r.hist||[]),{w:r.winner,ts:Date.now()}];const ids=sh(Object.keys(r.names));const st=kNew(ids,r.names);
+roomRef(KG.code).update(Object.assign(st,{state:'play',started:Date.now(),winner:null,hist,log:[]})).catch(netErr)}
+function kFinal(){const r=KG&&KG.room;if(!r)return cardsHome();const t=kTally(r),me=UID;const rows=Object.keys(r.names).map(u=>({n:kShort(r.names[u]),w:t[u]||0,me:u==me}));KG.uns&&KG.uns();KG=null;finBoard('آخر ورقة 🃏','🃏',rows,0,(r.hist||[]).length+(r.winner?1:0),'cardsHome()')}
 function kEnd(){const g=KG,st=g.st,win=st.winner===g.me,wn=esc(st.names[st.winner]||'');backRelease();
 if(win){kReward(g.key,'🃏 آخر ورقة');good()}kSfx('win');clap(win?25:12);cpRain();vib(win?[100,60,100,60,300]:[200]);say(win?'أحسنت يا بطل':'مبروك للفائز');
 const P=st.order.map(u=>({n:st.names[u],c:st.hands[u].length,u})).sort((a,b)=>a.c-b.c),md=['🥇','🥈','🥉'];
@@ -1470,7 +1481,8 @@ shell('آخر ورقة 🃏',`<div id=kx></div><div class="card kend"><div class
 <p class=kprize>${win?'🎁 مكافأة الفوز':'🎁 مكافأة الفائز'}</p><p class=sm style="margin:0">${kRwTxt()}</p><div class=cpflow>🎈🌹🎈🌷🎈</div>
 <table class=cptb><tr><th>#</th><th>اللاعب</th><th>الأوراق المتبقية</th></tr>${P.map((p,i)=>`<tr${i==0?' class=win':''}><td>${md[i]||i+1}</td><td>${esc(p.n)}${p.u==g.me?' (أنت)':''}</td><td>${p.c}</td></tr>`).join('')}</table>
 <p class=sm>${win?`رصيدك الآن 🪙 ${GD().toLocaleString('en')}`:`لا بأس! رصيدك 🪙 ${GD().toLocaleString('en')} — اجمع المزيد وحاول مرة أخرى 💪`}</p>
-<button class=big onclick="cardsHome()">🃏 جولة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button></div>`);
+${g.mode=='net'?(()=>{const r=g.room||st,t=kTally(r),L=Object.keys(r.names||st.names).map(u=>({u,n:kShort((r.names||st.names)[u]),w:t[u]||0})).sort((a,b)=>b.w-a.w);return `<h3 style="margin:10px 0 4px">📊 نتيجة الغرفة — ${(r.hist||[]).length+1} ${(r.hist||[]).length?'جولات':'جولة'}</h3><div class=cppl>${L.map(p=>`<span>${esc(p.n)}${p.u==g.me?' (أنت)':''}: <b>${p.w}</b> 🏆</span>`).join('')}</div>
+${r.host==UID?`<button class=big onclick=kRound()>🔁 جولة جديدة في نفس الغرفة</button>`:`<p class=sm>⏳ بانتظار صاحب الطاولة ليبدأ الجولة التالية…</p>`}<button class=big style="background:#8a63ff" onclick=kFinal()>🏁 إنهاء وعرض النتيجة النهائية</button>`})():`<button class=big onclick="cardsHome()">🃏 جولة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}</div>`);
 kPop(`🏆 <b>${win?'فزت بالجولة!':'فاز '+wn+'!'}</b> <small>🎁 +🪙 ${BONUS.toLocaleString('en')}${win?' مكافأة':' مكافأة للفائز'}</small>`,'turn',2600)}
 // دائرة اللاعبين: الترتيب، والاتجاه بأسهم، وصاحب الدور، والتالي — يراها الجميع
 // دائرة اللاعبين الصغيرة: الترتيب والاتجاه وصاحب الدور. الضغط عليها يفتح نافذة بالتفاصيل
@@ -1552,7 +1564,7 @@ try{const d=await roomRef(code).get();if(!d.exists||d.data().kind!='cards')retur
 await roomRef(code).update({['names.'+UID]:n});kRoom(code)}catch(e){netErr(e)}}
 function kRoom(code){invOn('k',code,'#kx');chatOn('k'+code,'#kx');S.klast={code,ts:Date.now()};save();if(KG&&KG.uns)KG.uns();KG={mode:'net',code,me:UID,st:null};KG.uns=roomRef(code).onSnapshot(d=>{const g=KG;if(!g||g.code!==code)return;if(!$('#kx')){g.uns&&g.uns();KG=null;return}if(!d.exists)return;const r=d.data();g.room=r;
 if(r.state=='wait')return kLobby();const key='k'+code+'_'+r.started;if(!(r.order||[]).includes(UID)){return shell('آخر ورقة 🃏','<div id=kx></div><div class=card><p>بدأت اللعبة بدونك.</p></div>')}
-if(!g.paid){g.paid=1;if(!kPay(key))toast('⚠️ رصيدك لا يكفي للرسوم')}g.key=key;g.pot=FEE*r.order.length;g.st=r;kRender();if(r.winner&&!g.ended){g.ended=1;kEnd()}},netErr);kLobby()}
+if(g.paid!==key){g.paid=key;g.ended=0;if(!kPay(key))toast('⚠️ رصيدك لا يكفي للرسوم')}g.key=key;g.pot=FEE*r.order.length;g.st=r;if(r.winner&&g.ended)return;kRender();if(r.winner&&!g.ended){g.ended=1;kEnd()}},netErr);kLobby()}
 function kLobby(){const r=KG.room||{},ns=r.names||{},host=r.host==UID;shell('طاولة آخر ورقة 🃏',`<div id=kx></div><div class="card cpt"><p class=sm>رقم الطاولة:</p><div class=cpcode dir=ltr>${KG.code}</div><p class=sm>يفتح كل لاعب «آخر ورقة ← 📱 مع العائلة» ويكتب هذا الرقم. رسوم كل لاعب 🪙 ${FEE}، والفائز يأخذ الكل.</p>
 <h3>اللاعبون (${Object.keys(ns).length}/6)</h3><div class=cppl>${Object.keys(ns).map(u=>`<span>${esc(ns[u])}${u==r.host?' 👑':''}</span>`).join('')}</div>${host?`<button class=big ${Object.keys(ns).length>=2?'':'disabled'} onclick=kStart()>🃏 ابدأ اللعبة</button>`:'<p>⏳ بانتظار صاحب الطاولة ليبدأ…</p>'}</div>`)}
 function kStart(){const r=KG.room,ids=sh(Object.keys(r.names));const st=kNew(ids,r.names);roomRef(KG.code).update(Object.assign(st,{state:'play',started:Date.now()})).catch(netErr)}
@@ -1729,9 +1741,14 @@ if(st.turn===ms&&(P.turn!==ms||P.phase!==cur.phase)&&['bid','trump','play'].incl
 async function tLeaveAsk(){if(await ask('لن تُعاد رسوم المشاركة.',{title:'مغادرة اللعبة؟',icon:'🚪',ok:'نعم، اخرج',no:'أكمل اللعب',danger:1})){if(TG&&TG.uns)TG.uns();TG=null;history.back()}else backGuard(tLeaveAsk)}
 function tLogPop(){const st=TG&&TG.st;if(!st)return;$('.ksheetw')&&$('.ksheetw').remove();const d=document.createElement('div');d.className='ksheetw';d.onclick=e=>{if(e.target===d)kSheetClose(d)};const L=(st.log||[]).slice().reverse();
 d.innerHTML=`<div class=ksheet><div class=kgrab></div><div class=kshh><b>📜 سجل الأحداث</b><button class=kpx onclick="kSheetClose(this.closest('.ksheetw'))" aria-label="إغلاق">✖</button></div><div class=kshl>${L.length?L.map((x,i)=>`<div class="klr${i==0?' new':''}"><span class=klic>${x.c=='trick'?'🃏':'•'}</span><span>${esc(kSm(x.m,st))}</span><small>${new Date(x.t).toLocaleTimeString('ar-SA-u-nu-latn',{hour:'numeric',minute:'2-digit'})}</small></div>`).join(''):'<p>لا أحداث بعد</p>'}</div></div>`;document.body.appendChild(d);requestAnimationFrame(()=>d.classList.add('show'))}
-function tEnd(){const g=TG,st=g.st,ms=st.order.indexOf(g.me),win=st.winner==ms%2;if(g.ended2)return;g.ended2=1;backRelease();if(win){kReward(g.key,'♠️ الطرنيب');good()}kSfx('win');clap(win?25:12);cpRain();vib(win?[100,60,300]:[200]);
+function tEnd(){const g=TG,st=g.st,ms=st.order.indexOf(g.me),win=st.winner==ms%2;if(g.ended2===g.key)return;g.ended2=g.key;backRelease();if(win){kReward(g.key,'♠️ الطرنيب');good()}kSfx('win');clap(win?25:12);cpRain();vib(win?[100,60,300]:[200]);
 const team=t=>st.order.filter((_,i)=>i%2==t).map(u=>esc(kShort(st.names[u]))).join(' و ');
-shell('الطرنيب ♠️',`<div id=tx></div><div class="card kend"><div class=cpflow>🌹🎈🌷🎈🌹</div><div class=res>🏆</div><p class=kendt>${win?'مبروك! فاز فريقكم 🎉':'انتهت اللعبة'}</p><h2>الفائز: <span class=kwn>${team(st.winner)}</span></h2><p class=kprize>${st.score[st.winner]} مقابل ${st.score[1-st.winner]}</p><p>${win?'🎁 '+kRwTxt():'حظًا أوفر في المرة القادمة 💪'}</p><p class=sm>رصيدك 🪙 ${GD().toLocaleString('en')}</p><button class=big onclick=tarneeb()>♠️ لعبة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button></div>`)}
+shell('الطرنيب ♠️',`<div id=tx></div><div class="card kend"><div class=cpflow>🌹🎈🌷🎈🌹</div><div class=res>🏆</div><p class=kendt>${win?'مبروك! فاز فريقكم 🎉':'انتهت اللعبة'}</p><h2>الفائز: <span class=kwn>${team(st.winner)}</span></h2><p class=kprize>${st.score[st.winner]} مقابل ${st.score[1-st.winner]}</p><p>${win?'🎁 '+kRwTxt():'حظًا أوفر في المرة القادمة 💪'}</p><p class=sm>رصيدك 🪙 ${GD().toLocaleString('en')}</p>${g.mode=='net'?(()=>{const r=g.room||st,h=[...(r.hist||[]),st.winner],w=[h.filter(x=>x==0).length,h.filter(x=>x==1).length],my=ms%2;return `<h3 style="margin:10px 0 4px">📊 نتيجة الغرفة — ${h.length} ${h.length>1?'ألعاب':'لعبة'}</h3><div class=cppl><span>🔵 ${team(0)}: <b>${w[0]}</b></span><span>🟠 ${team(1)}: <b>${w[1]}</b></span></div>
+${g.host?`<button class=big onclick=tNext()>🔁 لعبة جديدة في نفس الغرفة</button>`:`<p class=sm>⏳ بانتظار صاحب الطاولة ليبدأ اللعبة التالية…</p>`}<button class=big style="background:#8a63ff" onclick=tFinal()>🏁 إنهاء وعرض النتيجة النهائية</button>`})():`<button class=big onclick=tarneeb()>♠️ لعبة جديدة</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}</div>`)}
+function tNext(){const r=TG.room;if(!r||r.winner==null)return;const hist=[...(r.hist||[]),r.winner],ns={},bots={};r.order.forEach(u=>{ns[u]=r.names[u];if(r.bots&&r.bots[u])bots[u]=1});
+roomRef(TG.code).set(Object.assign({kind:'tarneeb',host:r.host,jn:r.jn,started:Date.now(),state:'play',hist},tNew(r.order,ns,bots,r.target||21))).catch(netErr)}
+function tFinal(){const g=TG,r=g&&g.room;if(!r)return tarneeb();const h=[...(r.hist||[]),...(r.winner!=null?[r.winner]:[])],ms=r.order.indexOf(UID),tm=t=>r.order.filter((_,i)=>i%2==t).map(u=>kShort(r.names[u])).join(' و ');g.uns&&g.uns();TG=null;
+finBoard('الطرنيب ♠️','♠️',[0,1].map(t=>({n:(t?'🟠 ':'🔵 ')+tm(t),w:h.filter(x=>x==t).length,me:ms%2==t})),0,h.length,'tarneeb()')}
 // مع العائلة
 async function tFreeCode(){for(const c of [...sh([10,20,30,40,50,60,70,80,90]),...sh([11,22,33,44,55,66,77,88,99])]){const d=await roomRef(String(c)).get(),r=d.exists?d.data():null;if(!r||Date.now()-(r.ts||0)>3*3600e3||(r.state=='end'&&Date.now()-(r.ts||0)>600e3))return String(c)}return String(100+R(900))}
 async function tCreate(){if(!netOK())return;const n=($('#tn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{const code=await tFreeCode();await roomRef(code).set({kind:'tarneeb',host:UID,state:'wait',ts:Date.now(),names:{[UID]:n},jn:[UID],target:S.tgt||21});tRoom(code)}catch(e){netErr(e)}}
@@ -1742,7 +1759,7 @@ async function tRejoin(code){try{const d=await roomRef(code).get(),r=d.exists?d.
 function tRoom(code){invOn('t',code,'#tx');chatOn('t'+code,'#tx');S.tlast={code,ts:Date.now()};save();if(TG&&TG.uns)TG.uns();const g=TG={mode:'net',code,me:UID,st:null};tLobby();
 g.uns=roomRef(code).onSnapshot(d=>{if(TG!==g)return;if(!$('#tx')){g.uns&&g.uns();TG=null;return}if(!d.exists)return;const r=d.data();g.room=r;g.host=r.host==UID;
 if(r.state=='wait')return tLobby();if(!(r.order||[]).includes(UID))return shell('الطرنيب ♠️','<div id=tx></div><div class=card><p>بدأت اللعبة بدونك.</p></div>');
-const key='t'+code+'_'+r.started;if(!g.paid){g.paid=1;kPay(key,'♠️ الطرنيب — رسوم')}g.key=key;g.st=r;tRender()},netErr)}
+const key='t'+code+'_'+r.started;if(g.paid!==key){g.paid=key;kPay(key,'♠️ الطرنيب — رسوم')}g.key=key;g.st=r;tRender()},netErr)}
 function tLobby(){const r=TG.room||{},ns=r.names||{},jn=(r.jn||[]).filter(u=>ns[u]),host=r.host==UID;
 shell('طاولة الطرنيب ♠️',`<div id=tx></div><div class="card cpt"><p class=sm>رقم الطاولة:</p><div class=cpcode dir=ltr>${TG.code}</div><p class=sm>يفتح كل لاعب «الطرنيب ← 📱 مع العائلة» ويكتب هذا الرقم. رسوم كل لاعب 🪙 ${FEE}.</p>
 <h3>اللاعبون (${jn.length}/4)</h3><div class=cppl>${jn.map((u,i)=>`<span>${i<2?'🔵':'🟠'} ${esc(ns[u])}${u==r.host?' 👑':''}</span>`).join('')||'…'}</div><p class=sm>🔵 فريق و🟠 فريق — الأماكن الفارغة يكملها الكمبيوتر 🤖 • حتى ${r.target||21} نقطة</p>
@@ -1766,7 +1783,7 @@ shell('إكس أو ❌⭕',`<div id=xx></div><div class="card kintro"><div class
 function xoStart(){const m=S.xm||'bot',n2=m=='bot'?'🤖 الكمبيوتر':(($('#xn2')||{}).value||'').trim()||'اللاعب الثاني',n1=m=='bot'?NM():(($('#xn1')||{}).value||'').trim()||'اللاعب الأول';
 XO={mode:m,me:'X',lv:S.xl||2,math:S.xq!==0,st:{b:XE,turn:'X',start:'X',sc:{X:0,O:0,D:0},names:{X:n1,O:n2}}};xoRender()}
 function xoRender(){const g=XO,st=g&&g.st;if(!st)return;const r=xoWin(st.b),myT=!r&&(g.mode=='local'||st.turn==g.me),nm=k=>esc(kShort(st.names[k]||'…'));let pan;
-if(r){const wn=r.w=='D'?'':st.names[r.w];pan=`<h2>${r.w=='D'?'🤝 تعادل!':(g.mode!='local'&&r.w==g.me?'🎉 فزت!':'🏆 فاز '+esc(wn)+'!')}</h2><button class=big onclick=xoNext()>🔁 جولة جديدة</button>`}
+if(r){const wn=r.w=='D'?'':st.names[r.w];pan=`<h2>${r.w=='D'?'🤝 تعادل!':(g.mode!='local'&&r.w==g.me?'🎉 فزت!':'🏆 فاز '+esc(wn)+'!')}</h2><button class=big onclick=xoNext()>🔁 جولة جديدة</button><button class=big style="background:#8a63ff" onclick=xoFinal()>🏁 إنهاء والنتيجة النهائية</button>`}
 else if(g.q)pan=`<p class=sm style="margin:0">🧮 أجب لتضع علامتك — الخطأ يُضيّع دورك</p>${qHTML(g.q.a,g.q.b)}<div class=opts>${opts(g.q.a,g.q.b).map(v=>`<button class=opt onclick=xoAns(this,${v})>${v}</button>`).join('')}</div>`;
 else pan=`<p class="kturn${myT?' me':''}">${myT?(g.mode=='local'?`دور ${st.turn=='X'?'❌':'⭕'} ${nm(st.turn)}`:'🎯 دورك! اختر مربعًا'):'⏳ دور '+nm(st.turn)}</p>`;
 shell('إكس أو ❌⭕',`<div id=xx></div><div class=xosc><span class="${st.turn=='X'&&!r?'on':''}"><i class=xx>✕</i> ${nm('X')}<b>${st.sc.X}</b></span><span>🤝<b>${st.sc.D}</b></span><span class="${st.turn=='O'&&!r?'on':''}"><i class=xoo>◯</i> ${nm('O')}<b>${st.sc.O}</b></span></div>
@@ -1780,6 +1797,7 @@ later(()=>{g.q=null;if(ok)xoPut(q.i);else{toast(`❌ ${q.a} × ${q.b} = ${q.a*q.
 function xoPut(i){const g=XO;if(g.mode=='net')return xoTx(r=>{if(r.turn!=g.me||r.b[i]!='.'||xoWin(r.b))return false;r.b=r.b.slice(0,i)+g.me+r.b.slice(i+1);const w=xoWin(r.b);if(w)r.sc[w.w]++;else r.turn=g.me=='X'?'O':'X';return true});
 const st=g.st;if(st.b[i]!='.'||xoWin(st.b))return;st.b=st.b.slice(0,i)+st.turn+st.b.slice(i+1);kSfx('card');const w=xoWin(st.b);if(w)st.sc[w.w]++;else st.turn=st.turn=='X'?'O':'X';xoRender()}
 function xoPass(){const g=XO;if(g.mode=='net')return xoTx(r=>{if(r.turn!=g.me)return false;r.turn=g.me=='X'?'O':'X';return true});g.st.turn=g.st.turn=='X'?'O':'X';xoRender()}
+function xoFinal(){const g=XO,st=g&&g.st;if(!st)return xo();if(g.uns)g.uns();XO=null;const sc=st.sc||{X:0,O:0,D:0};finBoard('إكس أو ❌⭕','❌⭕',['X','O'].map(k=>({n:(k=='X'?'❌ ':'⭕ ')+kShort(st.names[k]||''),w:sc[k]||0,me:g.mode!='local'&&g.me==k})),sc.D||0,(sc.X||0)+(sc.O||0)+(sc.D||0),'xo()')}
 function xoNext(){const g=XO;g.done=0;if(g.mode=='net')return xoTx(r=>{if(!xoWin(r.b))return false;r.start=r.start=='X'?'O':'X';r.b=XE;r.turn=r.start;return true});const st=g.st;st.start=st.start=='X'?'O':'X';st.b=XE;st.turn=st.start;xoRender()}
 async function xoCreate(){if(!netOK())return;const n=($('#xn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{const code=await tFreeCode();await roomRef(code).set({kind:'xo',host:UID,state:'wait',ts:Date.now(),names:{[UID]:n},X:UID,O:null,b:XE,turn:'X',start:'X',sc:{X:0,O:0,D:0},math:S.xq!==0});xoRoom(code)}catch(e){netErr(e)}}
 async function xoJoin(){if(!netOK())return;const code=($('#xcode').value||'').replace(/\D/g,''),n=($('#xn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الغرفة');S.cpme=n;save();
@@ -1851,7 +1869,7 @@ function idHand(st,p,nm,me){const V=IDV[st.v],h=st.hand[p],on=idCnt(st.b,p),lost
 function idRender(){const g=IG,st=g&&g.st;if(!st)return;const r=st.win,myT=!r&&(g.mode=='local'||st.turn==g.me),nm=k=>esc(kShort(g.names[k]||'…')),p=st.turn,V=IDV[st.v];let pan,o={};
 if(myT){if(st.rm)o.rmv=idRemovable(V,st.b,IOP(p));else if(st.hand[p]==0&&g.sel>=0)o.tg=V.adj[g.sel].filter(i=>st.b[i]=='.'),o.sel=g.sel;if(g.q){o.tg=[g.q.i];if(g.q.f!=null)o.sel=g.q.f}}
 const who=g.mode=='local'?`${p=='X'?'🔴':'🔵'} ${nm(p)}: `:'';
-if(r){pan=`<h2>${r.w=='D'?'🤝 تعادل!':(g.mode!='local'&&r.w==g.me?'🎉 فزت!':'🏆 فاز '+nm(r.w)+'!')}</h2>${r.stuck?`<p class=sm style="margin:0">حُوصر ${nm(IOP(r.w))} ولم يستطع الحركة</p>`:''}<button class=big onclick=idNext()>🔁 جولة جديدة</button>`}
+if(r){pan=`<h2>${r.w=='D'?'🤝 تعادل!':(g.mode!='local'&&r.w==g.me?'🎉 فزت!':'🏆 فاز '+nm(r.w)+'!')}</h2>${r.stuck?`<p class=sm style="margin:0">حُوصر ${nm(IOP(r.w))} ولم يستطع الحركة</p>`:''}<button class=big onclick=idNext()>🔁 جولة جديدة</button><button class=big style="background:#8a63ff" onclick=idFinal()>🏁 إنهاء والنتيجة النهائية</button>`}
 else if(g.q)pan=`<p class=sm style="margin:0">🧮 أجب لتتحرك — الخطأ يُضيّع دورك</p>${qHTML(g.q.a,g.q.b)}<div class=opts>${opts(g.q.a,g.q.b).map(v=>`<button class=opt onclick=idAns(this,${v})>${v}</button>`).join('')}</div>`;
 else if(!myT)pan=`<p class=kturn>⏳ دور ${nm(p)}${st.rm?' — يختار حصاة ليأخذها':''}</p>`;
 else pan=`<p class="kturn me">${who}${st.rm?'🎯 إدريس! اختر حصاة من حصى خصمك لتأخذها':st.hand[p]>0?`🎯 ضع حصاة على نقطة فارغة (معك ${st.hand[p]})`:g.sel>=0?'👆 اختر النقطة المجاورة المضيئة':'👆 اختر حصاة لتحرّكها'}</p>`;
@@ -1872,6 +1890,7 @@ function idDo(mv){const g=IG;g.sel=-1;if(mv.f===undefined)delete mv.f;
 if(g.mode=='net')return idTx(r=>{const s=r.g;if(s.turn!=g.me||s.win)return false;if(mv.t!='pass'&&!idMoves(s).some(m=>m.t==mv.t&&m.i==mv.i&&m.f==mv.f))return false;r.g=idApply(s,mv);return true});
 const st=g.st;if(mv.t!='pass'&&!idMoves(st).some(m=>m.t==mv.t&&m.i==mv.i&&m.f==mv.f))return;g.st=idApply(st,mv);idSfx(st,g.st);idRender()}
 function idSfx(a,b){if(!a||!b||a.b==b.b)return;if(b.rm&&!a.rm){kSfx('one');vib([60,40,60]);kPop('🪨 <b>إدريس!</b>','turn',1300)}else if(a.rm&&!b.rm)kSfx('draw');else kSfx('card')}
+function idFinal(){const g=IG,st=g&&g.st;if(!st)return idris();if(g.uns)g.uns();IG=null;const sc=st.sc||{X:0,O:0,D:0};finBoard('إدريس 🪨','🪨',['X','O'].map(k=>({n:(k=='X'?'🔴 ':'🔵 ')+kShort(g.names[k]||''),w:sc[k]||0,me:g.mode!='local'&&g.me==k})),sc.D||0,(sc.X||0)+(sc.O||0)+(sc.D||0),'idris()')}
 function idNext(){const g=IG;g.done=0;g.sel=-1;if(g.mode=='net')return idTx(r=>{if(!r.g.win)return false;r.g=idNew(r.g.v,IOP(r.g.start),r.g.sc);return true});const st=g.st;g.st=idNew(st.v,IOP(st.start),st.sc);idRender()}
 async function idCreate(){if(!netOK())return;const n=($('#inn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();try{const code=await tFreeCode();await roomRef(code).set({kind:'idris',host:UID,state:'wait',ts:Date.now(),names:{[UID]:n},X:UID,O:null,math:S.iq!==0,g:idNew(S.iv||'s','X')});idRoom(code)}catch(e){netErr(e)}}
 async function idJoin(){if(!netOK())return;const code=($('#icode').value||'').replace(/\D/g,''),n=($('#inn').value||'').trim();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الغرفة');S.cpme=n;save();
