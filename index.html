@@ -636,7 +636,7 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 <body>
 <div id="app"></div>
 <script>
-const VER='2.29.0';
+const VER='2.30.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1244,7 +1244,7 @@ function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.clas
 // ===== صفحة الألعاب =====
 // صفحة الألعاب: أقسام منظّمة، وبطاقات بنفس الحجم والتصميم، ولكل قسم لون واحد
 const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية'],['tarneeb','♠️','الطرنيب','4 لاعبين'],['xo','❌','إكس أو','مع صديق أو الكمبيوتر'],['idris','🪨','إدريس','لعبة الحصى الشعبية']]],
-['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['snake','🐛','الدودة','كُل الجواب الصحيح'],['tank','🪖','الدبابة','أطلق على الجواب'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
+['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['snake','🐛','الدودة','كُل الجواب الصحيح'],['tank','🪖','الدبابة','احمِ النسر 🦅'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
 ['⚡','سرعة','#2e8bff',[['balloons','🎈','فرقعة البالونات','اضرب البالونة الصحيحة'],['meteor','☄️','حارس الأرض','أسقط النيازك'],['tfg','✅','صح أم خطأ','60 ثانية'],['frog','🐸','قفزة الضفدع','إلى الجزيرة']]],
 ['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول'],/* v1: لعبة الحرف الناقص */['letterg','🔤','الحرف الناقص','أكمل الكلمة'],/* v2: كوّن الكلمات */['wordg','🔠','كوّن الكلمات','شكّل كلمات من الحروف'],['wchain','🔗','سلسلة الكلمات','غرفة لعدة لاعبين']]]];
 const GDEF={cardsHome:1500,tarneeb:1500},GINT=['cardsHome','tarneeb','contest'];
@@ -1994,39 +1994,134 @@ for(let i=0;i<N;i++)for(let j=0;j<N;j++)if((i+j)%2){x.fillStyle='#21452f';x.fill
 (g.body||[]).forEach((p,k)=>{x.fillStyle=k?(k%2?'#7ed957':'#5fc23d'):'#ff8a1f';x.beginPath();x.roundRect?x.roundRect(p[0]*s+2,p[1]*s+2,s-4,s-4,s*.35):x.rect(p[0]*s+2,p[1]*s+2,s-4,s-4);x.fill()});
 if(g.body){const h=g.body[0],d=RDIR[g.dir];const ex=h[0]*s+s/2+d[0]*s*.15,ey=h[1]*s+s/2+d[1]*s*.15,px=d[1]*s*.18,py=d[0]*s*.18;[[1],[-1]].forEach(([q])=>{x.fillStyle='#fff';x.beginPath();x.arc(ex+px*q,ey+py*q,s*.13,0,7);x.fill();x.fillStyle='#000';x.beginPath();x.arc(ex+px*q+d[0]*2,ey+py*q+d[1]*2,s*.06,0,7);x.fill()})}}
 
-// ----- الدبابة -----
-let TK=null;const TKN=13;
-function tank(){clr();const lv=S.tkl||1;TK={lv,on:0,ok:0,e:0,hp:3,goal:10};
-shell('الدبابة 🪖',`<div id=rq class=rq>🪖 أطلق على الدبابة التي تحمل الجواب!</div><div class=rwrap><canvas id=tkcv width=455 height=455></canvas><div id=rhud class=rhud></div></div>${rPad('tk',1)}
-<div id=rpan class=card><h2>🪖 معركة الدبابات</h2><p>أنت الدبابة الخضراء. على كل دبابة عدو رقم — <b>أطلق على الدبابة التي رقمها جواب المسألة</b>. إطلاقك على رقم خطأ أو إصابتك بقذيفة عدو يُنقصان قلبًا ❤️. الجدران الحمراء تتكسّر!</p>${rLv('tkl','tank')}<button class=big onclick=tkGo()>🪖 ابدأ المعركة</button></div>`);
-rKeys('tk',1);tkMap();tkDraw()}
-function tkMap(){const g=TK;g.m=[...Array(TKN)].map(()=>Array(TKN).fill(0));for(let i=1;i<TKN-1;i+=2)for(let j=2;j<TKN-3;j++)if(R(10)<6)g.m[j][i]=R(5)?1:2;for(let j=TKN-3;j<TKN;j++)for(let i=5;i<8;i++)g.m[j][i]=0;for(let i=0;i<TKN;i++)g.m[0][i]=g.m[1][i]=0;g.p={x:6,y:TKN-1,d:'u',cd:0,mv:0};g.en=[];g.bul=[];g.fx=[]}
-function tkGo(){const g=TK;tkMap();g.on=1;g.ok=0;g.e=0;g.hp=3;g.hold=null;$('#rpan').innerHTML='<p class=sm style="margin:0">⬆️⬇️⬅️➡️ للحركة • 🔥 للإطلاق</p>';tkWave();rHud(g);requestAnimationFrame(t=>tkLoop(t,g))}
-function tkWave(){const g=TK;rQ(g);const xs=sh([0,3,6,9,12]);g.en=g.vals.map((v,i)=>({x:xs[i],y:0,d:'d',v,mv:0,cd:1500+R(1500),t:0}));g.bul=g.bul.filter(b=>b.me)}
-function tkFree(x,y,self){const g=TK;if(x<0||y<0||x>=TKN||y>=TKN||g.m[y][x])return false;if(self!==g.p&&g.p.x==x&&g.p.y==y)return false;return !g.en.some(e=>e!==self&&e.x==x&&e.y==y)}
-function tkDir(d,on,ev){if(ev)ev.preventDefault();if(!TK)return;if(on){TK.hold=d;if(TK.on&&TK.p.mv<=0)tkMove(TK.p,d)}else if(TK.hold==d)TK.hold=null}
-function tkMove(o,d){o.d=d;const nx=o.x+RDIR[d][0],ny=o.y+RDIR[d][1];if(tkFree(nx,ny,o)){o.x=nx;o.y=ny;o.mv=o===TK.p?150:[0,520,430,350][TK.lv];return true}o.mv=o===TK.p?120:200;return false}
-function tkFire(ev){if(ev)ev.preventDefault();const g=TK;if(!g||!g.on||g.p.cd>0)return;g.p.cd=380;g.bul.push({x:g.p.x,y:g.p.y,d:g.p.d,me:1,t:0});tone(220,.08,'square',.1);tone(140,.1,'sawtooth',.08,.04)}
-function tkBoom(x,y,c){TK.fx.push({x,y,t:0,c:c||'#ffb020'})}
-function tkLoop(t,g){if(g!==TK||!g.on||!$('#tkcv'))return;const dt=Math.min(100,t-(g.tt||t));g.tt=t;const p=g.p;p.mv-=dt;p.cd-=dt;if(p.mv<=0&&g.hold)tkMove(p,g.hold);
-g.en.forEach(e=>{e.mv-=dt;e.cd-=dt;if(e.mv<=0){if(R(4)==0||!tkMove(e,e.d)){const ds=['u','d','l','r','d','d'];const toward=Math.abs(p.x-e.x)>Math.abs(p.y-e.y)?(p.x>e.x?'r':'l'):(p.y>e.y?'d':'u');tkMove(e,R(3)?toward:ds[R(ds.length)])}}
- if(e.cd<=0){e.cd=[0,3200,2400,1700][g.lv]+R(1200);g.bul.push({x:e.x,y:e.y,d:e.d,me:0,t:0})}});
-g.bul.forEach(b=>{b.t+=dt;while(b.t>=55&&!b.dead){b.t-=55;b.x+=RDIR[b.d][0];b.y+=RDIR[b.d][1];
- if(b.x<0||b.y<0||b.x>=TKN||b.y>=TKN){b.dead=1;break}
- const w=g.m[b.y][b.x];if(w){b.dead=1;if(w==1){g.m[b.y][b.x]=0;tkBoom(b.x,b.y,'#c0503a')}else tone(900,.03,'square',.05);break}
- if(b.me){const ei=g.en.findIndex(e=>e.x==b.x&&e.y==b.y);if(ei>=0){b.dead=1;const e=g.en[ei];tkBoom(e.x,e.y);
-   if(e.v==g.ans){rec(g.a,g.b,true);g.ok++;tone(160,.3,'sawtooth',.15);tone(880,.1,'triangle',.12,.15);rHud(g);if(g.ok>=g.goal){tkDraw();return rEnd(g,1,'الدبابة','tank')}tkWave()}
-   else{rec(g.a,g.b,false);g.en.splice(ei,1);g.hp--;g.e++;oops();vib(120);toast(`❌ ${g.a} × ${g.b} = ${g.ans}`);rHud(g);if(g.hp<=0){tkDraw();return rEnd(g,0,'الدبابة','tank')}}break}}
- else if(b.x==p.x&&b.y==p.y){b.dead=1;tkBoom(p.x,p.y,'#ff4040');g.hp--;g.e++;oops();vib(200);toast('💥 أصابتك قذيفة!');rHud(g);if(g.hp<=0){tkDraw();return rEnd(g,0,'الدبابة','tank')}break}}});
-if(!g.on)return;g.bul=g.bul.filter(b=>!b.dead);g.fx.forEach(f=>f.t+=dt);g.fx=g.fx.filter(f=>f.t<350);tkDraw();requestAnimationFrame(tt=>tkLoop(tt,g))}
-function tkTank(x,s,o,col,lbl){const cx=o.x*s+s/2,cy=o.y*s+s/2,a={u:0,r:Math.PI/2,d:Math.PI,l:-Math.PI/2}[o.d];x.save();x.translate(cx,cy);x.rotate(a);
-x.fillStyle='#222';x.fillRect(-s*.45,-s*.42,s*.2,s*.84);x.fillRect(s*.25,-s*.42,s*.2,s*.84);x.fillStyle=col;x.fillRect(-s*.3,-s*.34,s*.6,s*.68);x.fillStyle='#0003';x.beginPath();x.arc(0,0,s*.2,0,7);x.fill();x.fillStyle=col;x.fillRect(-s*.06,-s*.55,s*.12,s*.4);x.restore();
-if(lbl!=null){x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,s*.27,0,7);x.fill();x.fillStyle='#1b2a5c';x.font=`900 ${s*(lbl>99?.26:.32)}px sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(lbl,cx,cy+1)}}
-function tkDraw(){const cv=$('#tkcv');if(!cv)return;const x=cv.getContext('2d'),g=TK,s=cv.width/TKN;x.fillStyle='#14161c';x.fillRect(0,0,cv.width,cv.height);
-for(let j=0;j<TKN;j++)for(let i=0;i<TKN;i++){const w=g.m[j][i];if(w==1){x.fillStyle='#b5462f';x.fillRect(i*s+1,j*s+1,s-2,s-2);x.strokeStyle='#7a2a1a';x.lineWidth=2;x.beginPath();x.moveTo(i*s,j*s+s/2);x.lineTo(i*s+s,j*s+s/2);x.moveTo(i*s+s/2,j*s);x.lineTo(i*s+s/2,j*s+s/2);x.moveTo(i*s+s/4,j*s+s/2);x.lineTo(i*s+s/4,j*s+s);x.stroke()}else if(w==2){x.fillStyle='#9aa3b5';x.fillRect(i*s+1,j*s+1,s-2,s-2);x.fillStyle='#d7dce6';x.fillRect(i*s+s*.2,j*s+s*.2,s*.6,s*.6)}}
-g.en.forEach(e=>tkTank(x,s,e,'#e39b2d',e.v));tkTank(x,s,g.p,'#3ddc57');
-g.bul.forEach(b=>{x.fillStyle=b.me?'#ffe14d':'#ff5a5a';x.beginPath();x.arc(b.x*s+s/2,b.y*s+s/2,s*.12,0,7);x.fill()});
-g.fx.forEach(f=>{x.globalAlpha=1-f.t/350;x.fillStyle=f.c;x.beginPath();x.arc(f.x*s+s/2,f.y*s+s/2,s*(.3+f.t/350*.5),0,7);x.fill();x.globalAlpha=1})}
+// ----- الدبابة (على طريقة معارك الدبابات الكلاسيكية) -----
+// لوح 26×26 خلية (16px)، الدبابة 2×2. 0 فارغ 1 طوب 2 فولاذ 3 ماء 4 عشب
+let TK=null;const TC=16,TB=416;
+const TKMAPS=[
+["............."
+,".B.B.B.B.B.B."
+,".B.B.B.B.B.B."
+,".B.B.BSB.B.B."
+,".B.B.B.B.B.B."
+,".B.B.....B.B."
+,".....B.B....."
+,"S.BB.....BB.S"
+,".....B.B....."
+,".B.B.BBB.B.B."
+,".B.B.B.B.B.B."
+,".B.B.....B.B."
+,".B.B.....B.B."],
+["..S...S...S.."
+,".BB.GGGGG.BB."
+,".BB.......BB."
+,"....WW.WW...."
+,"GG.........GG"
+,"GB.SS.B.SS.BG"
+,"GB....B....BG"
+,"...BBBBBBB..."
+,".WW.......WW."
+,".B..B.B.B..B."
+,".B.GGGGGGG.B."
+,".B.........B."
+,"............."],
+["....S...S...."
+,".BB.B.G.B.BB."
+,".BB.B.G.B.BB."
+,".....SSS....."
+,"WW.B.....B.WW"
+,"...B.GGG.B..."
+,".S.B.GBG.B.S."
+,"...B.GGG.B..."
+,"BB.........BB"
+,"..BB.WWW.BB.."
+,".B.........B."
+,".B.BB...BB.B."
+,"............."]];
+const TKT={b:{sp:42,bs:230,hp:1,pt:100,c:'#c9ccd6'},f:{sp:84,bs:240,hp:1,pt:200,c:'#d8dbe4'},p:{sp:46,bs:380,hp:1,pt:300,c:'#bfc3cf'},a:{sp:42,bs:250,hp:4,pt:400,c:'#9fdc8a'}};
+const TKBON=[['⭐','نجمة: قذائف أقوى'],['⛑️','خوذة: درع مؤقت'],['💣','قنبلة: تدمّر كل الأعداء'],['🧱','مجرفة: فولاذ حول النسر'],['🪖','دبابة: حياة إضافية'],['⏱️','ساعة: تجميد الأعداء']];
+function tank(){clr();TK={on:0,stage:1,lives:3,score:0,ok:0,e:0,pow:0,hold:null};
+shell('الدبابة 🪖',`<div class=rwrap style="width:min(100%,calc((100svh - 330px)*1.15))"><canvas id=tkcv width=480 height=416></canvas></div>${rPad('tk',1)}
+<div id=rpan class=card><h2>🪖 معركة الدبابات</h2><p>احمِ <b>النسر 🦅</b> في أسفل اللوح ودمّر 20 دبابة عدو في كل مرحلة. الطوب يتكسّر، والفولاذ لا، والماء لا يُعبر، والعشب يخفيك. الدبابات الحمراء الوامضة تُسقط <b>جوائز</b> — التقطها وأجب عن المسألة لتحصل عليها!</p><button class=big onclick=tkGo()>🪖 ابدأ المعركة</button></div>`);
+rKeys('tk',1);tkLoad();tkDraw(0)}
+function tkLoad(){const g=TK,L=TKMAPS[(g.stage-1)%TKMAPS.length],m=[...Array(26)].map(()=>Array(26).fill(0)),code={B:1,S:2,W:3,G:4};
+for(let r=0;r<13;r++)for(let c=0;c<13;c++){const v=code[L[r][c]]||0;for(let a=0;a<2;a++)for(let b=0;b<2;b++)m[r*2+a][c*2+b]=v}
+for(let y=22;y<26;y++)for(let x=10;x<16;x++)m[y][x]=0;g.m=m;tkBaseWall(1);for(const [x,y] of [[0,0],[12,0],[24,0],[8,24]])for(let a=0;a<2;a++)for(let b=0;b<2;b++)m[y+a][x+b]=0;
+g.base={x:192,y:384,dead:0};g.en=[];g.bul=[];g.fx=[];g.bon=null;g.left=20;g.queue=tkQueue(g.stage);g.spT=1;g.spI=0;g.frz=0;g.shov=0;g.clear=0;g.p=null;tkSpawnP()}
+function tkBaseWall(v){const m=TK.m;for(const [x,y] of [[11,23],[12,23],[13,23],[14,23],[11,24],[11,25],[14,24],[14,25]])m[y][x]=v}
+function tkQueue(s){const q=[];for(let i=0;i<20;i++){const r=R(10);q.push(s<2?(r<7?'b':r<9?'f':'p'):r<4?'b':r<6?'f':r<8?'p':'a')}return q}
+function tkSpawnP(){TK.p={x:128,y:384,d:'u',sp:96,cd:0,sh:3,me:1,hp:1,mv:0}}
+function tkGo(){const g=TK;g.on=1;$('#rpan').innerHTML=`<p class=sm style="margin:0">⬆️⬇️⬅️➡️ للحركة • 🔥 للإطلاق • احمِ النسر 🦅</p>`;g.tt=0;requestAnimationFrame(t=>tkLoop(t,g))}
+function tkDir(d,on,ev){if(ev)ev.preventDefault();if(!TK)return;if(on)TK.hold=d;else if(TK.hold==d)TK.hold=null}
+function tkFire(ev){if(ev)ev.preventDefault();const g=TK;if(!g||!g.on||g.pause||!g.p||g.p.spawn)return;const mine=g.bul.filter(b=>b.me).length;if(mine>=(g.pow>=2?2:1)||g.p.cd>0)return;g.p.cd=.12;tkShoot(g.p,g.pow>=1?420:300);tone(300,.05,'square',.08);tone(160,.08,'sawtooth',.06,.03)}
+function tkShoot(t,sp){const d=RDIR[t.d];TK.bul.push({x:t.x+16+d[0]*14,y:t.y+16+d[1]*14,d:t.d,sp,me:!!t.me,o:t,pw:t.me?TK.pow:0})}
+const tkSolid=v=>v==1||v==2||v==3;
+function tkBlocked(t,x,y){if(x<0||y<0||x>TB-32||y>TB-32)return true;const m=TK.m;for(let cy=Math.floor(y/TC);cy<=Math.floor((y+31)/TC);cy++)for(let cx=Math.floor(x/TC);cx<=Math.floor((x+31)/TC);cx++)if(tkSolid(m[cy][cx]))return true;
+if(x<TK.base.x+32&&x+32>TK.base.x&&y<TK.base.y+32&&y+32>TK.base.y)return true;
+for(const o of [TK.p,...TK.en]){if(!o||o===t||o.spawn)continue;const ov=(ax,ay)=>ax<o.x+32&&ax+32>o.x&&ay<o.y+32&&ay+32>o.y;if(ov(x,y)&&!ov(t.x,t.y))return true}return false}
+function tkMove(t,d,dt){if(t.d!=d){if(RDIR[d][0])t.y=Math.round(t.y/TC)*TC;else t.x=Math.round(t.x/TC)*TC;t.d=d}let n=t.sp*dt,moved=false;const dx=RDIR[d][0],dy=RDIR[d][1];
+while(n>0){const s=Math.min(1,n);if(tkBlocked(t,t.x+dx*s,t.y+dy*s))break;t.x+=dx*s;t.y+=dy*s;n-=s;moved=true}t.mv+=moved?dt:0;return moved}
+function tkBoom(x,y,big){TK.fx.push({x,y,t:0,big:!!big});tone(big?90:180,big?.35:.12,'sawtooth',big?.15:.08)}
+function tkHitCells(b){const m=TK.m,d=RDIR[b.d],pts=d[0]?[[b.x,b.y-6],[b.x,b.y+6]]:[[b.x-6,b.y],[b.x+6,b.y]];let hit=false;
+for(const [px,py] of pts){const cx=Math.floor(px/TC),cy=Math.floor(py/TC);if(cx<0||cy<0||cx>25||cy>25)continue;const v=m[cy][cx];if(v==1){m[cy][cx]=0;hit=true}else if(v==2){hit=true;if(b.pw>=3)m[cy][cx]=0}}return hit}
+function tkLoop(t,g){if(g!==TK||!g.on||!$('#tkcv'))return;const dt=Math.min(.05,(t-(g.tt||t))/1000);g.tt=t;g.T=(g.T||0)+dt;if(!g.pause)tkStep(g,dt);tkDraw(g.T);if(g.on)requestAnimationFrame(tt=>tkLoop(tt,g))}
+function tkStep(g,dt){const p=g.p;
+if(g.clear){g.clear-=dt;if(g.clear<=0){g.stage++;tkLoad();kPop(`🚩 <b>المرحلة ${g.stage}</b>`,'turn',1800)}return}
+if(p){if(p.spawn){p.spawn-=dt;if(p.spawn<=0)p.spawn=0}else{p.cd-=dt;if(p.sh>0)p.sh-=dt;if(g.hold)tkMove(p,g.hold,dt)}}
+// spawn enemies
+g.spT-=dt;if(g.spT<=0&&g.queue.length&&g.en.length<4){const sx=[0,192,384][g.spI%3];g.spI++;const tp=g.queue.shift(),T=TKT[tp],idx=20-g.queue.length;g.en.push({x:sx,y:0,d:'d',tp,sp:T.sp*(1+g.stage*.05),hp:T.hp,spawn:.9,cd:1+Math.random()*1.5,turn:1+Math.random()*2,bonus:[4,11,18].includes(idx),mv:0});g.spT=Math.max(1.2,2.6-g.stage*.2)}
+if(g.frz>0)g.frz-=dt;if(g.shov>0){g.shov-=dt;if(g.shov<=0)tkBaseWall(1)}
+g.en.forEach(e=>{if(e.spawn){e.spawn-=dt;if(e.spawn<0)e.spawn=0;return}if(g.frz>0)return;e.turn-=dt;const ok=tkMove(e,e.d,dt);
+ if(!ok||e.turn<=0){e.turn=.6+Math.random()*2.2;const r=Math.random();const toB=e.x<g.base.x-8?'r':e.x>g.base.x+8?'l':'d';e.d=r<.35?'d':r<.55?toB:r<.75?'l':r<.92?'r':'u'}
+ e.cd-=dt;if(e.cd<=0&&!g.bul.some(b=>b.o===e)){e.cd=.6+Math.random()*(2.2-Math.min(1,g.stage*.15));tkShoot(e,TKT[e.tp].bs)}});
+// bullets
+for(const b of g.bul){if(b.dead)continue;let n=b.sp*dt;const d=RDIR[b.d];while(n>0&&!b.dead){const s=Math.min(4,n);n-=s;b.x+=d[0]*s;b.y+=d[1]*s;
+ if(b.x<0||b.y<0||b.x>=TB||b.y>=TB){b.dead=1;tone(500,.03,'square',.04);break}
+ if(tkHitCells(b)){b.dead=1;tkBoom(b.x,b.y);break}
+ if(!g.base.dead&&b.x>g.base.x&&b.x<g.base.x+32&&b.y>g.base.y&&b.y<g.base.y+32){b.dead=1;g.base.dead=1;tkBoom(g.base.x+16,g.base.y+16,1);return tkOver('💥 دُمّر النسر!')}
+ for(const o of g.bul)if(o!==b&&!o.dead&&o.me!==b.me&&Math.abs(o.x-b.x)<7&&Math.abs(o.y-b.y)<7){o.dead=b.dead=1}if(b.dead)break;
+ if(b.me){const e=g.en.find(e=>!e.spawn&&b.x>e.x&&b.x<e.x+32&&b.y>e.y&&b.y<e.y+32);if(e){b.dead=1;if(e.bonus){e.bonus=0;tkBonus()}e.hp--;if(e.hp<=0){g.en.splice(g.en.indexOf(e),1);g.left--;g.score+=TKT[e.tp].pt;tkBoom(e.x+16,e.y+16,1);vib(40);if(g.left<=0)tkClear()}else tone(700,.06,'square',.08)}}
+ else if(p&&!p.spawn&&b.x>p.x&&b.x<p.x+32&&b.y>p.y&&b.y<p.y+32){b.dead=1;if(p.sh>0)break;tkBoom(p.x+16,p.y+16,1);vib(200);g.lives--;g.pow=0;if(g.lives<0)return tkOver('💥 دُمّرت كل دباباتك!');tkSpawnP();g.p.spawn=.9}}}
+g.bul=g.bul.filter(b=>!b.dead);g.fx.forEach(f=>f.t+=dt);g.fx=g.fx.filter(f=>f.t<.4);
+if(g.bon){g.bon.t-=dt;if(g.bon.t<=0)g.bon=null;else if(p&&!p.spawn&&Math.abs(p.x-g.bon.x)<26&&Math.abs(p.y-g.bon.y)<26)tkBonusQ()}}
+function tkBonus(){let x,y,n=0;do{x=R(12)*32;y=R(11)*32+32;n++}while(n<40&&TK.m[y/TC][x/TC]==2);TK.bon={x,y,k:R(TKBON.length),t:12};tone(990,.1,'triangle',.12);tone(1320,.12,'triangle',.12,.1)}
+function tkBonusQ(){const g=TK,B=g.bon;g.bon=null;g.pause=1;g.hold=null;const f=pick(g.last);g.last=key(f[0],f[1]);g.qa=f;kSfx('turn');
+$('#rpan').innerHTML=`<p style="margin:0 0 4px">${TKBON[B.k][0]} <b>${TKBON[B.k][1]}</b> — أجب لتحصل عليها!</p>${qHTML(f[0],f[1])}<div class=opts>${opts(f[0],f[1]).map(v=>`<button class=opt onclick="tkBonusA(this,${v},${B.k})">${v}</button>`).join('')}</div>`;$('#rpan').scrollIntoView({block:'nearest',behavior:'smooth'})}
+function tkBonusA(el,v,k){const g=TK,[a,b]=g.qa,ok=v==a*b;rec(a,b,ok);document.querySelectorAll('#rpan .opt').forEach(o=>{o.disabled=true;if(+o.textContent==a*b)o.classList.add('ok')});el.classList.add(ok?'ok':'no');
+if(ok){g.ok++;g.score+=500;good();if(k==0)g.pow=Math.min(3,g.pow+1);else if(k==1)g.p.sh=10;else if(k==2){g.en.forEach(e=>{if(!e.spawn){tkBoom(e.x+16,e.y+16,1);g.left--;g.score+=TKT[e.tp].pt}});g.en=g.en.filter(e=>e.spawn);if(g.left<=0)tkClear()}else if(k==3){tkBaseWall(2);g.shov=15}else if(k==4)g.lives++;else g.frz=8}else{g.e++;oops()}
+later(()=>{g.pause=0;g.tt=0;$('#rpan').innerHTML=`<p class=sm style="margin:0">${ok?'✅ حصلت على '+TKBON[k][0]+' '+TKBON[k][1]:'❌ '+a+' × '+b+' = '+a*b+' — ضاعت الجائزة'}</p>`;tkScroll()},ok?600:1300)}
+function tkScroll(){const c=$('#tkcv');c&&c.scrollIntoView({block:'nearest',behavior:'smooth'})}
+function tkClear(){const g=TK;g.clear=2.5;g.bul=[];kSfx('win');clap(10);S.tkb=Math.max(S.tkb||0,g.stage);save()}
+function tkOver(msg){const g=TK;g.on=0;kSfx('bad');tkDraw(g.T||0);const st=g.stage-1,n=st>=3?3:st;if(n)award(n);
+$('#rpan').innerHTML=`<h2>${msg}</h2><p>🚩 وصلت إلى المرحلة <b>${g.stage}</b> • 🏆 النقاط <b>${g.score.toLocaleString('en')}</b></p><p class=sm>🧮 جوائز بالحساب: ✅ ${g.ok} • ❌ ${g.e} • أفضل مرحلة: ${Math.max(S.tkb||0,st)}</p><button class=big onclick=tank()>🔁 العب مرة أخرى</button>`}
+// ----- الرسم -----
+function tkTankDraw(x,t,col,dark,T,flash){const a={u:0,r:Math.PI/2,d:Math.PI,l:-Math.PI/2}[t.d];x.save();x.translate(t.x+16,t.y+16);x.rotate(a);
+const tr=Math.floor((t.mv||0)*12)%4;x.fillStyle=dark;x.fillRect(-15,-15,8,30);x.fillRect(7,-15,8,30);x.fillStyle='#0006';for(let i=-15+tr;i<15;i+=4){x.fillRect(-15,i,8,1.5);x.fillRect(7,i,8,1.5)}
+x.fillStyle=flash?'#e8453c':col;x.fillRect(-8,-11,16,24);x.fillStyle=dark;x.fillRect(-8,9,16,3);x.beginPath();x.arc(0,2,6.5,0,7);x.fillStyle=flash?'#ff7a6e':col;x.fill();x.strokeStyle=dark;x.lineWidth=1.5;x.stroke();x.fillStyle=flash?'#ff7a6e':col;x.fillRect(-2,-17,4,15);x.strokeRect(-2,-17,4,15);x.restore()}
+function tkDraw(T){const cv=$('#tkcv');if(!cv)return;const x=cv.getContext('2d'),g=TK,m=g.m;x.fillStyle='#6b6b6b';x.fillRect(0,0,480,416);x.fillStyle='#000';x.fillRect(0,0,TB,TB);
+for(let cy=0;cy<26;cy++)for(let cx=0;cx<26;cx++){const v=m[cy][cx],px=cx*TC,py=cy*TC;
+ if(v==1){x.fillStyle='#a5462c';x.fillRect(px,py,TC,TC);x.fillStyle='#d9744e';const o=(cy%2)*8;x.fillRect(px,py+1,TC,6);x.fillRect(px,py+9,TC,6);x.fillStyle='#5c1f10';x.fillRect(px+((o+4)%TC),py,1.5,8);x.fillRect(px+((o+12)%TC),py+8,1.5,8);x.fillRect(px,py+7,TC,1.5);x.fillRect(px,py+15,TC,1)}
+ else if(v==2){x.fillStyle='#8f96a3';x.fillRect(px,py,TC,TC);x.fillStyle='#e8ebf0';x.fillRect(px+3,py+3,10,10);x.fillStyle='#bfc4cd';x.fillRect(px+5,py+5,6,6)}
+ else if(v==3){x.fillStyle='#1f4fd1';x.fillRect(px,py,TC,TC);x.fillStyle='#7fb0ff';const w=Math.floor(T*3+cx+cy)%2;x.fillRect(px+(w?2:8),py+4,5,1.5);x.fillRect(px+(w?9:3),py+11,5,1.5)}}
+// base
+x.font='28px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(g.base.dead?'🏳️':'🦅',g.base.x+16,g.base.y+17);
+// bonus
+if(g.bon&&(g.bon.t>3||Math.floor(T*6)%2)){x.fillStyle='#fff';x.fillRect(g.bon.x+2,g.bon.y+2,28,28);x.strokeStyle='#e8453c';x.lineWidth=2;x.strokeRect(g.bon.x+2,g.bon.y+2,28,28);x.font='20px sans-serif';x.fillText(TKBON[g.bon.k][0],g.bon.x+16,g.bon.y+17)}
+// tanks
+const sparkle=o=>{const k=Math.floor(T*12)%4;x.fillStyle='#fff';x.save();x.translate(o.x+16,o.y+16);x.rotate(k*Math.PI/4);const r=6+k*3;x.beginPath();for(let i=0;i<8;i++){const a=i*Math.PI/4,rr=i%2?r/3:r;x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr)}x.fill();x.restore()};
+g.en.forEach(e=>{if(e.spawn)return sparkle(e);const T2=TKT[e.tp];let c=T2.c;if(e.tp=='a')c=['#e8e8e8','#f0d060','#9fdc8a','#7cc6ff'][Math.max(0,e.hp-1)];tkTankDraw(x,e,c,'#4a4f5c',T,e.bonus&&Math.floor(T*5)%2)});
+const p=g.p;if(p){if(p.spawn)sparkle(p);else{tkTankDraw(x,p,'#f2c230','#7a5a10',T);if(p.sh>0){x.strokeStyle=Math.floor(T*10)%2?'#fff':'#7fd3ff';x.lineWidth=2;x.setLineDash([4,3]);x.strokeRect(p.x-2,p.y-2,36,36);x.setLineDash([])}}}
+g.bul.forEach(b=>{x.fillStyle='#e9ecf2';x.fillRect(b.x-2.5,b.y-2.5,5,5)});
+// grass on top
+for(let cy=0;cy<26;cy++)for(let cx=0;cx<26;cx++)if(m[cy][cx]==4){const px=cx*TC,py=cy*TC;x.fillStyle='#2f8a1e';x.fillRect(px,py,TC,TC);x.fillStyle='#7fd34a';for(let i=0;i<4;i++)x.fillRect(px+((i*5+cy*3)%13),py+((i*7+cx*5)%13),4,4);x.fillStyle='#1d5e12';x.fillRect(px+6,py+6,3,3)}
+g.fx.forEach(f=>{const r=(f.big?10:5)+f.t/.4*(f.big?18:8);x.globalAlpha=1-f.t/.4;x.fillStyle=f.big?'#fff3a0':'#fff';x.beginPath();x.arc(f.x,f.y,r,0,7);x.fill();x.fillStyle='#ff7a1a';x.beginPath();x.arc(f.x,f.y,r*.65,0,7);x.fill();x.fillStyle='#d42a1a';x.beginPath();x.arc(f.x,f.y,r*.35,0,7);x.fill();x.globalAlpha=1});
+if(g.frz>0){x.fillStyle='#7fd3ff22';x.fillRect(0,0,TB,TB)}
+// side panel
+x.fillStyle='#000';for(let i=0;i<Math.max(0,g.queue.length);i++){const px=430+(i%2)*18,py=14+Math.floor(i/2)*18;x.fillRect(px,py,14,14);x.fillStyle='#6b6b6b';x.fillRect(px+4,py+2,6,10);x.fillStyle='#000'}
+x.fillStyle='#000';x.font='bold 18px monospace';x.textAlign='left';x.fillText('IP',432,250);x.font='16px sans-serif';x.fillText('🪖',428,274);x.font='bold 18px monospace';x.fillText(Math.max(0,g.lives),454,275);
+x.font='26px sans-serif';x.fillText('🚩',428,330);x.font='bold 20px monospace';x.fillText(g.stage,450,365);
+x.font='bold 11px sans-serif';x.fillText((g.score||0)+'',424,395);
+if(g.clear){x.fillStyle='#000a';x.fillRect(0,170,TB,76);x.fillStyle='#ffd23f';x.font='bold 30px sans-serif';x.textAlign='center';x.fillText('🚩 أحسنت! المرحلة '+g.stage+' انتهت',TB/2,208)}
+if(!g.on&&g.base&&(g.base.dead||g.lives<0)){x.fillStyle='#000a';x.fillRect(0,170,TB,76);x.fillStyle='#e8453c';x.font='bold 34px sans-serif';x.textAlign='center';x.fillText('انتهت اللعبة',TB/2,208)}}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
