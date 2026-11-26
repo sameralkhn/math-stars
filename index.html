@@ -631,12 +631,13 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 .rpdir button,.rpf{border:0;border-radius:14px;background:#fff;font-size:24px;box-shadow:0 4px 0 #0002;cursor:pointer;touch-action:none}.rpdir button:active,.rpf:active{transform:translateY(3px);box-shadow:0 1px 0 #0002;background:#eef3ff}
 .rpu{grid-column:2;grid-row:1}.rpl{grid-column:3;grid-row:2}.rpr{grid-column:1;grid-row:2}.rpd{grid-column:2;grid-row:3}
 .rpf{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#ff6b5b,#e8453c);color:#fff;font-size:30px;display:flex;flex-direction:column;align-items:center;justify-content:center}.rpf small{font-size:13px;font-weight:900}
+.toast.tbot{top:auto;bottom:calc(16px + env(safe-area-inset-bottom))}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.30.0';
+const VER='2.30.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1031,7 +1032,7 @@ const NAMES={o:i=>STY[i/10|0]+' '+PAL[i%10][0],n:i=>['سلسلة ذهبية','ع
 const CNT={o:100,n:NC.length,b:BR.length,e:EA.length,m:8,c:50},PR={o:50,n:50,b:50,e:50,m:50,c:100};
 const CAT=[['c','🐰','شخصية'],['o','👗','أثواب'],['n','📿','قلائد'],['b','💍','أساور'],['e','✨','أقراط'],['m','🕺','حركات']];
 let SH='o';
-function toast(m){const d=document.createElement('div');d.className='toast';d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2400)}
+function toast(m){const d=document.createElement('div');d.className='toast'+(document.querySelector('#sncv,#tkcv,#dnsc')?' tbot':'');d.textContent=m;document.body.appendChild(d);setTimeout(()=>d.remove(),2400)}
 const GD=()=>S.gd||0;let TY={};S.own=S.own||{};if(!S.own.c)S.own.c=[...new Set([0,S.ch|0])];
 function shop(){clr();TY={};shell('المتجر 🛍️',`<div class="card stk"><div id=sp class=sp></div><div id=sb></div></div><div class=seg id=st></div><div class=gr id=sg></div>`);dS(1)}
 function dS(full){$('#sp').innerHTML=AV(null,null,TY);const t=TY[SH];
