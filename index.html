@@ -624,12 +624,19 @@ svg[class^=mv]{transform-origin:50% 85%}
 .invcard{border-top-color:#18a959!important}.invav{width:84px;height:84px;margin:0 auto 8px;border-radius:50%;background:linear-gradient(135deg,#18a959,#2e8bff);color:#fff;font-size:40px;font-weight:900;display:flex;align-items:center;justify-content:center;animation:invp 1s ease-in-out infinite}@keyframes invp{0%,100%{box-shadow:0 0 0 0 #18a95988}50%{box-shadow:0 0 0 18px #18a95900}}
 #invb.play{height:40px;padding:0 14px;font-size:14px;background:#1b2a5c;box-shadow:0 3px 10px #1b2a5c55}#invb.play b{font-size:16px;color:#ffd23f}
 body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(.ksheetw) #chatw,body:has(.askw) #chatw,body:has(.askw) #invb{display:none!important}
+.rq{text-align:center;font-size:26px;font-weight:900;color:#1b2a5c;background:#fff;border-radius:16px;padding:6px;margin-bottom:8px;box-shadow:0 3px 0 #0001}.rq b{color:#ff8a1f}
+.rwrap{position:relative;width:min(100%,calc(100svh - 400px));min-width:240px;margin:0 auto}.rwrap canvas{width:100%;display:block;border-radius:16px;box-shadow:0 6px 0 #0002;touch-action:none}
+.rhud{display:flex;justify-content:space-between;font-weight:900;font-size:15px;padding:4px 6px}
+.rpad{display:flex;align-items:center;justify-content:center;gap:22px;margin:4px 0 8px;user-select:none;-webkit-user-select:none}.rpdir{display:grid;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(3,52px);gap:4px}
+.rpdir button,.rpf{border:0;border-radius:14px;background:#fff;font-size:24px;box-shadow:0 4px 0 #0002;cursor:pointer;touch-action:none}.rpdir button:active,.rpf:active{transform:translateY(3px);box-shadow:0 1px 0 #0002;background:#eef3ff}
+.rpu{grid-column:2;grid-row:1}.rpl{grid-column:3;grid-row:2}.rpr{grid-column:1;grid-row:2}.rpd{grid-column:2;grid-row:3}
+.rpf{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#ff6b5b,#e8453c);color:#fff;font-size:30px;display:flex;flex-direction:column;align-items:center;justify-content:center}.rpf small{font-size:13px;font-weight:900}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.28.6';
+const VER='2.29.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -694,7 +701,7 @@ const mid=el=>{const r=el.getBoundingClientRect();return[r.left+r.width/2,r.top+
 const key=(a,b)=>a+'x'+b;
 // الذهب حسب سرعة الإجابة: الوقت من ظهور السؤال حتى الإجابة
 // سجل الرصيد: كل كسب أو صرف للذهب، مع دمج المتتالي من نفس المصدر
-let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم',xo:'❌ إكس أو',idris:'🪨 إدريس',/* v1: لعبة الحرف الناقص */letterg:'🔤 الحرف الناقص',/* v2: كوّن الكلمات */wordg:'🔠 كوّن الكلمات',wchain:'🔗 سلسلة الكلمات'};
+let CURG='';const GLBL={journey:'🐰 رحلة الجزر',race:'🏎️ سباق السيارات',balloons:'🎈 فرقعة البالونات',quiz:'🧠 اختبار النجوم',match:'🃏 لعبة الذاكرة',collect:'🦘 اجمع قفزات',learn:'📖 تعلّم وردّد',cards:'🎴 البطاقات',frog:'🐸 قفزة الضفدع',tower:'🏗️ برج المكعبات',meteor:'☄️ حارس الأرض',tfg:'✅ صح أم خطأ',seqg:'🪜 السلسلة المفقودة',dino:'🦖 الهروب من الديناصور',snake:'🐛 الدودة',tank:'🪖 الدبابة',catg:'🐱 القطة والسمك',arrows:'🏹 متاهة الأسهم',xo:'❌ إكس أو',idris:'🪨 إدريس',/* v1: لعبة الحرف الناقص */letterg:'🔤 الحرف الناقص',/* v2: كوّن الكلمات */wordg:'🔠 كوّن الكلمات',wchain:'🔗 سلسلة الكلمات'};
 function gLog(d,src){if(!d)return;src=src||GLBL[CURG]||'🎮 الألعاب';const L=S.gl=S.gl||[],now=Date.now(),l=L[0];
 if(l&&l.s==src&&Math.sign(l.d)==Math.sign(d)&&now-l.ts<15*60e3){l.d+=d;l.n=(l.n||1)+1;l.ts=now}else L.unshift({ts:now,d,s:src,n:1});if(L.length>150)L.length=150;try{const c=sesCur();d>0?c.gp+=d:c.gm-=d}catch(e){}}
 // ----- تتبّع الجلسات والألعاب (يُزامَن مع الحساب ليراه المدير) -----
@@ -1237,7 +1244,7 @@ function fcAll(v){stopA();document.querySelectorAll('.fg .fc').forEach(e=>e.clas
 // ===== صفحة الألعاب =====
 // صفحة الألعاب: أقسام منظّمة، وبطاقات بنفس الحجم والتصميم، ولكل قسم لون واحد
 const GSEC=[['🏆','المسابقات والترفيه','#f0a400',[['contest','🏆','تجميع الذهب','مسابقة فردية وجماعية'],['cardsHome','🃏','آخر ورقة','أوراق جماعية'],['tarneeb','♠️','الطرنيب','4 لاعبين'],['xo','❌','إكس أو','مع صديق أو الكمبيوتر'],['idris','🪨','إدريس','لعبة الحصى الشعبية']]],
-['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
+['🏃','مغامرات','#ff6b5b',[['journey','🐰','رحلة الجزر','اقفز بين الجزر'],['race','🏎️','سباق السيارات','10 مراحل'],['dino','🦖','الهروب من الديناصور','حلّ لتركض أسرع'],['snake','🐛','الدودة','كُل الجواب الصحيح'],['tank','🪖','الدبابة','أطلق على الجواب'],['catg','🐱','القطة والسمك','أطعمها بالإجابات']]],
 ['⚡','سرعة','#2e8bff',[['balloons','🎈','فرقعة البالونات','اضرب البالونة الصحيحة'],['meteor','☄️','حارس الأرض','أسقط النيازك'],['tfg','✅','صح أم خطأ','60 ثانية'],['frog','🐸','قفزة الضفدع','إلى الجزيرة']]],
 ['🧩','تفكير وذاكرة','#8a63ff',[['quiz','🧠','اختبار النجوم','10 أسئلة'],['match','🎴','لعبة الذاكرة','طابِق البطاقات'],['arrows','🏹','متاهة الأسهم','لغز وطاقة'],['tower','🏗️','برج المكعبات','ابنِ 10 طوابق'],['seqg','🪜','السلسلة المفقودة','أكمل الجدول'],/* v1: لعبة الحرف الناقص */['letterg','🔤','الحرف الناقص','أكمل الكلمة'],/* v2: كوّن الكلمات */['wordg','🔠','كوّن الكلمات','شكّل كلمات من الحروف'],['wchain','🔗','سلسلة الكلمات','غرفة لعدة لاعبين']]]];
 const GDEF={cardsHome:1500,tarneeb:1500},GINT=['cardsHome','tarneeb','contest'];
@@ -1261,7 +1268,7 @@ shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><di
 ${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="gEnter('${f}')"><i>${e}</i><b>${n}</b><small>${d}</small>${gFee(f)>0?`<em class=gfee>🪙 ${gFee(f).toLocaleString('en')}</em>`:''}</button>`).join('')}</div>`).join('')}`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={notes:1,admin:2,ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,idris:2,dino:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,letterg:2,wordg:2,wchain:2,wRejView:'r',journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={notes:1,admin:2,ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,idris:2,dino:2,snake:2,tank:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,letterg:2,wordg:2,wchain:2,wRejView:'r',journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -1952,6 +1959,74 @@ async function invPick(){if(!INV)return;const w=document.createElement('div');w.
 try{const q=await FB.d.collection('presence').orderBy('ts','desc').limit(60).get(),L=q.docs.map(d=>({u:d.id,...d.data()})).filter(x=>x.u!=UID);const l=$('#invl');if(!l)return;
 l.innerHTML=L.length?L.map(x=>{const on=Date.now()-x.ts<4*60e3;return `<div class=invr><span class=admav style="width:36px;height:36px;font-size:16px">${esc((x.n||'?').trim()[0]||'?')}</span><span class=invn><b>${esc(x.n||'لاعب')}</b><small>${on?'🟢 متصل الآن':'⚪ '+ago(x.ts)}</small></span><button class=invs ${INV.sent.has(x.u)?'disabled':''} onclick="invSend('${x.u}',this)">${INV.sent.has(x.u)?'✓ أُرسلت':'📣 ادعُه'}</button></div>`}).join(''):'<p class=sm>لا يوجد لاعبون آخرون بعد — يظهرون هنا عندما يفتحون البرنامج بحساباتهم.</p>'}catch(e){netErr(e)}}
 async function invSend(u,el){if(!INV)return;el.disabled=true;el.textContent='…';try{await FB.d.collection('invites').add({to:u,from:UID,n:kShort(S.cpme||S.nm||'لاعب'),k:INV.k,code:INV.code,ts:Date.now()});INV.sent.add(u);el.textContent='✓ أُرسلت';toast('📣 أُرسلت الدعوة')}catch(e){el.disabled=false;el.textContent='📣 ادعُه';netErr(e)}}
+// ===== ألعاب الأتاري: الدودة 🐛 والدبابة 🪖 =====
+const RDIR={u:[0,-1],d:[0,1],l:[-1,0],r:[1,0]},ROPP={u:'d',d:'u',l:'r',r:'l'};
+function rPad(pre,fire){return `<div class=rpad><div class=rpdir>${[['u','⬆️'],['l','⬅️'],['r','➡️'],['d','⬇️']].map(([k,e])=>`<button class="rp${k}" onpointerdown="${pre}Dir('${k}',1,event)" onpointerup="${pre}Dir('${k}',0)" onpointerleave="${pre}Dir('${k}',0)" oncontextmenu="return false">${e}</button>`).join('')}</div>${fire?`<button class=rpf onpointerdown="${pre}Fire(event)" oncontextmenu="return false">🔥<small>أطلق</small></button>`:''}</div>`}
+function rSwipe(el,fn){let x0,y0;el.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});el.addEventListener('touchend',e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.max(Math.abs(dx),Math.abs(dy))<20)return;fn(Math.abs(dx)>Math.abs(dy)?(dx>0?'r':'l'):(dy>0?'d':'u'))},{passive:true})}
+function rKeys(pre,fire){const h=e=>{if(!document.getElementById(pre+'cv')){removeEventListener('keydown',h);removeEventListener('keyup',u);return}const m={ArrowUp:'u',ArrowDown:'d',ArrowLeft:'l',ArrowRight:'r'}[e.key];if(m){e.preventDefault();window[pre+'Dir'](m,1)}else if(fire&&(e.key==' '||e.key=='Enter')){e.preventDefault();window[pre+'Fire']()}},u=e=>{const m={ArrowUp:'u',ArrowDown:'d',ArrowLeft:'l',ArrowRight:'r'}[e.key];if(m)window[pre+'Dir'](m,0)};addEventListener('keydown',h);addEventListener('keyup',u)}
+function rQ(g){const f=pick(g.last);g.last=key(f[0],f[1]);g.a=f[0];g.b=f[1];g.ans=f[0]*f[1];const o=sh(opts(f[0],f[1]));g.vals=o;const q=$('#rq');if(q)q.innerHTML=`<span>${f[0]} × ${f[1]} = <b>؟</b></span>`}
+function rHud(g,extra){const h=$('#rhud');if(h)h.innerHTML=`<span>✅ ${g.ok}/${g.goal}</span><span>${'❤️'.repeat(Math.max(0,g.hp))}${'🤍'.repeat(Math.max(0,3-g.hp))}</span>${extra||''}`}
+function rEnd(g,win,title,again){g.on=0;const n=g.ok>=g.goal?3:g.ok>=g.goal*.6?2:g.ok>=g.goal*.3?1:0;if(n)award(n);if(win){kSfx('win');clap(16);cpRain()}else kSfx('bad');
+$('#rpan').innerHTML=`<h2>${win?'🎉 فزت!':'💥 انتهت اللعبة'}</h2><p>✅ إجابات صحيحة: <b>${g.ok}</b> • ❌ ${g.e}</p><p>${'⭐'.repeat(n)||'حاول مرة أخرى 💪'}</p><button class=big onclick="${again}()">🔁 العب مرة أخرى</button>`}
+function rLv(v,fn){return `<div class=seg>${[1,2,3].map(n=>`<button class="${(S[v]||1)==n?'on':''}" onclick="S.${v}=${n};save();${fn}()">${['🙂 سهل','😬 متوسط','😱 صعب'][n-1]}</button>`).join('')}</div>`}
+
+// ----- الدودة -----
+let SN=null;
+function snake(){clr();const lv=S.snl||1;SN={lv,on:0,N:15,ok:0,e:0,hp:3,goal:12};
+shell('الدودة 🐛',`<div id=rq class=rq>🐛 كُل الرقم الصحيح!</div><div class=rwrap><canvas id=sncv width=450 height=450></canvas><div id=rhud class=rhud></div></div>${rPad('sn')}
+<div id=rpan class=card><h2>🐛 الدودة الجائعة</h2><p>حرّك الدودة بالأسهم أو بسحب إصبعك على اللوح، وكُل <b>الرقم الذي هو جواب المسألة</b> لتكبر. الرقم الخطأ يُنقص قلبًا ❤️، والاصطدام بالجدار أو بنفسك كذلك!</p>${rLv('snl','snake')}<button class=big onclick=snGo()>🐛 ابدأ</button></div>`);
+rSwipe($('#sncv'),d=>snDir(d,1));rKeys('sn');snDraw()}
+function snGo(){const g=SN,c=7;g.on=1;g.body=[[c,c],[c-1,c],[c-2,c]];g.dir='r';g.nd='r';g.grow=0;g.ok=0;g.e=0;g.hp=3;g.step=[0,230,170,125][g.lv];g.acc=0;$('#rpan').innerHTML='<p class=sm style="margin:0">⬆️⬇️⬅️➡️ أو اسحب إصبعك على اللوح</p>';snFood();rHud(g);requestAnimationFrame(t=>snLoop(t,g))}
+function snFood(){const g=SN;rQ(g);const occ=new Set(g.body.map(p=>p+''));g.food=g.vals.map(v=>{let p;do p=[R(g.N),R(g.N)];while(occ.has(p+'')||Math.abs(p[0]-g.body[0][0])+Math.abs(p[1]-g.body[0][1])<4);occ.add(p+'');return {p,v}})}
+function snDir(d,on,ev){if(ev)ev.preventDefault();if(!on||!SN||!SN.on)return;if(d!==ROPP[SN.dir])SN.nd=d}
+function snHit(msg){const g=SN;g.hp--;g.e++;oops();vib(120);toast(msg);rHud(g);if(g.hp<=0)return rEnd(g,0,'الدودة','snake');const c=7;g.body=[[c,c],[c-1,c],[c-2,c]];g.dir=g.nd='r';snFood()}
+function snLoop(t,g){if(g!==SN||!g.on||!$('#sncv'))return;const dt=Math.min(100,t-(g.tt||t));g.tt=t;g.acc+=dt;
+if(g.acc>=g.step){g.acc=0;g.dir=g.nd;const h=g.body[0],n=[h[0]+RDIR[g.dir][0],h[1]+RDIR[g.dir][1]];
+ if(n[0]<0||n[1]<0||n[0]>=g.N||n[1]>=g.N)snHit('💥 اصطدمت بالجدار!');else if(g.body.some((p,i)=>i<g.body.length-1&&p[0]==n[0]&&p[1]==n[1]))snHit('💥 عضضت نفسك!');
+ else{g.body.unshift(n);const fi=g.food.findIndex(f=>f.p[0]==n[0]&&f.p[1]==n[1]);
+  if(fi>=0){const f=g.food[fi];if(f.v==g.ans){rec(g.a,g.b,true);g.ok++;g.grow+=2;tone(880,.08,'triangle',.15);tone(1320,.1,'triangle',.12,.08);if(g.ok>=g.goal){snDraw();return rEnd(g,1,'الدودة','snake')}snFood()}
+   else{rec(g.a,g.b,false);g.food.splice(fi,1);toast(`❌ ${g.a} × ${g.b} = ${g.ans}`);g.hp--;g.e++;oops();vib(120);if(g.hp<=0){snDraw();rHud(g);return rEnd(g,0,'الدودة','snake')}}rHud(g)}
+  if(g.grow>0)g.grow--;else g.body.pop()}}
+snDraw();requestAnimationFrame(tt=>snLoop(tt,g))}
+function snDraw(){const cv=$('#sncv');if(!cv)return;const x=cv.getContext('2d'),g=SN,N=g.N,s=cv.width/N;x.fillStyle='#1d3b2a';x.fillRect(0,0,cv.width,cv.height);
+for(let i=0;i<N;i++)for(let j=0;j<N;j++)if((i+j)%2){x.fillStyle='#21452f';x.fillRect(i*s,j*s,s,s)}
+(g.food||[]).forEach(f=>{const [i,j]=f.p;x.fillStyle='#ffd23f';x.beginPath();x.arc(i*s+s/2,j*s+s/2,s*.62,0,7);x.fill();x.fillStyle='#1b2a5c';x.font=`900 ${s*(f.v>99?.5:.62)}px sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(f.v,i*s+s/2,j*s+s/2+1)});
+(g.body||[]).forEach((p,k)=>{x.fillStyle=k?(k%2?'#7ed957':'#5fc23d'):'#ff8a1f';x.beginPath();x.roundRect?x.roundRect(p[0]*s+2,p[1]*s+2,s-4,s-4,s*.35):x.rect(p[0]*s+2,p[1]*s+2,s-4,s-4);x.fill()});
+if(g.body){const h=g.body[0],d=RDIR[g.dir];const ex=h[0]*s+s/2+d[0]*s*.15,ey=h[1]*s+s/2+d[1]*s*.15,px=d[1]*s*.18,py=d[0]*s*.18;[[1],[-1]].forEach(([q])=>{x.fillStyle='#fff';x.beginPath();x.arc(ex+px*q,ey+py*q,s*.13,0,7);x.fill();x.fillStyle='#000';x.beginPath();x.arc(ex+px*q+d[0]*2,ey+py*q+d[1]*2,s*.06,0,7);x.fill()})}}
+
+// ----- الدبابة -----
+let TK=null;const TKN=13;
+function tank(){clr();const lv=S.tkl||1;TK={lv,on:0,ok:0,e:0,hp:3,goal:10};
+shell('الدبابة 🪖',`<div id=rq class=rq>🪖 أطلق على الدبابة التي تحمل الجواب!</div><div class=rwrap><canvas id=tkcv width=455 height=455></canvas><div id=rhud class=rhud></div></div>${rPad('tk',1)}
+<div id=rpan class=card><h2>🪖 معركة الدبابات</h2><p>أنت الدبابة الخضراء. على كل دبابة عدو رقم — <b>أطلق على الدبابة التي رقمها جواب المسألة</b>. إطلاقك على رقم خطأ أو إصابتك بقذيفة عدو يُنقصان قلبًا ❤️. الجدران الحمراء تتكسّر!</p>${rLv('tkl','tank')}<button class=big onclick=tkGo()>🪖 ابدأ المعركة</button></div>`);
+rKeys('tk',1);tkMap();tkDraw()}
+function tkMap(){const g=TK;g.m=[...Array(TKN)].map(()=>Array(TKN).fill(0));for(let i=1;i<TKN-1;i+=2)for(let j=2;j<TKN-3;j++)if(R(10)<6)g.m[j][i]=R(5)?1:2;for(let j=TKN-3;j<TKN;j++)for(let i=5;i<8;i++)g.m[j][i]=0;for(let i=0;i<TKN;i++)g.m[0][i]=g.m[1][i]=0;g.p={x:6,y:TKN-1,d:'u',cd:0,mv:0};g.en=[];g.bul=[];g.fx=[]}
+function tkGo(){const g=TK;tkMap();g.on=1;g.ok=0;g.e=0;g.hp=3;g.hold=null;$('#rpan').innerHTML='<p class=sm style="margin:0">⬆️⬇️⬅️➡️ للحركة • 🔥 للإطلاق</p>';tkWave();rHud(g);requestAnimationFrame(t=>tkLoop(t,g))}
+function tkWave(){const g=TK;rQ(g);const xs=sh([0,3,6,9,12]);g.en=g.vals.map((v,i)=>({x:xs[i],y:0,d:'d',v,mv:0,cd:1500+R(1500),t:0}));g.bul=g.bul.filter(b=>b.me)}
+function tkFree(x,y,self){const g=TK;if(x<0||y<0||x>=TKN||y>=TKN||g.m[y][x])return false;if(self!==g.p&&g.p.x==x&&g.p.y==y)return false;return !g.en.some(e=>e!==self&&e.x==x&&e.y==y)}
+function tkDir(d,on,ev){if(ev)ev.preventDefault();if(!TK)return;if(on){TK.hold=d;if(TK.on&&TK.p.mv<=0)tkMove(TK.p,d)}else if(TK.hold==d)TK.hold=null}
+function tkMove(o,d){o.d=d;const nx=o.x+RDIR[d][0],ny=o.y+RDIR[d][1];if(tkFree(nx,ny,o)){o.x=nx;o.y=ny;o.mv=o===TK.p?150:[0,520,430,350][TK.lv];return true}o.mv=o===TK.p?120:200;return false}
+function tkFire(ev){if(ev)ev.preventDefault();const g=TK;if(!g||!g.on||g.p.cd>0)return;g.p.cd=380;g.bul.push({x:g.p.x,y:g.p.y,d:g.p.d,me:1,t:0});tone(220,.08,'square',.1);tone(140,.1,'sawtooth',.08,.04)}
+function tkBoom(x,y,c){TK.fx.push({x,y,t:0,c:c||'#ffb020'})}
+function tkLoop(t,g){if(g!==TK||!g.on||!$('#tkcv'))return;const dt=Math.min(100,t-(g.tt||t));g.tt=t;const p=g.p;p.mv-=dt;p.cd-=dt;if(p.mv<=0&&g.hold)tkMove(p,g.hold);
+g.en.forEach(e=>{e.mv-=dt;e.cd-=dt;if(e.mv<=0){if(R(4)==0||!tkMove(e,e.d)){const ds=['u','d','l','r','d','d'];const toward=Math.abs(p.x-e.x)>Math.abs(p.y-e.y)?(p.x>e.x?'r':'l'):(p.y>e.y?'d':'u');tkMove(e,R(3)?toward:ds[R(ds.length)])}}
+ if(e.cd<=0){e.cd=[0,3200,2400,1700][g.lv]+R(1200);g.bul.push({x:e.x,y:e.y,d:e.d,me:0,t:0})}});
+g.bul.forEach(b=>{b.t+=dt;while(b.t>=55&&!b.dead){b.t-=55;b.x+=RDIR[b.d][0];b.y+=RDIR[b.d][1];
+ if(b.x<0||b.y<0||b.x>=TKN||b.y>=TKN){b.dead=1;break}
+ const w=g.m[b.y][b.x];if(w){b.dead=1;if(w==1){g.m[b.y][b.x]=0;tkBoom(b.x,b.y,'#c0503a')}else tone(900,.03,'square',.05);break}
+ if(b.me){const ei=g.en.findIndex(e=>e.x==b.x&&e.y==b.y);if(ei>=0){b.dead=1;const e=g.en[ei];tkBoom(e.x,e.y);
+   if(e.v==g.ans){rec(g.a,g.b,true);g.ok++;tone(160,.3,'sawtooth',.15);tone(880,.1,'triangle',.12,.15);rHud(g);if(g.ok>=g.goal){tkDraw();return rEnd(g,1,'الدبابة','tank')}tkWave()}
+   else{rec(g.a,g.b,false);g.en.splice(ei,1);g.hp--;g.e++;oops();vib(120);toast(`❌ ${g.a} × ${g.b} = ${g.ans}`);rHud(g);if(g.hp<=0){tkDraw();return rEnd(g,0,'الدبابة','tank')}}break}}
+ else if(b.x==p.x&&b.y==p.y){b.dead=1;tkBoom(p.x,p.y,'#ff4040');g.hp--;g.e++;oops();vib(200);toast('💥 أصابتك قذيفة!');rHud(g);if(g.hp<=0){tkDraw();return rEnd(g,0,'الدبابة','tank')}break}}});
+if(!g.on)return;g.bul=g.bul.filter(b=>!b.dead);g.fx.forEach(f=>f.t+=dt);g.fx=g.fx.filter(f=>f.t<350);tkDraw();requestAnimationFrame(tt=>tkLoop(tt,g))}
+function tkTank(x,s,o,col,lbl){const cx=o.x*s+s/2,cy=o.y*s+s/2,a={u:0,r:Math.PI/2,d:Math.PI,l:-Math.PI/2}[o.d];x.save();x.translate(cx,cy);x.rotate(a);
+x.fillStyle='#222';x.fillRect(-s*.45,-s*.42,s*.2,s*.84);x.fillRect(s*.25,-s*.42,s*.2,s*.84);x.fillStyle=col;x.fillRect(-s*.3,-s*.34,s*.6,s*.68);x.fillStyle='#0003';x.beginPath();x.arc(0,0,s*.2,0,7);x.fill();x.fillStyle=col;x.fillRect(-s*.06,-s*.55,s*.12,s*.4);x.restore();
+if(lbl!=null){x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,s*.27,0,7);x.fill();x.fillStyle='#1b2a5c';x.font=`900 ${s*(lbl>99?.26:.32)}px sans-serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(lbl,cx,cy+1)}}
+function tkDraw(){const cv=$('#tkcv');if(!cv)return;const x=cv.getContext('2d'),g=TK,s=cv.width/TKN;x.fillStyle='#14161c';x.fillRect(0,0,cv.width,cv.height);
+for(let j=0;j<TKN;j++)for(let i=0;i<TKN;i++){const w=g.m[j][i];if(w==1){x.fillStyle='#b5462f';x.fillRect(i*s+1,j*s+1,s-2,s-2);x.strokeStyle='#7a2a1a';x.lineWidth=2;x.beginPath();x.moveTo(i*s,j*s+s/2);x.lineTo(i*s+s,j*s+s/2);x.moveTo(i*s+s/2,j*s);x.lineTo(i*s+s/2,j*s+s/2);x.moveTo(i*s+s/4,j*s+s/2);x.lineTo(i*s+s/4,j*s+s);x.stroke()}else if(w==2){x.fillStyle='#9aa3b5';x.fillRect(i*s+1,j*s+1,s-2,s-2);x.fillStyle='#d7dce6';x.fillRect(i*s+s*.2,j*s+s*.2,s*.6,s*.6)}}
+g.en.forEach(e=>tkTank(x,s,e,'#e39b2d',e.v));tkTank(x,s,g.p,'#3ddc57');
+g.bul.forEach(b=>{x.fillStyle=b.me?'#ffe14d':'#ff5a5a';x.beginPath();x.arc(b.x*s+s/2,b.y*s+s/2,s*.12,0,7);x.fill()});
+g.fx.forEach(f=>{x.globalAlpha=1-f.t/350;x.fillStyle=f.c;x.beginPath();x.arc(f.x*s+s/2,f.y*s+s/2,s*(.3+f.t/350*.5),0,7);x.fill();x.globalAlpha=1})}
 // ===== مسابقة تجميع الذهب =====
 // فردية، أو جماعية على جهاز واحد (بالدور)، أو جماعية من عدة أجهزة عبر غرفة برمز (Firestore: rooms/{code})
 let CP=null;
