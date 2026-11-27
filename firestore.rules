@@ -88,6 +88,11 @@ service cloud.firestore {
         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['seen']);
     }
 
+    // رموز الإشعارات لكل جهاز (يقرؤها خادم الإشعارات فقط)
+    match /pushtokens/{uid} {
+      allow write: if signed() && request.auth.uid == uid;
+    }
+
     // الغرف والطاولات الجماعية
     match /rooms/{code} {
       allow read: if signed();
