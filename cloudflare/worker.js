@@ -7,6 +7,17 @@ const unb64u = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/')
 const CORS = { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Headers': 'Authorization, Content-Type', 'Access-Control-Allow-Methods': 'POST, OPTIONS' };
 const J = (o, s = 200) => new Response(JSON.stringify(o), { status: s, headers: { ...CORS, 'Content-Type': 'application/json' } });
 
+// يقبل ملف حساب الخدمة حتى لو نُسخ ناقص الأقواس أو بمسافات/أسطر زائدة
+function parseSA(raw) {
+  let t = String(raw).replace(/^\uFEFF/, '').trim();
+  const tries = [t, '{' + t + '}', '{' + t, t + '}', '{' + t.replace(/^[^"]*/, '').replace(/[^"\]]*$/, '') + '}'];
+  for (const x of tries) { try { const o = JSON.parse(x); if (o && o.private_key && o.client_email) { if (!o.project_id) o.project_id = 'math-stars-cc1cb'; return o; } } catch (e) {} }
+  const g = k => { const m = t.match(new RegExp('"' + k + '"\\s*:\\s*"((?:[^"\\\\]|\\\\.)*)"')); return m ? JSON.parse('"' + m[1] + '"') : null; };
+  const o = { private_key: g('private_key'), client_email: g('client_email'), project_id: g('project_id') || 'math-stars-cc1cb' };
+  if (o.private_key && o.client_email) return o;
+  throw 'SERVICE_ACCOUNT غير صالح — بدايته: ' + t.slice(0, 12).replace(/[A-Za-z0-9+/]{6,}/g, '…');
+}
+
 let JWKS = null, JWKS_T = 0, TOK = null, TOK_T = 0;
 
 async function verifyIdToken(tok, projectId) {
@@ -47,7 +58,7 @@ export default {
     if (req.method === 'OPTIONS') return new Response(null, { headers: CORS });
     if (req.method !== 'POST') return J({ ok: true, service: 'math-stars push' });
     try {
-      const sa = JSON.parse(env.SERVICE_ACCOUNT);
+      const sa = parseSA(env.SERVICE_ACCOUNT || '');
       const uid = await verifyIdToken((req.headers.get('Authorization') || '').replace('Bearer ', ''), sa.project_id);
       const { inv } = await req.json(); if (!/^[A-Za-z0-9]{10,40}$/.test(inv || '')) return J({ error: 'bad' }, 400);
       const at = await accessToken(sa);
