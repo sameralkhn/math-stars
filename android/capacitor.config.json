@@ -1,0 +1,8 @@
+{
+  "appId": "com.sameralkhn.mathstars",
+  "appName": "نجوم الضرب",
+  "webDir": "www",
+  "server": { "url": "https://sameralkhn.github.io/math-stars/", "cleartext": false, "androidScheme": "https" },
+  "android": { "allowMixedContent": false },
+  "plugins": { "PushNotifications": { "presentationOptions": ["badge", "sound", "alert"] } }
+}

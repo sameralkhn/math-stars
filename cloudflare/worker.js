@@ -67,8 +67,10 @@ export default {
       const t = await getDoc(sa, at, 'pushtokens/' + d.to);
       if (!t || !t.t) return J({ ok: false, reason: 'no-token' });
       const names = { k: '🃏 آخر ورقة', t: '♠️ الطرنيب', x: '❌ إكس أو', i: '🪨 إدريس', c: '🏆 تجميع الذهب' };
-      const msg = { message: { token: t.t, webpush: { headers: { Urgency: 'high', TTL: '900' }, data: {
-        title: '📣 ' + String(d.n || 'لاعب').slice(0, 30) + ' يدعوك للعب', body: (names[d.k] || 'لعبة') + ' — غرفة ' + d.code + ' • اضغط للانضمام', k: String(d.k), code: String(d.code), inv } } } };
+      const title = '📣 ' + String(d.n || 'لاعب').slice(0, 30) + ' يدعوك للعب', body = (names[d.k] || 'لعبة') + ' — غرفة ' + d.code + ' • اضغط للانضمام', data = { title, body, k: String(d.k), code: String(d.code), inv };
+      const ch = /^[a-z]{2,12}$/.test(t.ch || '') ? t.ch : 'classic';
+      const msg = t.a ? { message: { token: t.t, notification: { title, body }, data, android: { priority: 'HIGH', ttl: '900s', notification: { channel_id: 'inv_' + ch, sound: 'tone_' + ch, notification_priority: 'PRIORITY_MAX', visibility: 'PUBLIC', default_vibrate_timings: true } } } }
+        : { message: { token: t.t, webpush: { headers: { Urgency: 'high', TTL: '900' }, data } } };
       const r = await fetch(`https://fcm.googleapis.com/v1/projects/${sa.project_id}/messages:send`, { method: 'POST', headers: { Authorization: 'Bearer ' + at, 'Content-Type': 'application/json' }, body: JSON.stringify(msg) });
       const j = await r.json(); return J({ ok: r.ok, fcm: r.ok ? undefined : j });
     } catch (e) { return J({ error: String(e) }, 401); }

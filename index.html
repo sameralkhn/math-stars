@@ -639,7 +639,7 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 <body>
 <div id="app"></div>
 <script>
-const VER='2.33.0';
+const VER='2.34.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -731,17 +731,29 @@ const award=n=>{const w=S.stars[tk()]||0;S.stars[tk()]=Math.max(w,n);save();U=(f
 const total=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
 function shell(title,body,back){app.innerHTML=`<header>${back===false?'':(typeof curD=='function'&&curD()>=2?'<button class=ic aria-label="رجوع" onclick="history.back()">↩️</button>':'<button class=ic aria-label="الرئيسية" onclick="home()">🏠</button>')}<h1>${title}</h1>${back===false?'<button class=ic aria-label="حسابي" onclick="acc()">'+(UID?'☁️':'👤')+'</button><button class=ic aria-label="الإعدادات" onclick="settings()">⚙️</button><button class="ic nbell" aria-label="الإشعارات" onclick="notes()">🔔'+(typeof nUnread=='function'&&nUnread()?'<i>'+nUnread()+'</i>':'')+'</button>':''}<button class=ic aria-label="الصوت" onclick="S.sound=!S.sound;save();this.textContent=S.sound?'🔊':'🔇'">${S.sound?'🔊':'🔇'}</button><span class=st>⭐ ${total()}</span></header>${body}<footer class=ver>نجوم الضرب • الإصدار ${VER}</footer>`}
 const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
+// ----- تطبيق الأندرويد (Capacitor): إشعارات أصلية بنغمات خاصة -----
+const NAT=!!(window.Capacitor&&Capacitor.isNativePlatform&&Capacitor.isNativePlatform()),PN=NAT?((Capacitor.Plugins||{}).PushNotifications||null):null;
+const NTONES=[['classic','🔔 كلاسيكي'],['happy','🎵 لحن مرح'],['phone','📞 هاتف قديم'],['door','🎶 جرس الباب']];
+let NATREG=0;
+async function natInit(){if(!PN)return;try{const p=await PN.checkPermissions();S.natok=p.receive=='granted'?1:0;save();if(S.natok)natReg()}catch(e){console.warn(e)}
+PN.addListener('registration',t=>{S.ptok=t.value;save();natTok()});PN.addListener('registrationError',e=>console.warn('push',e));
+PN.addListener('pushNotificationActionPerformed',a=>{const d=(a.notification&&a.notification.data)||{};if(d.k&&d.code){const go=()=>UID&&typeof invJoin=='function'?invJoin(d.k,d.code):setTimeout(go,700);go()}})}
+async function natReg(){if(!PN||NATREG)return;NATREG=1;try{for(const[k,n]of NTONES)await PN.createChannel({id:'inv_'+k,name:'دعوات اللعب — '+n,description:'دعوات الانضمام إلى الغرف',importance:5,visibility:1,sound:'tone_'+k,vibration:true,lights:true}).catch(()=>{});
+await PN.createChannel({id:'general',name:'أخبار وهدايا',importance:4,visibility:1,vibration:true}).catch(()=>{});await PN.register()}catch(e){NATREG=0;console.warn(e)}}
+function natTok(){if(!UID||!S.ptok||!NAT)return;FB.d.collection('pushtokens').doc(UID).set({t:S.ptok,a:true,ch:S.ntone||'classic',ts:Date.now(),v:VER}).catch(()=>{})}
+function natTone(k){S.ntone=k;save();natTok();toast('🎵 تم — هذه نغمة الدعوات والتطبيق مغلق');notes()}
+if(NAT)setTimeout(natInit,300);
 // تفعيل الإشعارات إجباري (يمكن إيقافه من لوحة الإدارة)
-const ntSup=()=>'Notification'in window&&'serviceWorker'in navigator;
-const ntNeed=()=>CFG.requireNotif!==false&&ntSup()&&Notification.permission!='granted'&&!(typeof isAdmin=='function'&&isAdmin()&&S.ntskip);
+const ntSup=()=>NAT?!!PN:'Notification'in window&&'serviceWorker'in navigator;
+const ntNeed=()=>CFG.requireNotif!==false&&ntSup()&&(NAT?!S.natok:Notification.permission!='granted')&&!(typeof isAdmin=='function'&&isAdmin()&&S.ntskip);
 const isIOS=()=>/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform=='MacIntel'&&navigator.maxTouchPoints>1);
-function ntGate(){clr();const den=Notification.permission=='denied',ios=isIOS(),and=/Android/i.test(navigator.userAgent);
+function ntGate(){clr();const den=NAT?S.natok===0&&S.natden:Notification.permission=='denied',ios=isIOS(),and=/Android/i.test(navigator.userAgent);
 app.innerHTML=`<div id=ngate class=card style="margin:24px 12px;text-align:center"><div style="font-size:64px">🔔</div><h2 style="margin:6px 0">فعّل الإشعارات للدخول</h2>
 <p>نحتاج الإشعارات لتصلك <b>دعوات اللعب من أصدقائك</b> وهدايا الذهب والأخبار — حتى والبرنامج مغلق.</p>
 ${den?`<div class=admmsg style="text-align:right">⚠️ الإشعارات ممنوعة في المتصفح. لتفعيلها:<br>${and?'1) اضغط 🔒 بجانب الرابط في الأعلى (أو ⋮ ← معلومات الموقع)<br>2) الأذونات ← الإشعارات ← <b>سماح</b><br>3) ارجع واضغط «تحقّق مرة أخرى»':ios?'الإعدادات ← الإشعارات ← نجوم الضرب ← <b>السماح بالإشعارات</b>، ثم ارجع واضغط «تحقّق مرة أخرى»':'اضغط 🔒 بجانب الرابط ← الإشعارات ← <b>سماح</b>، ثم «تحقّق مرة أخرى»'}</div><button class=big onclick="location.reload()">🔄 تحقّق مرة أخرى</button>`
 :`<button class=big style="font-size:22px" onclick=ntGateAsk()>🔔 تفعيل الإشعارات</button><p class=sm>عند ظهور السؤال اختر <b>«سماح»</b>.</p>`}
 <p class=sm style="margin-top:14px;opacity:.6">نجوم الضرب • الإصدار ${VER}</p></div>`}
-async function ntGateAsk(){try{const r=await Notification.requestPermission();if(r=='granted'){good();toast('✅ تم تفعيل الإشعارات');try{pushReg(1)}catch(e){}ntDevice('نجوم الضرب 🌟','ستصلك الإشعارات هنا');home()}else ntGate()}catch(e){ntGate()}}
+async function ntGateAsk(){if(NAT){try{const r=await PN.requestPermissions();S.natok=r.receive=='granted'?1:0;S.natden=!S.natok;save();if(S.natok){good();natReg();home()}else ntGate()}catch(e){ntGate()}return}try{const r=await Notification.requestPermission();if(r=='granted'){good();toast('✅ تم تفعيل الإشعارات');try{pushReg(1)}catch(e){}ntDevice('نجوم الضرب 🌟','ستصلك الإشعارات هنا');home()}else ntGate()}catch(e){ntGate()}}
 function nameGate(){clr();app.innerHTML=`<div id=ngate class=card style="margin:24px 12px;text-align:center"><div style="font-size:64px">👋</div><h2 style="margin:6px 0">أهلًا بك! ما اسمك؟</h2><p class=sm>اكتب اسمك الحقيقي ليظهر في المسابقات واللعب مع الأصدقاء.</p>
 <input id=ngn class=nm maxlength=20 placeholder="اكتب اسمك هنا" style="font-size:22px;text-align:center" onkeydown="if(event.key=='Enter')ngSave()"><p id=nge class=sm style="color:#e8453c;min-height:1.2em;margin:4px 0"></p><button class=big onclick=ngSave()>✅ ابدأ</button><p class=sm style="margin-top:14px;opacity:.6">نجوم الضرب • الإصدار ${VER}</p></div>`;setTimeout(()=>{const i=$('#ngn');if(i)i.focus()},300)}
 function ngSave(){const v=($('#ngn').value||'').replace(/\s+/g,' ').trim(),e=$('#nge');if(v.replace(/[^\p{L}]/gu,'').length<2){e.textContent='✏️ اكتب اسمك (حرفان على الأقل)';return}S.nm=v;save();if(typeof push=='function'&&UID)try{push(1)}catch(x){}good();home()}
@@ -1964,7 +1976,7 @@ function presPing(){if(!FB||!UID||document.hidden||Date.now()-PRT<90e3)return;PR
 setInterval(presPing,30e3);document.addEventListener('visibilitychange',()=>{if(!document.hidden){PRT=0;presPing()}});
 // ----- إشعارات فورية حتى والبرنامج مغلق (FCM + Cloudflare Worker) -----
 let PUSHOK=0;const VAPID0='BOKOR-z9UG_hpnk64J_25v2t55tmnxFl77zslloICksqc2Qjcoztu9QSg_J6ZMP4b56z6SgkYXAJ8gRJLE4MsgQ',PUSH0='https://math-stars-push.eng-samralkhn.workers.dev';const pVap=()=>CFG.vapid||VAPID0,pUrl=()=>CFG.pushUrl||PUSH0;
-async function pushReg(force){try{if(!UID||!('Notification'in window)||Notification.permission!='granted'||!window.firebase||!firebase.messaging)return;if(PUSHOK&&!force)return;PUSHOK=1;
+async function pushReg(force){if(NAT){natTok();return}try{if(!UID||!('Notification'in window)||Notification.permission!='granted'||!window.firebase||!firebase.messaging)return;if(PUSHOK&&!force)return;PUSHOK=1;
 if(firebase.messaging.isSupported&&!(await firebase.messaging.isSupported()))return;const reg=await navigator.serviceWorker.ready;const t=await firebase.messaging().getToken({vapidKey:pVap(),serviceWorkerRegistration:reg});
 if(t&&t!==S.ptok){await FB.d.collection('pushtokens').doc(UID).set({t,ts:Date.now(),v:VER});S.ptok=t;save()}}catch(e){PUSHOK=0;console.warn('push',e)}}
 async function pushSend(inv,u){try{const it=await firebase.auth().currentUser.getIdToken();const r=await fetch(pUrl(),{method:'POST',headers:{Authorization:'Bearer '+it,'Content-Type':'application/json'},body:JSON.stringify({inv})});const j=await r.json();const t=$('#ist_'+u);
@@ -3594,8 +3606,8 @@ async function ntAsk(){if(!('Notification'in window))return toast('هذا الم
 function notes(){clr();const seen=S.nseen||0,pm='Notification'in window?Notification.permission:'na';
 const L=NOTES.map(n=>`<div class="ntc${n.ts>seen?' new':''}"><b>${n.to=='all'?'📢':'💌'} ${esc(n.title||'إشعار')}</b>${n.body?`<p>${esc(n.body)}</p>`:''}<small>${ago(n.ts)}${n.to!='all'?' • لك أنت':''}</small></div>`).join('');
 S.nseen=Math.max(seen,...NOTES.map(n=>n.ts),0);save();
-shell('الإشعارات 🔔',`<div id=notes></div>${pm=='granted'?'':pm=='na'?'':`<div class="card" style="text-align:center"><p style="margin:0 0 6px">🔔 فعّل إشعارات الجهاز لتصلك الرسائل في شريط الإشعارات أيضًا</p>${pm=='denied'?'<p class=sm>الإشعارات ممنوعة في المتصفح — فعّلها من إعدادات الموقع (رمز القفل بجانب الرابط).</p>':'<button class=big onclick=ntAsk()>🔔 تفعيل الإشعارات</button>'}</div>`}
-<div class=card><h3 style="margin-top:0">🎵 نغمة الدعوات</h3><p class=sm style="margin-top:0">تُسمع عند وصول دعوة والبرنامج مفتوح. المس نغمة لتسمعها وتختارها.</p><div class=rtg>${RTONES.map((t,i)=>`<button class="${(S.rtone|0)==i?'on':''}" onclick=rtTry(${i})>${t[0]}</button>`).join('')}</div>
+shell('الإشعارات 🔔',`<div id=notes></div>${pm=='granted'||NAT?'':pm=='na'?'':`<div class="card" style="text-align:center"><p style="margin:0 0 6px">🔔 فعّل إشعارات الجهاز لتصلك الرسائل في شريط الإشعارات أيضًا</p>${pm=='denied'?'<p class=sm>الإشعارات ممنوعة في المتصفح — فعّلها من إعدادات الموقع (رمز القفل بجانب الرابط).</p>':'<button class=big onclick=ntAsk()>🔔 تفعيل الإشعارات</button>'}</div>`}
+${NAT?`<div class=card><h3 style="margin-top:0">📲 نغمة الدعوات والتطبيق مغلق</h3><div class=rtg>${NTONES.map(([k,n])=>`<button class="${(S.ntone||'classic')==k?'on':''}" onclick="natTone('${k}')">${n}</button>`).join('')}</div></div>`:''}<div class=card><h3 style="margin-top:0">🎵 نغمة الدعوات</h3><p class=sm style="margin-top:0">تُسمع عند وصول دعوة والبرنامج مفتوح. المس نغمة لتسمعها وتختارها.</p><div class=rtg>${RTONES.map((t,i)=>`<button class="${(S.rtone|0)==i?'on':''}" onclick=rtTry(${i})>${t[0]}</button>`).join('')}</div>
 <details><summary class=sm>📲 تغيير نغمة الإشعار والبرنامج مغلق (من إعدادات الجوال)</summary><p class=sm style="line-height:1.8">${/iPhone|iPad/.test(navigator.userAgent)?'الآيفون لا يسمح باختيار نغمة لإشعارات المواقع — تُستخدم نغمة الإشعارات الافتراضية.':'الإعدادات ← التطبيقات ← <b>Chrome</b> (أو المتصفح الذي تستخدمه) ← الإشعارات ← <b>المواقع</b> ← '+esc(location.host)+' ← <b>الصوت</b> واختر النغمة من نغمات جوالك. وإن ثبّتّ البرنامج على الشاشة الرئيسية: الإعدادات ← التطبيقات ← <b>نجوم الضرب</b> ← الإشعارات ← الصوت.'}</p></details></div>
 ${L||`<div class=card style="text-align:center"><div style="font-size:48px">📭</div><p>لا توجد إشعارات بعد</p></div>`}`)}
 function admWatch(){if(!FB)return;grWatch();invWatch();ntWatch();const C=FB.d.collection('config');
@@ -3695,7 +3707,7 @@ if(!FB)b=`<div class=card><h2>☁️ الحسابات غير مفعّلة بعد
 else if(UID)b=`<div class=card><div class=pv>${AV()}</div><h2 dir=ltr>${esc(UEM)}</h2><p>${SYN=='✅'?'✅ تقدّمك محفوظ في السحابة ويُزامَن مع كل أجهزتك':SYN=='⏳'?'⏳ جارٍ المزامنة…':SYN=='⚠️'?'⚠️ تعذّرت المزامنة، تحقق من الإنترنت':''}</p>${isAdmin()?`<button class=big style="background:#1b2a5c" onclick=admin()>🛡️ لوحة الإدارة</button>`:''}${OWN===false?`<button class=big style="background:#f0a400" onclick=admClaim()>👑 اجعل هذا الحساب مالك البرنامج</button><p class=sm>يظهر هذا الزر مرة واحدة فقط، قبل تثبيت المالك.</p>`:''}<button class=big onclick="push(1)">🔄 زامن الآن</button><button class=big style="background:#e8579a" onclick="aout()">🚪 تسجيل الخروج</button></div>`;
 else b=`<div class=card><h2>☁️ احفظ تقدّمك</h2><p class=sm>سجّل الدخول لتحفظ النجوم والليرات والمشتريات، وتكمل اللعب من أي جهاز.</p><button class=big style="background:#fff;color:#1b2a5c;box-shadow:0 0 0 2px #dde,0 6px 0 #0002" onclick="gin()">الدخول بحساب Google</button><h3>أو بالإيميل</h3><input id=em class=nm type=email dir=ltr placeholder="الإيميل" autocomplete=email><input id=pw class=nm type=password dir=ltr placeholder="كلمة المرور (6 أحرف على الأقل)" style="margin-top:8px" autocomplete=current-password><button class=big onclick="ein()">🔑 دخول</button><button class=big style="background:#18a999" onclick="eup()">✨ إنشاء حساب جديد</button><button class=ic style="margin-top:12px;font-size:14px" onclick="erst()">نسيت كلمة المرور؟</button></div>`;
 shell('حسابي 👤','<div id=acc>'+b+'</div>')}
-function gin(){const p=new firebase.auth.GoogleAuthProvider();FB.a.signInWithPopup(p).catch(e=>{if(/popup-blocked|operation-not-supported|web-storage/.test(e.code||''))FB.a.signInWithRedirect(p);else toast(aerr(e))})}
+function gin(){if(NAT)return toast('في التطبيق ادخل بالإيميل وكلمة المرور. إن كان حسابك بجوجل فاضغط «نسيت كلمة المرور؟» لتضع كلمة مرور لنفس الإيميل');const p=new firebase.auth.GoogleAuthProvider();FB.a.signInWithPopup(p).catch(e=>{if(/popup-blocked|operation-not-supported|web-storage/.test(e.code||''))FB.a.signInWithRedirect(p);else toast(aerr(e))})}
 const cred=()=>[($('#em').value||'').trim(),$('#pw').value||''];
 function ein(){const[e,p]=cred();FB.a.signInWithEmailAndPassword(e,p).then(()=>toast('👋 أهلًا بعودتك!')).catch(x=>toast(aerr(x)))}
 function eup(){const[e,p]=cred();FB.a.createUserWithEmailAndPassword(e,p).then(()=>toast('🎉 تم إنشاء حسابك!')).catch(x=>toast(aerr(x)))}
