@@ -638,7 +638,7 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 <body>
 <div id="app"></div>
 <script>
-const VER='2.32.0';
+const VER='2.32.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1964,7 +1964,7 @@ async function pushReg(force){try{if(!UID||!('Notification'in window)||Notificat
 if(firebase.messaging.isSupported&&!(await firebase.messaging.isSupported()))return;const reg=await navigator.serviceWorker.ready;const t=await firebase.messaging().getToken({vapidKey:pVap(),serviceWorkerRegistration:reg});
 if(t&&t!==S.ptok){await FB.d.collection('pushtokens').doc(UID).set({t,ts:Date.now(),v:VER});S.ptok=t;save()}}catch(e){PUSHOK=0;console.warn('push',e)}}
 async function pushSend(inv,u){try{const it=await firebase.auth().currentUser.getIdToken();const r=await fetch(pUrl(),{method:'POST',headers:{Authorization:'Bearer '+it,'Content-Type':'application/json'},body:JSON.stringify({inv})});const j=await r.json();const t=$('#ist_'+u);
-if(t&&/بانتظار/.test(t.textContent))t.textContent=j.ok?'📲 أُرسل إشعار إلى جواله':j.reason=='no-token'?'⚠️ لم يفعّل التنبيهات — لن يصله إشعار والبرنامج مغلق':'⚠️ تعذّر إرسال الإشعار'}catch(e){console.warn(e)}}
+if(t&&/بانتظار/.test(t.textContent))t.textContent=j.ok?'📲 أُرسل إشعار إلى جواله':j.reason=='no-token'?'⚠️ لم يفعّل التنبيهات — لن يصله إشعار والبرنامج مغلق':'⚠️ تعذّر إرسال الإشعار: '+String(j.error||(j.fcm&&j.fcm.error&&(j.fcm.error.status+' '+j.fcm.error.message))||r.status).slice(0,140)}catch(e){console.warn(e);const t=$('#ist_'+u);if(t)t.textContent='⚠️ تعذّر الاتصال بخادم الإشعارات: '+String(e.message||e).slice(0,80)}}
 function joinFromUrl(){const q=new URLSearchParams(location.search),k=q.get('join'),c=q.get('code');if(!k||!c||!UID)return;history.replaceState(null,'',location.pathname);setTimeout(()=>invJoin(k,c),600)}
 if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('message',e=>{const j=e.data&&e.data.join;if(j&&INVK[j.k]){const w=$('#invc');if(w)w.remove();invJoin(j.k,j.code)}});
 function invWatch(){if(INVU){INVU();INVU=null}if(!UID)return;joinFromUrl();pushReg();PRT=0;presPing();INVU=FB.d.collection('invites').where('to','==',UID).onSnapshot(q=>{q.docChanges().forEach(c=>{if(c.type!='added')return;const v={id:c.doc.id,ref:c.doc.ref,...c.doc.data()};if(Date.now()-v.ts>15*60e3){c.doc.ref.delete().catch(()=>{});return}c.doc.ref.update({seen:Date.now()}).catch(()=>{});INVP=INVP.filter(x=>x.id!=v.id).concat(v);invRing(v)})},e=>{console.warn(e);toast('⚠️ تعذّر استقبال الدعوات: '+(e.code||e.message||''))})}
