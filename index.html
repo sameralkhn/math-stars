@@ -633,12 +633,13 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 .rpu{grid-column:2;grid-row:1}.rpl{grid-column:3;grid-row:2}.rpr{grid-column:1;grid-row:2}.rpd{grid-column:2;grid-row:3}
 .rpf{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#ff6b5b,#e8453c);color:#fff;font-size:30px;display:flex;flex-direction:column;align-items:center;justify-content:center}.rpf small{font-size:13px;font-weight:900}
 .toast.tbot{top:auto;bottom:calc(16px + env(safe-area-inset-bottom))}
+.rtg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.rtg button{border:0;background:#f2f5fb;border-radius:12px;padding:10px 6px;font:inherit;font-weight:800;cursor:pointer}.rtg button.on{background:#1b2a5c;color:#fff}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.32.1';
+const VER='2.33.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1955,7 +1956,10 @@ r.start();const ind=document.createElement('div');ind.id='chrec';ind.innerHTML='
 catch(e){toast('🎤 اسمح للبرنامج باستخدام المايكروفون من إعدادات المتصفح')}}
 function chatRecStop(cancel){const R0=CHAT&&CHAT.rec;if(!R0)return;clearTimeout(R0.to);if(cancel)R0.cancel=1;try{R0.r.state!='inactive'&&R0.r.stop()}catch(e){}}
 // ===== دعوة اللاعبين إلى غرفة: حضور + دعوة برنين =====
-let INVU=null,PRT=0,INV=null,INVP=[];const INVK={k:['cardsHome','km','kcode','kn','kJoin','🃏 آخر ورقة'],t:['tarneeb','tm','tcode','tn','tJoin','♠️ الطرنيب'],x:['xo','xm','xcode','xn','xoJoin','❌ إكس أو'],i:['idris','im','icode','inn','idJoin','🪨 إدريس'],c:['contest','cpm','cpcode','cpn1','cpJoin','🏆 تجميع الذهب']};
+let INVU=null,PRT=0,INV=null,INVP=[];
+const RTONES=[['🔔 كلاسيكي',[[988,.25,0],[1319,.3,.28],[988,.25,.7],[1319,.3,.98]]],['🎵 لحن مرح',[[784,.15,0],[988,.15,.16],[1175,.15,.32],[1568,.3,.48],[1175,.15,.9],[1568,.35,1.06]]],['📞 هاتف قديم',[...Array(12)].map((_,i)=>[i%2?1400:1100,.05,i*.06]).concat([...Array(12)].map((_,i)=>[i%2?1400:1100,.05,.9+i*.06]))],['🎶 جرس الباب',[[1319,.5,0],[1047,.7,.5]]],['⭐ نجوم',[[1568,.1,0],[2093,.1,.12],[2637,.2,.24],[2093,.1,.6],[2637,.25,.72]]],['🥁 قوي',[[523,.2,0],[523,.2,.25],[784,.4,.5],[523,.2,1],[784,.5,1.25]]]];
+function rtPlay(rt){(RTONES[S.rtone|0]||RTONES[0])[1].forEach(([f,d,a])=>rt(f,d,a))}
+function rtTry(i){S.rtone=i;save();try{AC=AC||new(window.AudioContext||webkitAudioContext)();if(AC.state=='suspended')AC.resume()}catch(e){}rtPlay((f,d,at)=>{try{const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(.001,AC.currentTime+at);g.gain.exponentialRampToValueAtTime(.35,AC.currentTime+at+.02);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+at+d);o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+at);o.stop(AC.currentTime+at+d+.05)}catch(e){}});notes()}const INVK={k:['cardsHome','km','kcode','kn','kJoin','🃏 آخر ورقة'],t:['tarneeb','tm','tcode','tn','tJoin','♠️ الطرنيب'],x:['xo','xm','xcode','xn','xoJoin','❌ إكس أو'],i:['idris','im','icode','inn','idJoin','🪨 إدريس'],c:['contest','cpm','cpcode','cpn1','cpJoin','🏆 تجميع الذهب']};
 function presPing(){if(!FB||!UID||document.hidden||Date.now()-PRT<90e3)return;PRT=Date.now();FB.d.collection('presence').doc(UID).set({n:(S.nm||'').trim()||'لاعب',ts:Date.now(),v:VER,nt:'Notification'in window?Notification.permission:'na'}).catch(()=>{})}
 setInterval(presPing,30e3);document.addEventListener('visibilitychange',()=>{if(!document.hidden){PRT=0;presPing()}});
 // ----- إشعارات فورية حتى والبرنامج مغلق (FCM + Cloudflare Worker) -----
@@ -1971,7 +1975,7 @@ function invWatch(){if(INVU){INVU();INVU=null}if(!UID)return;joinFromUrl();pushR
 function invRing(v){const K=INVK[v.k];if(!K)return v.ref.delete().catch(()=>{});if($('#invc'))return setTimeout(()=>invRing(v),3000);if(!INVP.some(x=>x.id==v.id))return;const w=document.createElement('div');w.id='invc';w.className='askw show';
 w.innerHTML=`<div class="askc invcard"><div class=invav>${esc(((v.n||'?').trim()[0]||'?'))}</div><h3>${esc(v.n||'لاعب')} يدعوك!</h3><p>للعب <b>${K[5]}</b><br><small>رقم الغرفة: <bdi>${esc(v.code)}</bdi></small></p><div class=askb><button class=asky>✅ انضم الآن</button><button class=askn>لاحقًا</button></div></div>`;document.body.appendChild(w);
 let n=0;const rt=(f,d,at)=>{try{AC=AC||new(window.AudioContext||webkitAudioContext)();if(AC.state=='suspended')AC.resume();const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.001,AC.currentTime+at);g.gain.exponentialRampToValueAtTime(.35,AC.currentTime+at+.02);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+at+d);o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+at);o.stop(AC.currentTime+at+d+.05)}catch(e){}};
-const ring=()=>{if(!$('#invc'))return;rt(988,.25,0);rt(1319,.3,.28);rt(988,.25,.7);rt(1319,.3,.98);try{navigator.vibrate&&navigator.vibrate([400,200,400])}catch(e){}if(++n<20)w._t=setTimeout(ring,2200);else end()};ring();
+const ring=()=>{if(!$('#invc'))return;rtPlay(rt);try{navigator.vibrate&&navigator.vibrate([400,200,400])}catch(e){}if(++n<20)w._t=setTimeout(ring,2200);else end()};ring();
 const unl=()=>{if(AC&&AC.state=='suspended')AC.resume();rt(988,.2,0)};document.addEventListener('pointerdown',unl,{once:true});ntDevice('📣 '+(v.n||'لاعب')+' يدعوك للعب',K[5]+' — غرفة '+v.code,1);
 const end=()=>{clearTimeout(w._t);w.remove();document.removeEventListener('pointerdown',unl);INVP=INVP.filter(x=>x.id!=v.id);v.ref.delete().catch(()=>{})};w.querySelector('.askn').onclick=end;w.querySelector('.asky').onclick=()=>{end();invJoin(v.k,v.code)}}
 async function invJoin(k,code){const K=INVK[k];S[K[1]]='net';save();if(typeof gEnter=='function')await gEnter(K[0]);else window[K[0]]();setTimeout(()=>{const c=$('#'+K[2]),n=$('#'+K[3]);if(!c)return toast('افتح اللعبة وادخل رقم الغرفة '+code);c.value=code;if(n&&!n.value.trim())n.value=(S.cpme||S.nm||'').trim();window[K[4]]()},350)}
@@ -3591,6 +3595,8 @@ function notes(){clr();const seen=S.nseen||0,pm='Notification'in window?Notifica
 const L=NOTES.map(n=>`<div class="ntc${n.ts>seen?' new':''}"><b>${n.to=='all'?'📢':'💌'} ${esc(n.title||'إشعار')}</b>${n.body?`<p>${esc(n.body)}</p>`:''}<small>${ago(n.ts)}${n.to!='all'?' • لك أنت':''}</small></div>`).join('');
 S.nseen=Math.max(seen,...NOTES.map(n=>n.ts),0);save();
 shell('الإشعارات 🔔',`<div id=notes></div>${pm=='granted'?'':pm=='na'?'':`<div class="card" style="text-align:center"><p style="margin:0 0 6px">🔔 فعّل إشعارات الجهاز لتصلك الرسائل في شريط الإشعارات أيضًا</p>${pm=='denied'?'<p class=sm>الإشعارات ممنوعة في المتصفح — فعّلها من إعدادات الموقع (رمز القفل بجانب الرابط).</p>':'<button class=big onclick=ntAsk()>🔔 تفعيل الإشعارات</button>'}</div>`}
+<div class=card><h3 style="margin-top:0">🎵 نغمة الدعوات</h3><p class=sm style="margin-top:0">تُسمع عند وصول دعوة والبرنامج مفتوح. المس نغمة لتسمعها وتختارها.</p><div class=rtg>${RTONES.map((t,i)=>`<button class="${(S.rtone|0)==i?'on':''}" onclick=rtTry(${i})>${t[0]}</button>`).join('')}</div>
+<details><summary class=sm>📲 تغيير نغمة الإشعار والبرنامج مغلق (من إعدادات الجوال)</summary><p class=sm style="line-height:1.8">${/iPhone|iPad/.test(navigator.userAgent)?'الآيفون لا يسمح باختيار نغمة لإشعارات المواقع — تُستخدم نغمة الإشعارات الافتراضية.':'الإعدادات ← التطبيقات ← <b>Chrome</b> (أو المتصفح الذي تستخدمه) ← الإشعارات ← <b>المواقع</b> ← '+esc(location.host)+' ← <b>الصوت</b> واختر النغمة من نغمات جوالك. وإن ثبّتّ البرنامج على الشاشة الرئيسية: الإعدادات ← التطبيقات ← <b>نجوم الضرب</b> ← الإشعارات ← الصوت.'}</p></details></div>
 ${L||`<div class=card style="text-align:center"><div style="font-size:48px">📭</div><p>لا توجد إشعارات بعد</p></div>`}`)}
 function admWatch(){if(!FB)return;grWatch();invWatch();ntWatch();const C=FB.d.collection('config');
 if(!CFGU)CFGU=C.doc('app').onSnapshot(d=>{CFG=d.exists?d.data():{};admGate();pushReg()},()=>{});
