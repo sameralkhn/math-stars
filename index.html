@@ -638,7 +638,7 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 <body>
 <div id="app"></div>
 <script>
-const VER='2.31.0';
+const VER='2.31.1';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -1948,11 +1948,11 @@ let INVU=null,PRT=0,INV=null,INVP=[];const INVK={k:['cardsHome','km','kcode','kn
 function presPing(){if(!FB||!UID||document.hidden||Date.now()-PRT<90e3)return;PRT=Date.now();FB.d.collection('presence').doc(UID).set({n:(S.nm||'').trim()||'لاعب',ts:Date.now(),v:VER,nt:'Notification'in window?Notification.permission:'na'}).catch(()=>{})}
 setInterval(presPing,30e3);document.addEventListener('visibilitychange',()=>{if(!document.hidden){PRT=0;presPing()}});
 // ----- إشعارات فورية حتى والبرنامج مغلق (FCM + Cloudflare Worker) -----
-let PUSHOK=0;
-async function pushReg(force){try{if(!UID||!CFG.vapid||!('Notification'in window)||Notification.permission!='granted'||!window.firebase||!firebase.messaging)return;if(PUSHOK&&!force)return;PUSHOK=1;
-if(firebase.messaging.isSupported&&!(await firebase.messaging.isSupported()))return;const reg=await navigator.serviceWorker.ready;const t=await firebase.messaging().getToken({vapidKey:CFG.vapid,serviceWorkerRegistration:reg});
+let PUSHOK=0;const VAPID0='BOKOR-z9UG_hpnk64J_25v2t55tmnxFl77zslloICksqc2Qjcoztu9QSg_J6ZMP4b56z6SgkYXAJ8gRJLE4MsgQ',PUSH0='https://math-stars-push.eng-samralkhn.workers.dev';const pVap=()=>CFG.vapid||VAPID0,pUrl=()=>CFG.pushUrl||PUSH0;
+async function pushReg(force){try{if(!UID||!('Notification'in window)||Notification.permission!='granted'||!window.firebase||!firebase.messaging)return;if(PUSHOK&&!force)return;PUSHOK=1;
+if(firebase.messaging.isSupported&&!(await firebase.messaging.isSupported()))return;const reg=await navigator.serviceWorker.ready;const t=await firebase.messaging().getToken({vapidKey:pVap(),serviceWorkerRegistration:reg});
 if(t&&t!==S.ptok){await FB.d.collection('pushtokens').doc(UID).set({t,ts:Date.now(),v:VER});S.ptok=t;save()}}catch(e){PUSHOK=0;console.warn('push',e)}}
-async function pushSend(inv,u){if(!CFG.pushUrl)return;try{const it=await firebase.auth().currentUser.getIdToken();const r=await fetch(CFG.pushUrl,{method:'POST',headers:{Authorization:'Bearer '+it,'Content-Type':'application/json'},body:JSON.stringify({inv})});const j=await r.json();const t=$('#ist_'+u);
+async function pushSend(inv,u){try{const it=await firebase.auth().currentUser.getIdToken();const r=await fetch(pUrl(),{method:'POST',headers:{Authorization:'Bearer '+it,'Content-Type':'application/json'},body:JSON.stringify({inv})});const j=await r.json();const t=$('#ist_'+u);
 if(t&&/بانتظار/.test(t.textContent))t.textContent=j.ok?'📲 أُرسل إشعار إلى جواله':j.reason=='no-token'?'⚠️ لم يفعّل التنبيهات — لن يصله إشعار والبرنامج مغلق':'⚠️ تعذّر إرسال الإشعار'}catch(e){console.warn(e)}}
 function joinFromUrl(){const q=new URLSearchParams(location.search),k=q.get('join'),c=q.get('code');if(!k||!c||!UID)return;history.replaceState(null,'',location.pathname);setTimeout(()=>invJoin(k,c),600)}
 if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('message',e=>{const j=e.data&&e.data.join;if(j&&INVK[j.k]){const w=$('#invc');if(w)w.remove();invJoin(j.k,j.code)}});
@@ -3605,8 +3605,8 @@ shell('لوحة الإدارة 🛡️',`<div id=adm></div><div class=admst><spa
 <p class=sm>يظهر هنا كل من دخل بحساب. من يلعب دون حساب لا يظهر — فعّل «إلزام تسجيل الدخول» لترى الجميع.</p></div>`:T=='games'?admGames():T=='notes'?`<div class=card><h3 style="margin-top:0">🔔 إرسال إشعار للجميع</h3><input id=ntt class=nm maxlength=60 placeholder="العنوان — مثل: لعبة جديدة! 🎉"><textarea id=ntb class=nm rows=2 maxlength=300 placeholder="نص الإشعار (اختياري)" style="margin-top:6px"></textarea><button class=big style="background:#ff8a1f" onclick="admNote('all')">📢 أرسل للجميع</button>
 ${NOTES.length?`<details><summary class=sm>آخر الإشعارات المرسلة (${NOTES.length})</summary>${NOTES.slice(0,10).map(n=>`<div class=admchip style="background:#f2f5fb"><span>${n.to=='all'?'📢':'💌'} ${esc(n.title||'')} <small>${ago(n.ts)}</small></span><button onclick="admNoteDel('${n.id}')">🗑️ حذف</button></div>`).join('')}</details>`:''}</div>
 `:`<div class=card><h3 style="margin-top:0">⚙️ إعدادات البرنامج</h3>${tg('requireLogin','🔐 إلزام تسجيل الدخول',!!CFG.requireLogin,'لا يفتح البرنامج إلا بحساب')}${tg('net','📱 اللعب الجماعي',CFG.net!==false,'الغرف والطاولات بين الأجهزة')}${tg('chat','💬 الرسائل والإيموجي في الغرف',CFG.chat!==false,'رسائل جاهزة بين اللاعبين في نفس الغرفة')}${tg('voice','🎤 الرسائل الصوتية',CFG.voice!==false,'حتى 8 ثوانٍ، داخل الغرفة فقط')}
-<label class=cplb for=admvap>📲 مفتاح الإشعارات (Web Push certificate)</label><input id=admvap class=nm dir=ltr placeholder="BK...." value="${esc(CFG.vapid||'')}">
-<label class=cplb for=admpu>🌐 رابط خادم الإشعارات (Cloudflare Worker)</label><input id=admpu class=nm dir=ltr placeholder="https://....workers.dev" value="${esc(CFG.pushUrl||'')}"><button class=buy onclick="admCfg('vapid',$('#admvap').value.trim());admCfg('pushUrl',$('#admpu').value.trim())">💾 حفظ إعدادات الإشعارات</button>
+<label class=cplb for=admvap>📲 مفتاح الإشعارات (Web Push certificate)</label><input id=admvap class=nm dir=ltr placeholder="BK...." value="${esc(pVap())}">
+<label class=cplb for=admpu>🌐 رابط خادم الإشعارات (Cloudflare Worker)</label><input id=admpu class=nm dir=ltr placeholder="https://....workers.dev" value="${esc(pUrl())}"><button class=buy onclick="admCfg('vapid',$('#admvap').value.trim());admCfg('pushUrl',$('#admpu').value.trim())">💾 حفظ إعدادات الإشعارات</button>
 <label class=cplb for=admwel>🎁 هدية التسجيل لكل حساب جديد</label><div class=admrow><input id=admwel class=nm type=number inputmode=numeric min=0 step=500 dir=ltr value="${CFG.welcome==null?3000:CFG.welcome}"><button class=buy onclick="admCfg('welcome',Math.max(0,Math.round(+$('#admwel').value||0)))">💾 حفظ</button></div>
 <label class=cplb for=admmsg>📢 رسالة تظهر للجميع في الصفحة الرئيسية</label><textarea id=admmsg class=nm rows=2 maxlength=200 placeholder="اتركها فارغة لإخفائها">${esc(CFG.msg||'')}</textarea><button class=buy onclick="admCfg('msg',$('#admmsg').value.trim())">💾 حفظ الرسالة</button>
 <label class=cplb for=admbl>⛔ إيقاف إيميل (حتى قبل أن يسجّل)</label><div class=admrow><input id=admbl class=nm dir=ltr type=email placeholder="name@example.com"><button class=buy onclick=admBlockEmail()>إيقاف</button></div>${(CFG.blocked||[]).map(e=>`<div class=admchip><span dir=ltr>${esc(e)}</span><button onclick="admUnblockEmail('${esc(e)}')">↩️ إلغاء</button></div>`).join('')}</div>
