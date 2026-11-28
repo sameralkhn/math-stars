@@ -634,12 +634,13 @@ body:has(.kpbar) #chatw,body:has(.kpbar) #invb,body:has(.kpbar) #chrec,body:has(
 .rpf{width:92px;height:92px;border-radius:50%;background:linear-gradient(135deg,#ff6b5b,#e8453c);color:#fff;font-size:30px;display:flex;flex-direction:column;align-items:center;justify-content:center}.rpf small{font-size:13px;font-weight:900}
 .toast.tbot{top:auto;bottom:calc(16px + env(safe-area-inset-bottom))}
 .rtg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.rtg button{border:0;background:#f2f5fb;border-radius:12px;padding:10px 6px;font:inherit;font-weight:800;cursor:pointer}.rtg button.on{background:#1b2a5c;color:#fff}
+.chcta{background:linear-gradient(135deg,#ff8a00,#e8579a)!important;margin:6px 0 10px}.chgl{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 10px}.chgb{border:2px solid #dfe6f3;background:#fff;border-radius:12px;padding:6px 2px;font:inherit;font-size:13px;color:inherit}.chgb i{display:block;font-style:normal;font-size:24px}.chgb.on{border-color:#18a999;background:#e3f8f3;font-weight:700}.chbd{display:grid;gap:5px;margin:6px 0 10px}.chrw{display:grid;grid-template-columns:34px 1fr auto 44px;align-items:center;gap:6px;background:#f4f7fd;border-radius:10px;padding:7px 10px;text-align:right}.chrw.me{background:#fff4d6;font-weight:700}.chrw.chwt{opacity:.6}.chrw em{font-style:normal}.chrw small{opacity:.7}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
-const VER='2.35.0';
+const VER='2.36.0';
 const $=s=>document.querySelector(s),app=$('#app');
 let S={f:{},stars:{},sound:true};
 try{Object.assign(S,JSON.parse(localStorage.getItem('mt')||'{}'))}catch(e){}
@@ -727,7 +728,7 @@ const tabs=()=>{if(!cur)return[1,2,3,4,5,6,7,8,9,10];if(S.scope=='one')return[cu
 function pick(avoid){const L=[];tabs().forEach(a=>{for(let b=1;b<=10;b++){const o=S.f[key(a,b)]||{o:0,x:0};L.push([a,b,Math.max(1,1+3*o.x-.5*o.o)])}});let r=Math.random()*L.reduce((s,x)=>s+x[2],0);for(const x of L){r-=x[2];if(r<=0&&key(x[0],x[1])!==avoid)return x}return L[R(L.length)]}
 function opts(a,b){const n=a*b,s=new Set([n]);for(const c of sh([n+a,n-a,n+b,n-b,n+1,n-1,n+10,n-10,a*(b+1),a*(b-1),(a+1)*b]))if(c>0&&c<=100&&s.size<4)s.add(c);while(s.size<4)s.add(1+R(100));return sh([...s])}
 const tk=()=>cur||'m';
-const award=n=>{const w=S.stars[tk()]||0;S.stars[tk()]=Math.max(w,n);save();U=(false)?`<p class=tip>🔓 فتحت الجدول ${cur+1}!</p>`:''};
+const award=n=>{try{chRes(n)}catch(e){}const w=S.stars[tk()]||0;S.stars[tk()]=Math.max(w,n);save();U=(false)?`<p class=tip>🔓 فتحت الجدول ${cur+1}!</p>`:''};
 const total=()=>Object.values(S.stars).reduce((a,b)=>a+b,0);
 function shell(title,body,back){app.innerHTML=`<header>${back===false?'':(typeof curD=='function'&&curD()>=2?'<button class=ic aria-label="رجوع" onclick="history.back()">↩️</button>':'<button class=ic aria-label="الرئيسية" onclick="home()">🏠</button>')}<h1>${title}</h1>${back===false?'<button class=ic aria-label="حسابي" onclick="acc()">'+(UID?'☁️':'👤')+'</button><button class=ic aria-label="الإعدادات" onclick="settings()">⚙️</button><button class="ic nbell" aria-label="الإشعارات" onclick="notes()">🔔'+(typeof nUnread=='function'&&nUnread()?'<i>'+nUnread()+'</i>':'')+'</button>':''}<button class=ic aria-label="الصوت" onclick="S.sound=!S.sound;save();this.textContent=S.sound?'🔊':'🔇'">${S.sound?'🔊':'🔇'}</button><span class=st>⭐ ${total()}</span></header>${body}${back===false?'<button class=big style="background:#25a36b;max-width:420px;margin:14px auto 0;display:block" onclick=shareApp()>📲 افتح البرنامج على جهاز آخر (باركود)</button>':''}<footer class=ver>نجوم الضرب • الإصدار ${VER}</footer>`}
 const PRAISE=['أحسنت!','رائع!','بطل!','ممتاز!','عبقري!'];
@@ -1290,11 +1291,11 @@ if(g<fee)return kPop(`🔒 <b>${esc(gName(f))}</b> <small>الدخول بـ 🪙
 if(!await ask(`ادفع <b>🪙 ${fee.toLocaleString('en')}</b> لتدخل اللعبة${['xo','idris','wchain'].includes(f)?`<br><small>🏆 إن فزت تأخذ 🪙 ${gRw(fee).toLocaleString('en')}</small>`:''}<br><small>رصيدك الآن: 🪙 ${g.toLocaleString('en')}</small>`,{icon:gName(f).split(' ')[0],title:esc(gName(f).split(' ').slice(1).join(' ')),ok:'🎟️ ادفع وادخل',no:'لاحقًا'}))return;if(GD()<fee)return;
 S.gd=g-fee;gLog(-fee,'🎟️ دخول '+gName(f));GPAY={f,fee};save();toast(`🎟️ دفعت 🪙 ${fee.toLocaleString('en')}`);window[f]()}
 function games(){clr();const sc=cur?(S.scope=='one'||cur==1?'جدول '+cur:'الجداول 1–'+cur):'كل الجداول';
-shell('الألعاب 🎮',`<div class=gstat><span class=gsav>${AV()}</span><div><b>${esc(NM())}</b><small>🎯 ${sc}</small></div><span class=gsg>🪙 ${GD().toLocaleString('en')}</span><span class=gsb>🦘 ${BK()}</span></div>
+shell('الألعاب 🎮',`<button class="big chcta" onclick="chHome()">🏁 غرف التحدي — العب أي لعبة مع أصدقائك</button><div class=gstat><span class=gsav>${AV()}</span><div><b>${esc(NM())}</b><small>🎯 ${sc}</small></div><span class=gsg>🪙 ${GD().toLocaleString('en')}</span><span class=gsb>🦘 ${BK()}</span></div>
 ${GSEC.map(([ic,t,col,L])=>`<h3 class=gsh style="--c:${col}"><span>${ic}</span>${t}</h3><div class=ggd>${L.map(([f,e,n,d])=>`<button class=gt style="--c:${col}" onclick="gEnter('${f}')"><i>${e}</i><b>${n}</b><small>${d}</small>${gFee(f)>0?`<em class=gfee>🪙 ${gFee(f).toLocaleString('en')}</em>`:''}</button>`).join('')}</div>`).join('')}`)}
 // ===== التنقّل وزر الرجوع (السحب للخلف) =====
 // المستوى 0: الرئيسية، 1: الصفحات، 2: الألعاب داخل «الألعاب». الرجوع يعيد للمستوى السابق، ومن الرئيسية يخرج مباشرة.
-const LV={notes:1,admin:2,ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,idris:2,dino:2,snake:2,tank:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,letterg:2,wordg:2,wchain:2,wRejView:'r',journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
+const LV={notes:1,admin:2,ledger:1,cpHist:'r',learn:1,cards:1,shop:'r',settings:'r',garage:'r',acc:1,games:1,contest:2,tarneeb:2,xo:2,chHome:2,idris:2,dino:2,snake:2,tank:2,catg:2,arrows:2,cardsHome:2,frog:2,tower:2,meteor:2,tfg:2,seqg:2,letterg:2,wordg:2,wchain:2,wRejView:'r',journey:2,race:2,balloons:2,quiz:2,match:2,collect:'r'},ORIG={};
 const curD=()=>(history.state&&history.state.d)||0;
 function leaveGame(){try{if(J)J.on=0;if(RC)RC.on=0}catch(e){}try{if(document.fullscreenElement)document.exitFullscreen();screen.orientation.unlock()}catch(e){}}
 ORIG.home=home;home=function(){const d=curD();if(d>0){history.go(-d);return}leaveGame();ORIG.home()};
@@ -1639,7 +1640,7 @@ g.els.forEach(e=>e.style.left=(KX-(e.dataset.w-g.d))+'px');$('#dnrex').style.lef
 const k=$('#dnkid');k.style.left=KX+'px';k.classList.toggle('dnjmp',g.jump>0);k.classList.toggle('dnrun',g.ph=='run');$('#dnrex').classList.toggle('dnrun',g.ph=='run');
 sc.style.setProperty('--p1',(g.d*.25)%600+'px');sc.style.setProperty('--p2',(g.d*.6)%400+'px');$('#dnred').style.opacity=g.ph=='run'?Math.max(0,Math.min(.6,(220-gap)/220)):0;
 $('#dneg').style.width=g.en+'%';$('#dnmk').style.right=Math.min(100,g.d/g.FIN*100)+'%';$('#dnmr').style.right=Math.max(0,Math.min(100,g.dd/g.FIN*100))+'%'}
-function dnEnd(win){const g=DN;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;
+function dnEnd(win){const g=DN;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;chRes(n);
 if(win){award(n);good();clap(20);say('أحسنت يا بطل');for(let i=0;i<6;i++)later(()=>burst(R(innerWidth),R(300)+60),i*250)}else{tone(80,.8,'sawtooth',.18);oops()}
 $('#dnp').innerHTML=`<div class=res>${win?'🏡🎉':'🦖😱'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'نجوت من الديناصور!':'أمسكك الديناصور!'}</h2><p>${win?`وصلت البيت في ${Math.round(g.t)} ثانية • ✅ ${g.ok} إجابة`:'أجب أسرع لتأخذ طاقة أكثر ⚡ — الطاقة تجعلك تركض وتقفز'}</p>${U}<button class=big onclick=dino()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
 // ===== 🐱 القطة والسمك: أطعم القطة بالإجابات الصحيحة قبل أن يفرغ شبعها =====
@@ -1663,7 +1664,7 @@ function ctLoop(t,g){if(g!==CT||!g.on||!$('#ctsc'))return;const dt=Math.min(.05,
  if(g.full<25&&!g.warn){g.warn=1;toast('🙀 القطة جائعة جدًا! أسرع!');ctMeow(0);try{navigator.vibrate&&navigator.vibrate(150)}catch(e){}}if(g.full>35)g.warn=0}ctDraw();requestAnimationFrame(t=>ctLoop(t,g))}
 function ctDraw(){const g=CT,b=$('#ctbar'),f=$('#ctface');if(!b)return;b.style.width=g.full+'%';const m=g.full>70?'😻':g.full>40?'😺':g.full>20?'😿':'🙀';if(f.textContent!==m)f.textContent=m;
 $('#ctcat').style.transform=`scale(${1+g.fish*.025})`;$('#ctz').textContent=g.full<20?'💭🐟':''}
-function ctEnd(win){const g=CT;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;const f=$('#ctface');if(f)f.textContent=win?'😻':'😿';
+function ctEnd(win){const g=CT;g.ph='end';g.on=0;const n=win?(g.e<=2?3:g.e<=5?2:1):0;chRes(n);const f=$('#ctface');if(f)f.textContent=win?'😻':'😿';
 if(win){award(n);good();clap(18);say('أحسنت يا بطل');$('#ctz').textContent='💤💕';for(let i=0;i<5;i++)later(()=>burst(R(innerWidth),R(260)+80),i*250)}else{ctMeow(0);oops();$('#ctz').textContent='💭🐟'}
 $('#ctp').innerHTML=`<div class=res>${win?'😻💤':'😿'}</div><div class=res>${win?'⭐'.repeat(n):''}</div><h2>${win?'شبعت القطة ونامت سعيدة!':'القطة ما زالت جائعة!'}</h2><p>${win?`أطعمتها ${g.fish} سمكة 🐟`:`أطعمتها ${g.fish} من ${g.goal} سمكة — أجب أسرع لتعطيها سمكًا أكبر 🐠`}</p>${U}<button class=big onclick=catg()>🔁 ${win?'العب مرة أخرى':'حاول مرة أخرى'}</button><button class=big style="background:#18a999" onclick="history.back()">🎮 الألعاب</button>`}
 // ===== 🏹 متاهة الأسهم: اضغط السهم ليخرج في اتجاهه إن كان طريقه فارغًا. كل سهم يحتاج ⚡ طاقة، والطاقة من حل المسائل =====
@@ -1971,7 +1972,7 @@ function chatRecStop(cancel){const R0=CHAT&&CHAT.rec;if(!R0)return;clearTimeout(
 let INVU=null,PRT=0,INV=null,INVP=[];
 const RTONES=[['🔔 كلاسيكي',[[988,.25,0],[1319,.3,.28],[988,.25,.7],[1319,.3,.98]]],['🎵 لحن مرح',[[784,.15,0],[988,.15,.16],[1175,.15,.32],[1568,.3,.48],[1175,.15,.9],[1568,.35,1.06]]],['📞 هاتف قديم',[...Array(12)].map((_,i)=>[i%2?1400:1100,.05,i*.06]).concat([...Array(12)].map((_,i)=>[i%2?1400:1100,.05,.9+i*.06]))],['🎶 جرس الباب',[[1319,.5,0],[1047,.7,.5]]],['⭐ نجوم',[[1568,.1,0],[2093,.1,.12],[2637,.2,.24],[2093,.1,.6],[2637,.25,.72]]],['🥁 قوي',[[523,.2,0],[523,.2,.25],[784,.4,.5],[523,.2,1],[784,.5,1.25]]]];
 function rtPlay(rt){(RTONES[S.rtone|0]||RTONES[0])[1].forEach(([f,d,a])=>rt(f,d,a))}
-function rtTry(i){S.rtone=i;save();try{AC=AC||new(window.AudioContext||webkitAudioContext)();if(AC.state=='suspended')AC.resume()}catch(e){}rtPlay((f,d,at)=>{try{const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(.001,AC.currentTime+at);g.gain.exponentialRampToValueAtTime(.35,AC.currentTime+at+.02);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+at+d);o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+at);o.stop(AC.currentTime+at+d+.05)}catch(e){}});notes()}const INVK={k:['cardsHome','km','kcode','kn','kJoin','🃏 آخر ورقة'],t:['tarneeb','tm','tcode','tn','tJoin','♠️ الطرنيب'],x:['xo','xm','xcode','xn','xoJoin','❌ إكس أو'],i:['idris','im','icode','inn','idJoin','🪨 إدريس'],c:['contest','cpm','cpcode','cpn1','cpJoin','🏆 تجميع الذهب']};
+function rtTry(i){S.rtone=i;save();try{AC=AC||new(window.AudioContext||webkitAudioContext)();if(AC.state=='suspended')AC.resume()}catch(e){}rtPlay((f,d,at)=>{try{const o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;g.gain.setValueAtTime(.001,AC.currentTime+at);g.gain.exponentialRampToValueAtTime(.35,AC.currentTime+at+.02);g.gain.exponentialRampToValueAtTime(.001,AC.currentTime+at+d);o.connect(g);g.connect(AC.destination);o.start(AC.currentTime+at);o.stop(AC.currentTime+at+d+.05)}catch(e){}});notes()}const INVK={k:['cardsHome','km','kcode','kn','kJoin','🃏 آخر ورقة'],t:['tarneeb','tm','tcode','tn','tJoin','♠️ الطرنيب'],x:['xo','xm','xcode','xn','xoJoin','❌ إكس أو'],i:['idris','im','icode','inn','idJoin','🪨 إدريس'],c:['contest','cpm','cpcode','cpn1','cpJoin','🏆 تجميع الذهب'],w:['wchain','wcm','wcc','wcn','wcJoin','🔗 سلسلة الكلمات'],h:['chHome','chm','chcode','chn','chJoin','🏁 غرفة تحدٍّ']};
 function presPing(){if(!FB||!UID||document.hidden||Date.now()-PRT<90e3)return;PRT=Date.now();FB.d.collection('presence').doc(UID).set({n:(S.nm||'').trim()||'لاعب',ts:Date.now(),v:VER,nt:'Notification'in window?Notification.permission:'na'}).catch(()=>{})}
 setInterval(presPing,30e3);document.addEventListener('visibilitychange',()=>{if(!document.hidden){PRT=0;presPing()}});
 // ----- إشعارات فورية حتى والبرنامج مغلق (FCM + Cloudflare Worker) -----
@@ -2006,6 +2007,51 @@ const n=w.querySelector('#shnat');if(n)n.onclick=()=>navigator.share({title:'ن�
 w.querySelector('#shcp').onclick=async()=>{try{await navigator.clipboard.writeText(url);toast('✅ نُسخ الرابط')}catch(e){prompt('انسخ الرابط:',url)}}}
 function shareApp(){shSheet('📲 افتح البرنامج على جهاز آخر','امسح الباركود بكاميرا الجهاز الآخر، أو أرسل الرابط.',APPURL,'⭐ تعال العب «نجوم الضرب» وتعلّم جدول الضرب:')}
 function roomShare(){if(!INV)return;const K=INVK[INV.k]||[],u=APPURL+'?join='+INV.k+'&code='+encodeURIComponent(INV.code);shSheet('🔗 شارك الغرفة <bdi>'+esc(INV.code)+'</bdi>','من يمسح الباركود أو يفتح الرابط يدخل الغرفة مباشرة'+(K[5]?' — '+K[5]:'')+'.',u,'🎮 تعال العب معي '+(K[5]||'')+' في «نجوم الضرب» — رقم الغرفة '+INV.code+':')}
+
+// ===== 🏁 غرف التحدي: أي لعبة فردية يلعبها عدة لاعبين في نفس الوقت =====
+let CR=null;
+const CHX=['contest','cardsHome','tarneeb','xo','idris','wchain'];
+const chGames=()=>GSEC.flatMap(x=>x[3]).filter(g=>!CHX.includes(g[0]));
+function chHome(){clr();const L=chGames();if(!S.chg||!L.some(g=>g[0]==S.chg))S.chg=L[0][0];
+shell('غرف التحدي 🏁',`<div class="card kintro"><div style="font-size:46px">🏁</div><p class=sm>أنشئ غرفة واختر أي لعبة، وادعُ أصدقاءك. يلعب الجميع نفس اللعبة في نفس الوقت، كلٌّ من جهازه، ثم تظهر النتائج: الأكثر نجومًا ثم الأسرع يفوز 🏆</p>
+${!FB?`<p>☁️ تحتاج فتح اللعبة من رابطها على الإنترنت.</p>`:!UID?`<p>👤 سجّل الدخول أولًا.</p><button class=big onclick=acc()>👤 تسجيل الدخول</button>`:`<label class=cplb for=chn>✏️ اسمك</label><input id=chn class=nm maxlength=20 value="${esc(S.cpme||S.nm||'')}" placeholder="اكتب اسمك">
+<label class=cplb>🎮 اختر اللعبة</label><div class=chgl>${L.map(([f,e,n])=>`<button class="chgb${S.chg==f?' on':''}" onclick="S.chg='${f}';save();document.querySelectorAll('.chgb').forEach(b=>b.classList.remove('on'));this.classList.add('on')"><i>${e}</i>${n}</button>`).join('')}</div>
+<button class=big onclick=chCreate()>🏠 أنشئ غرفة</button><h3>أو انضم</h3><input id=chcode class=nm inputmode=numeric maxlength=3 placeholder="رقم الغرفة (مثل 50)" dir=ltr><button class=big style="background:#18a999" onclick=chJoin()>🔑 انضمام</button>`}</div>`)}
+const chName=()=>(($('#chn')||{}).value||'').trim();
+async function chCreate(){if(!netOK())return;const n=chName();if(!n)return toast('✏️ اكتب اسمك أولًا');S.cpme=n;save();
+try{const code=await tFreeCode();await roomRef(code).set({kind:'ch',host:UID,g:S.chg,state:'wait',rd:0,res:{},ts:Date.now(),names:{[UID]:n},jn:[UID]});chRoom(code)}catch(e){netErr(e)}}
+async function chJoin(){if(!netOK())return;const code=(($('#chcode')||{}).value||'').replace(/\D/g,''),n=chName();if(!n)return toast('✏️ اكتب اسمك أولًا');if(code.length<2)return toast('اكتب رقم الغرفة');S.cpme=n;save();
+try{const ref=roomRef(code),d=await ref.get();if(!d.exists||d.data().kind!='ch')return toast('لا توجد غرفة تحدٍّ بهذا الرقم');
+if((d.data().jn||[]).length>=12&&!d.data().jn.includes(UID))return toast('الغرفة ممتلئة');
+await ref.update({jn:firebase.firestore.FieldValue.arrayUnion(UID),['names.'+UID]:n,ts:Date.now()});chRoom(code)}catch(e){netErr(e)}}
+function chOff(){if(CR){CR.uns&&CR.uns();CR=null}}
+function chRoom(code){chOff();const g=CR={code,s:null,rd:null,play:false,sent:0,t0:0};chLobby();
+g.uns=roomRef(code).onSnapshot(d=>{if(CR!==g)return;if(!d.exists){toast('أُغلقت الغرفة');return chOff()}
+const s=d.data();g.s=s;if(!(s.jn||[]).includes(UID)){toast('لم تعد في هذه الغرفة');return chOff()}
+if(g.rd===null)g.rd=s.state=='play'?s.rd:-1;
+if(s.state=='play'&&s.rd!==g.rd){g.rd=s.rd;g.sent=0;g.play=true;g.t0=Date.now();kPop(`🏁 <b>انطلق!</b> <small>${esc(gName(s.g))} — الجولة ${s.rd}</small>`,'turn',1800);setTimeout(async()=>{await gEnter(s.g);if($('#chx'))g.play=false},700);return}
+if($('#chx'))chRender();else if($('#chres'))$('#chres').innerHTML=chBoard(s);
+else if(!g.play){chOff()}},netErr)}
+function chLobby(){if(!CR)return;shell('غرفة التحدي 🏁',`<div id=chx><div class="card cpt"><p class=sm>رقم الغرفة — أخبر به أصدقاءك:</p><div class=cpcode dir=ltr>${CR.code}</div><p>⏳ جارٍ الاتصال…</p></div></div>`);invOn('h',CR.code,'#chx');chatOn('h'+CR.code,'#chx');if(CR.s)chRender()}
+function chBoard(s){const rd=s.rd,J=s.jn||[],res=s.res||{};const P=J.map(u=>({u,n:(s.names||{})[u]||'لاعب',r:res[u]&&res[u].rd==rd?res[u]:null}));
+const done=P.filter(p=>p.r).sort((a,b)=>b.r.n-a.r.n||a.r.t-b.r.t),wait=P.filter(p=>!p.r),all=!wait.length&&done.length;
+if(!rd)return`<p class=sm>لم تبدأ أي جولة بعد.</p>`;
+return`<h3 style="margin:6px 0">${all?'🏆 النتائج النهائية':'⏱️ النتائج حتى الآن'} — الجولة ${rd}</h3><div class=chbd>${done.map((p,i)=>`<div class="chrw${p.u==UID?' me':''}"><b>${all&&i==0?'🥇':all&&i==1?'🥈':all&&i==2?'🥉':i+1}</b><span>${esc(p.n)}</span><em>${'⭐'.repeat(p.r.n)||'—'}</em><small dir=ltr>${p.r.t}s</small></div>`).join('')}${wait.map(p=>`<div class="chrw chwt${p.u==UID?' me':''}"><b>⏳</b><span>${esc(p.n)}</span><em>يلعب…</em><small></small></div>`).join('')}</div>`}
+function chRender(){const s=CR&&CR.s,x=$('#chx');if(!s||!x)return;const host=s.host==UID,L=chGames(),N=s.names||{};
+x.innerHTML=`<div class="card cpt"><p class=sm>رقم الغرفة — أخبر به أصدقاءك:</p><div class=cpcode dir=ltr>${CR.code}</div>
+<p style="font-size:20px;margin:6px 0">🎮 <b>${esc(gName(s.g))}</b></p>
+${host&&s.state!='play'?`<select class=nm onchange="chSet(this.value)">${L.map(([f,e,n])=>`<option value=${f}${f==s.g?' selected':''}>${e} ${n}</option>`).join('')}</select>`:''}
+<h3>👥 اللاعبون (${(s.jn||[]).length})</h3><div class=cppl>${(s.jn||[]).map(u=>`<span>${esc(N[u]||'لاعب')}${u==s.host?' 👑':''}</span>`).join('')}</div>
+${s.rd?chBoard(s):''}
+${host?(s.state=='play'?`<button class=big style="background:#e8579a" onclick=chStop()>⏹️ إنهاء الجولة</button>`:`<button class=big onclick=chStart()>▶️ ابدأ ${s.rd?'جولة جديدة':'التحدي'}</button>`):`<p class=sm>${s.state=='play'?'⏳ الجولة جارية…':'⏳ بانتظار المضيف ليبدأ…'}</p>`}
+${s.state=='play'&&!CR.sent&&(CR.rd!==s.rd||!CR.play)?`<button class=big style="background:#18a999" onclick="CR.rd=-2;chRe()">🎮 العب الجولة الآن</button>`:''}</div>`}
+function chRe(){const s=CR.s;CR.rd=s.rd;CR.sent=0;CR.play=true;CR.t0=Date.now();gEnter(s.g).then(()=>{if($('#chx'))CR.play=false})}
+function chSet(f){roomRef(CR.code).update({g:f,ts:Date.now()}).catch(netErr)}
+function chStart(){const s=CR.s;roomRef(CR.code).update({state:'play',rd:(s.rd||0)+1,res:{},ts:Date.now()}).catch(netErr)}
+function chStop(){roomRef(CR.code).update({state:'wait',ts:Date.now()}).catch(netErr)}
+function chRes(n){const g=CR;if(!g||!g.play||g.sent)return;g.sent=1;g.play=false;const t=Math.round((Date.now()-g.t0)/1000);
+roomRef(g.code).update({['res.'+UID]:{n:n|0,t,rd:g.rd},ts:Date.now()}).catch(netErr);setTimeout(()=>{if(CR===g)chSheet()},1600)}
+function chSheet(){if(!CR||!CR.s||$('#chres'))return;const w=document.createElement('div');w.className='ksheetw';w.innerHTML=`<div class=ksheet style="padding:14px;overflow:auto"><div id=chres>${chBoard(CR.s)}</div><button class=big onclick="this.closest('.ksheetw').remove();chLobby()">🏠 العودة للغرفة <bdi>${esc(CR.code)}</bdi></button><button class=big style="background:#5b6b8c" onclick="this.closest('.ksheetw').remove()">إغلاق</button></div>`;w.style.zIndex=80;w.onclick=e=>{if(e.target==w)w.remove()};document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('show'))}
 function joinFromUrl(){const q=new URLSearchParams(location.search),k=q.get('join'),c=q.get('code');if(!k||!c||!UID)return;history.replaceState(null,'',location.pathname);setTimeout(()=>invJoin(k,c),600)}
 if(navigator.serviceWorker)navigator.serviceWorker.addEventListener('message',e=>{const j=e.data&&e.data.join;if(j&&INVK[j.k]){const w=$('#invc');if(w)w.remove();invJoin(j.k,j.code)}});
 function invWatch(){if(INVU){INVU();INVU=null}if(!UID)return;joinFromUrl();pushReg();PRT=0;presPing();INVU=FB.d.collection('invites').where('to','==',UID).onSnapshot(q=>{q.docChanges().forEach(c=>{if(c.type!='added')return;const v={id:c.doc.id,ref:c.doc.ref,...c.doc.data()};if(Date.now()-v.ts>15*60e3){c.doc.ref.delete().catch(()=>{});return}c.doc.ref.update({seen:Date.now()}).catch(()=>{});INVP=INVP.filter(x=>x.id!=v.id).concat(v);invRing(v)})},e=>{console.warn(e);toast('⚠️ تعذّر استقبال الدعوات: '+(e.code||e.message||''))})}
@@ -2021,7 +2067,7 @@ clearInterval(invOn.iv);invOn.iv=setInterval(()=>{const e=$('#invb');if(!INV||!d
 async function invPick(){if(!INV)return;const w=document.createElement('div');w.className='ksheetw';w.innerHTML=`<div class=ksheet style="padding:14px;overflow:auto"><h3 style="margin:0 0 4px">📣 ادعُ لاعبين إلى غرفتك <bdi>${esc(INV.code)}</bdi></h3><p class=sm style="margin:0 0 8px">يرنّ عنده البرنامج ويظهر له زر «انضم» إن كان البرنامج مفتوحًا.</p><button class=big style="background:#25d366;margin:0 0 10px" onclick="this.closest('.ksheetw').remove();roomShare()">🔗 شارك الغرفة بباركود أو واتساب</button><div id=invl><p class=sm>⏳ جارٍ التحميل…</p></div><button class=big style="background:#5b6b8c" onclick="this.closest('.ksheetw').remove()">إغلاق</button></div>`;w.style.zIndex=80;w.onclick=e=>{if(e.target==w)w.remove()};document.body.appendChild(w);requestAnimationFrame(()=>w.classList.add('show'));
 try{const q=await FB.d.collection('presence').orderBy('ts','desc').limit(60).get(),L=q.docs.map(d=>({u:d.id,...d.data()})).filter(x=>x.u!=UID);const l=$('#invl');if(!l)return;
 l.innerHTML=L.length?L.map(x=>{const on=Date.now()-x.ts<4*60e3;return `<div class=invr><span class=admav style="width:36px;height:36px;font-size:16px">${esc((x.n||'?').trim()[0]||'?')}</span><span class=invn><b>${esc(x.n||'لاعب')}</b><small>${on?'🟢 متصل الآن':'⚪ '+ago(x.ts)}${x.v?' • v'+esc(x.v):' • ⚠️ نسخة قديمة'}${x.nt=='granted'?' • 🔔':''}</small><small class=invst id="ist_${x.u}"></small></span><button class=invs ${INV.sent.has(x.u)?'disabled':''} onclick="invSend('${x.u}',this)">${INV.sent.has(x.u)?'✓ أُرسلت':'📣 ادعُه'}</button></div>`}).join(''):'<p class=sm>لا يوجد لاعبون آخرون بعد — يظهرون هنا عندما يفتحون البرنامج بحساباتهم.</p>'}catch(e){netErr(e)}}
-async function invSend(u,el){if(!INV)return;el.disabled=true;el.textContent='…';let d;try{d=await FB.d.collection('invites').add({to:u,from:UID,n:kShort(S.cpme||S.nm||'لاعب'),k:INV.k,code:INV.code,ts:Date.now()});INV.sent.add(u);pushSend(d.id,u);el.textContent='✓ أُرسلت';toast('📣 أُرسلت الدعوة');const st=$('#ist_'+u);if(st)st.textContent='⏳ بانتظار وصولها…';
+async function invSend(u,el){if(!INV)return;el.disabled=true;el.textContent='…';let d;try{d=await FB.d.collection('invites').add({to:u,from:UID,n:kShort(S.cpme||S.nm||'لاعب'),k:INV.k,code:INV.code,lb:INV.k=='h'&&CR&&CR.s?'🏁 تحدّي '+gName(CR.s.g):'',ts:Date.now()});INV.sent.add(u);pushSend(d.id,u);el.textContent='✓ أُرسلت';toast('📣 أُرسلت الدعوة');const st=$('#ist_'+u);if(st)st.textContent='⏳ بانتظار وصولها…';
 const un=d.onSnapshot(x=>{const t=$('#ist_'+u);if(!x.exists){if(t)t.textContent='✅ رأى الدعوة';un();return}if(x.data().seen&&t){t.textContent='✓✓ وصلت — يرنّ عنده الآن'}},()=>{});setTimeout(()=>{const t=$('#ist_'+u);if(t&&/بانتظار/.test(t.textContent))t.textContent='⚠️ لم تصل بعد — البرنامج مغلق عنده أو يحتاج تحديثًا. ستصله إن فتحه خلال 15 دقيقة'},15000)}catch(e){el.disabled=false;el.textContent='📣 ادعُه';netErr(e)}}
 // ===== ألعاب الأتاري: الدودة 🐛 والدبابة 🪖 =====
 const RDIR={u:[0,-1],d:[0,1],l:[-1,0],r:[1,0]},ROPP={u:'d',d:'u',l:'r',r:'l'};
@@ -2030,7 +2076,7 @@ function rSwipe(el,fn){let x0,y0;el.addEventListener('touchstart',e=>{x0=e.touch
 function rKeys(pre,fire){const h=e=>{if(!document.getElementById(pre+'cv')){removeEventListener('keydown',h);removeEventListener('keyup',u);return}const m={ArrowUp:'u',ArrowDown:'d',ArrowLeft:'l',ArrowRight:'r'}[e.key];if(m){e.preventDefault();window[pre+'Dir'](m,1)}else if(fire&&(e.key==' '||e.key=='Enter')){e.preventDefault();window[pre+'Fire']()}},u=e=>{const m={ArrowUp:'u',ArrowDown:'d',ArrowLeft:'l',ArrowRight:'r'}[e.key];if(m)window[pre+'Dir'](m,0)};addEventListener('keydown',h);addEventListener('keyup',u)}
 function rQ(g){const f=pick(g.last);g.last=key(f[0],f[1]);g.a=f[0];g.b=f[1];g.ans=f[0]*f[1];const o=sh(opts(f[0],f[1]));g.vals=o;const q=$('#rq');if(q)q.innerHTML=`<span>${f[0]} × ${f[1]} = <b>؟</b></span>`}
 function rHud(g,extra){const h=$('#rhud');if(h)h.innerHTML=`<span>✅ ${g.ok}/${g.goal}</span><span>${'❤️'.repeat(Math.max(0,g.hp))}${'🤍'.repeat(Math.max(0,3-g.hp))}</span>${extra||''}`}
-function rEnd(g,win,title,again){g.on=0;const n=g.ok>=g.goal?3:g.ok>=g.goal*.6?2:g.ok>=g.goal*.3?1:0;if(n)award(n);if(win){kSfx('win');clap(16);cpRain()}else kSfx('bad');
+function rEnd(g,win,title,again){g.on=0;const n=g.ok>=g.goal?3:g.ok>=g.goal*.6?2:g.ok>=g.goal*.3?1:0;chRes(n);if(n)award(n);if(win){kSfx('win');clap(16);cpRain()}else kSfx('bad');
 $('#rpan').innerHTML=`<h2>${win?'🎉 فزت!':'💥 انتهت اللعبة'}</h2><p>✅ إجابات صحيحة: <b>${g.ok}</b> • ❌ ${g.e}</p><p>${'⭐'.repeat(n)||'حاول مرة أخرى 💪'}</p><button class=big onclick="${again}()">🔁 العب مرة أخرى</button>`}
 function rLv(v,fn){return `<div class=seg>${[1,2,3].map(n=>`<button class="${(S[v]||1)==n?'on':''}" onclick="S.${v}=${n};save();${fn}()">${['🙂 سهل','😬 متوسط','😱 صعب'][n-1]}</button>`).join('')}</div>`}
 
@@ -2155,7 +2201,7 @@ if(ok){g.ok++;g.score+=500;good();if(k==0)g.pow=Math.min(3,g.pow+1);else if(k==1
 later(()=>{g.pause=0;g.tt=0;$('#rpan').innerHTML=`<p class=sm style="margin:0">${ok?'✅ حصلت على '+TKBON[k][0]+' '+TKBON[k][1]:'❌ '+a+' × '+b+' = '+a*b+' — ضاعت الجائزة'}</p>`;tkScroll()},ok?600:1300)}
 function tkScroll(){const c=$('#tkcv');c&&c.scrollIntoView({block:'nearest',behavior:'smooth'})}
 function tkClear(){const g=TK;g.clear=2.5;g.bul=[];kSfx('win');clap(10);S.tkb=Math.max(S.tkb||0,g.stage);save()}
-function tkOver(msg){const g=TK;g.on=0;kSfx('bad');tkDraw(g.T||0);const st=g.stage-1,n=st>=3?3:st;if(n)award(n);
+function tkOver(msg){const g=TK;g.on=0;kSfx('bad');tkDraw(g.T||0);const st=g.stage-1,n=st>=3?3:st;chRes(n);if(n)award(n);
 $('#rpan').innerHTML=`<h2>${msg}</h2><p>🚩 وصلت إلى المرحلة <b>${g.stage}</b> • 🏆 النقاط <b>${g.score.toLocaleString('en')}</b></p><p class=sm>🧮 جوائز بالحساب: ✅ ${g.ok} • ❌ ${g.e} • أفضل مرحلة: ${Math.max(S.tkb||0,st)}</p><button class=big onclick=tank()>🔁 العب مرة أخرى</button>`}
 // ----- الرسم -----
 function tkTankDraw(x,t,col,dark,T,flash){const a={u:0,r:Math.PI/2,d:Math.PI,l:-Math.PI/2}[t.d];x.save();x.translate(t.x+16,t.y+16);x.rotate(a);
@@ -3501,7 +3547,7 @@ const r=d.data();if(r.jn.includes(UID))return wcRoom(code);
 if(r.state!='wait')return toast('اللعبة بدأت بالفعل — انتظر الجولة القادمة');
 const ok=await FB.d.runTransaction(async tx=>{const x=await tx.get(ref),s=x.data();if(s.state!='wait')return 'started';if(s.jn.includes(UID)){s.names[UID]=n;tx.set(ref,s);return 1}if(s.jn.length>=WCMAX)return 'full';s.jn.push(UID);s.names[UID]=n;s.ts=Date.now();tx.set(ref,s);return 1});
 if(ok==='full')return toast('الغرفة ممتلئة');if(ok==='started')return toast('اللعبة بدأت بالفعل');wcRoom(code)}catch(e){netErr(e)}}
-function wcRoom(code){wcOff();const g=WC={code,s:null,tk:'',pv:null};
+function wcRoom(code){wcOff();invOn('w',code,'#wcx');chatOn('w'+code,'#wcx');const g=WC={code,s:null,tk:'',pv:null};
 shell('سلسلة الكلمات 🔗',`<div id=wcx></div><div class="card cpt"><div class=cpcode dir=ltr>${code}</div><p>⏳ جارٍ الاتصال…</p></div>`);
 g.uns=roomRef(code).onSnapshot(d=>{if(WC!==g)return;if(!$('#wcx')){wcLeaveSilent(g);return}
 if(!d.exists){toast('أُغلقت الغرفة');wcOff();return history.back()}

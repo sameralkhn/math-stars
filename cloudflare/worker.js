@@ -66,8 +66,8 @@ export default {
       if (!d || d.from !== uid) return J({ error: 'not yours' }, 403);
       const t = await getDoc(sa, at, 'pushtokens/' + d.to);
       if (!t || !t.t) return J({ ok: false, reason: 'no-token' });
-      const names = { k: '🃏 آخر ورقة', t: '♠️ الطرنيب', x: '❌ إكس أو', i: '🪨 إدريس', c: '🏆 تجميع الذهب' };
-      const title = '📣 ' + String(d.n || 'لاعب').slice(0, 30) + ' يدعوك للعب', body = (names[d.k] || 'لعبة') + ' — غرفة ' + d.code + ' • اضغط للانضمام', data = { title, body, k: String(d.k), code: String(d.code), inv };
+      const names = { k: '🃏 آخر ورقة', t: '♠️ الطرنيب', x: '❌ إكس أو', i: '🪨 إدريس', c: '🏆 تجميع الذهب', w: '🔗 سلسلة الكلمات', h: '🏁 غرفة تحدٍّ' };
+      const title = '📣 ' + String(d.n || 'لاعب').slice(0, 30) + ' يدعوك للعب', body = (d.lb || names[d.k] || 'لعبة') + ' — غرفة ' + d.code + ' • اضغط للانضمام', data = { title, body, k: String(d.k), code: String(d.code), inv };
       const ch = /^[a-z]{2,12}$/.test(t.ch || '') ? t.ch : 'classic';
       const msg = t.a ? { message: { token: t.t, notification: { title, body }, data, android: { priority: 'HIGH', ttl: '900s', notification: { channel_id: 'inv_' + ch, sound: 'tone_' + ch, notification_priority: 'PRIORITY_MAX', visibility: 'PUBLIC', default_vibrate_timings: true } } } }
         : { message: { token: t.t, webpush: { headers: { Urgency: 'high', TTL: '900' }, data } } };
